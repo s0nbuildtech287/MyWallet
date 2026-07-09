@@ -859,7 +859,8 @@ export default function Portfolio({ marketPrices, formatValSymbol: parentFormatV
                   type="date"
                   value={txDate}
                   onChange={(e) => setTxDate(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 focus:border-emerald-500 rounded-xl py-2 px-3 text-xs focus:outline-none text-slate-100 font-mono transition-all"
+                  onClick={(e) => e.target.showPicker?.()}
+                  className="w-full bg-slate-950 border border-slate-800 focus:border-emerald-500 rounded-xl py-2 px-3 text-xs focus:outline-none text-slate-100 font-mono transition-all cursor-pointer"
                   required
                 />
               </div>

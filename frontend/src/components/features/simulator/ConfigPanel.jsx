@@ -79,7 +79,8 @@ export default function ConfigPanel({
             type="date"
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
-            className="w-full bg-slate-950/60 border border-slate-800 focus:border-emerald-500 rounded-xl py-2 px-3 text-sm focus:outline-none focus:ring-0 transition-all font-mono text-slate-200"
+            onClick={(e) => e.target.showPicker?.()}
+            className="w-full bg-slate-950/60 border border-slate-800 focus:border-emerald-500 rounded-xl py-2 px-3 text-sm focus:outline-none focus:ring-0 transition-all font-mono text-slate-200 cursor-pointer"
             required
           />
         </div>
@@ -94,7 +95,8 @@ export default function ConfigPanel({
             type="date"
             value={endDate}
             onChange={(e) => setEndDate(e.target.value)}
-            className="w-full bg-slate-950/60 border border-slate-800 focus:border-emerald-500 rounded-xl py-2 px-3 text-sm focus:outline-none focus:ring-0 transition-all font-mono text-slate-200"
+            onClick={(e) => e.target.showPicker?.()}
+            className="w-full bg-slate-950/60 border border-slate-800 focus:border-emerald-500 rounded-xl py-2 px-3 text-sm focus:outline-none focus:ring-0 transition-all font-mono text-slate-200 cursor-pointer"
             required
           />
         </div>
