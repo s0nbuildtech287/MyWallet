@@ -7,7 +7,7 @@ import logoImage from '../../assests/logoooo.png';
 export default function Sidebar({ activeTab, setActiveTab }) {
   return (
     <aside className="w-64 bg-slate-900 border-r border-slate-700/25 flex flex-col h-full z-20 shrink-0">
-      <div className="p-6 border-b border-slate-700/25 flex items-center gap-3">
+      <div className="h-16 px-6 border-b border-slate-700/25 flex items-center gap-3 shrink-0">
         <div className="p-1 bg-gradient-to-tr from-emerald-500 to-teal-400 rounded-xl shadow-lg shadow-emerald-500/20 flex items-center justify-center h-9 w-9 overflow-hidden">
           <img src={logoImage} alt="Logo" className="h-7 w-7 object-contain" />
         </div>

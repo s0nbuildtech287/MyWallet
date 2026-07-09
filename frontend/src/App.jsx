@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 // Import Modular Pages
+import Login from './pages/Login';
 import Overview from './pages/Overview';
 import AssetDetails from './pages/AssetDetails';
 import Simulator from './pages/Simulator';
@@ -22,6 +23,27 @@ import { formatValSymbol, formatVal, formatVolumeHelper } from './utils/formatte
 import { crosshairPlugin } from './utils/crosshairPlugin';
 
 export default function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(() => {
+    return sessionStorage.getItem('mywallet_auth') === '1';
+  });
+
+  const handleLogin = () => {
+    sessionStorage.setItem('mywallet_auth', '1');
+    setIsLoggedIn(true);
+    window.location.hash = '#/overview';
+  };
+
+  // Redirect to login if not authenticated
+  useEffect(() => {
+    if (!isLoggedIn) {
+      window.location.hash = '#/login';
+    }
+  }, [isLoggedIn]);
+
+  if (!isLoggedIn) {
+    return <Login onLogin={handleLogin} />;
+  }
+
   const [activeTab, setActiveTab] = useState('overview'); // 'overview' | 'asset-details' | 'simulator' | 'interest' | 'news'
   const [globalSearch, setGlobalSearch] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('All');
@@ -85,11 +107,11 @@ export default function App() {
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash.replace('#/', '');
+      if (hash === 'login') return; // handled by isLoggedIn guard
       const validTabs = ['overview', 'portfolio', 'asset-details', 'comparison', 'simulator', 'interest', 'news', 'guides', 'trading-gpt'];
       if (validTabs.includes(hash)) {
         setActiveTab(hash);
       } else {
-        // Mặc định chuyển hướng về /#/overview nếu đường dẫn trống/lỗi
         window.location.hash = '#/overview';
         setActiveTab('overview');
       }
