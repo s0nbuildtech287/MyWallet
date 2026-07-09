@@ -1,14 +1,15 @@
-﻿import React from 'react';
+import React from 'react';
 import { 
   Compass, LayoutDashboard, Briefcase, LineChart, Scale, Calculator, Percent, Newspaper, BookOpen, Bot 
 } from 'lucide-react';
+import logoImage from '../../assests/logoooo.png';
 
 export default function Sidebar({ activeTab, setActiveTab }) {
   return (
     <aside className="w-64 bg-slate-900 border-r border-slate-700/25 flex flex-col h-full z-20 shrink-0">
       <div className="p-6 border-b border-slate-700/25 flex items-center gap-3">
-        <div className="p-2 bg-gradient-to-tr from-emerald-500 to-teal-400 rounded-xl shadow-lg shadow-emerald-500/20">
-          <Compass className="h-5 w-5 text-slate-950 font-bold" />
+        <div className="p-1 bg-gradient-to-tr from-emerald-500 to-teal-400 rounded-xl shadow-lg shadow-emerald-500/20 flex items-center justify-center h-9 w-9 overflow-hidden">
+          <img src={logoImage} alt="Logo" className="h-7 w-7 object-contain" />
         </div>
         <div>
           <h1 className="text-base font-bold bg-gradient-to-r from-emerald-400 to-teal-200 bg-clip-text text-transparent">MyWallet Hub</h1>
