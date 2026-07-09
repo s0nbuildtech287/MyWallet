@@ -1,5 +1,6 @@
-import React from "react";
-import { Search, Layers, ArrowRight, ChevronLeft, ChevronRight, Loader2, AlertCircle, PlusCircle } from "lucide-react";
+import React from 'react';
+import { Search, Layers, ArrowRight, Loader2, AlertCircle, PlusCircle } from 'lucide-react';
+import Pagination from '../components/ui/Pagination';
 
 export default function Overview({
   globalSearch,
@@ -22,6 +23,7 @@ export default function Overview({
 }) {
   return (
     <div className="flex flex-col gap-6 animate-fadeIn">
+      {/* Hero Search Section */}
       <section className="bg-gradient-to-r from-slate-900/80 via-slate-900/10 to-slate-900/80 border border-slate-850 rounded-2xl p-6 text-center flex flex-col items-center justify-center gap-3.5 shadow-2xl backdrop-blur-lg">
         <h2 className="text-xl font-bold bg-gradient-to-r from-emerald-400 to-teal-100 bg-clip-text text-transparent">
           Cổng tra cứu tài sản &amp; Thiết lập phương án tích sản
@@ -68,6 +70,7 @@ export default function Overview({
         )}
       </section>
 
+      {/* Large Market Asset List */}
       <section className="bg-slate-900/40 border border-slate-800/80 rounded-2xl p-5 shadow-2xl backdrop-blur-lg flex flex-col gap-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-800/60 pb-3 gap-3">
           <h3 className="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-2">
@@ -130,9 +133,7 @@ export default function Overview({
                     <td className={`py-3 px-4 font-bold font-mono transition-colors duration-200 ${
                       asset.tick === "up" ? "text-emerald-400" : asset.tick === "down" ? "text-rose-400" : "text-slate-100"
                     }`}>
-                      {asset.isVnd
-                        ? `${asset.price.toLocaleString("vi-VN")} đ`
-                        : `$${asset.price.toLocaleString("en-US")}`}
+                      {formatValSymbol(asset.price, asset.symbol)}
                     </td>
                     <td className={`py-3 px-4 font-bold font-mono ${asset.change >= 0 ? "text-emerald-400" : "text-rose-400"}`}>
                       {asset.change >= 0 ? "+" : ""}{asset.change}%
@@ -164,53 +165,14 @@ export default function Overview({
           </table>
         </div>
 
-        {overviewTotalPages > 1 && (
-          <div className="flex items-center justify-between pt-2 border-t border-slate-800/60">
-            <span className="text-[10px] text-slate-500">
-              Trang {overviewPage}/{overviewTotalPages} &nbsp;·&nbsp; {totalFilteredCount} tài sản
-            </span>
-            <div className="flex items-center gap-1">
-              <button
-                onClick={() => setOverviewPage((p) => Math.max(1, p - 1))}
-                disabled={overviewPage === 1}
-                className="h-7 w-7 flex items-center justify-center rounded-lg border border-slate-800 text-slate-400 hover:text-slate-200 hover:border-slate-600 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
-              >
-                <ChevronLeft className="h-4 w-4" />
-              </button>
-              {Array.from({ length: overviewTotalPages }, (_, i) => i + 1)
-                .filter((p) => p === 1 || p === overviewTotalPages || Math.abs(p - overviewPage) <= 1)
-                .reduce((acc, p, idx, arr) => {
-                  if (idx > 0 && arr[idx - 1] !== p - 1) acc.push("...");
-                  acc.push(p);
-                  return acc;
-                }, [])
-                .map((p, i) =>
-                  p === "..." ? (
-                    <span key={"e" + i} className="px-1 text-slate-600 text-[10px]">...</span>
-                  ) : (
-                    <button
-                      key={p}
-                      onClick={() => setOverviewPage(p)}
-                      className={`h-7 w-7 flex items-center justify-center rounded-lg text-[10px] font-bold border transition-all ${
-                        overviewPage === p
-                          ? "bg-emerald-500/15 border-emerald-500/40 text-emerald-400"
-                          : "border-slate-800 text-slate-400 hover:text-slate-200 hover:border-slate-600"
-                      }`}
-                    >
-                      {p}
-                    </button>
-                  )
-                )}
-              <button
-                onClick={() => setOverviewPage((p) => Math.min(overviewTotalPages, p + 1))}
-                disabled={overviewPage === overviewTotalPages}
-                className="h-7 w-7 flex items-center justify-center rounded-lg border border-slate-800 text-slate-400 hover:text-slate-200 hover:border-slate-600 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
-              >
-                <ChevronRight className="h-4 w-4" />
-              </button>
-            </div>
-          </div>
-        )}
+        {/* Reusable Pagination */}
+        <Pagination
+          currentPage={overviewPage}
+          totalPages={overviewTotalPages}
+          totalCount={totalFilteredCount}
+          onPageChange={setOverviewPage}
+          label="tài sản"
+        />
       </section>
     </div>
   );
