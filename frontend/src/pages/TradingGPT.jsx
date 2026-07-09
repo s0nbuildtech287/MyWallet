@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+﻿import React, { useState, useEffect, useRef } from 'react';
 import { Bot, Send, Sparkles, RefreshCw, AlertTriangle, TrendingUp, Info, ArrowRight, User } from 'lucide-react';
 import { calculateSMA, calculateBollingerBands, calculateRSI, calculateMACD } from '../utils/indicators';
 
@@ -18,7 +18,7 @@ function SafeMarkdown({ text }) {
           return <h5 key={idx} className="text-slate-100 font-bold text-xs mt-3 mb-1 uppercase tracking-wider text-emerald-400">{cleanLine.replace('###', '').trim()}</h5>;
         }
         if (cleanLine.startsWith('##') || cleanLine.startsWith('#')) {
-          return <h4 key={idx} className="text-slate-100 font-bold text-sm mt-4 mb-1.5 border-b border-slate-800 pb-1 text-emerald-300">{cleanLine.replace(/^#+\s*/, '').trim()}</h4>;
+          return <h4 key={idx} className="text-slate-100 font-bold text-sm mt-4 mb-1.5 border-b border-slate-700/25 pb-1 text-emerald-300">{cleanLine.replace(/^#+\s*/, '').trim()}</h4>;
         }
 
         // 2. Bullet list
@@ -282,7 +282,7 @@ export default function TradingGPT({
       {/* LEFT COLUMN: Asset Selection & Metrics */}
       <div className="lg:col-span-1 flex flex-col gap-5">
         {/* Selection Card */}
-        <div className="bg-slate-900/40 border border-slate-800/80 rounded-2xl p-5 shadow-xl backdrop-blur-lg flex flex-col gap-4">
+        <div className="bg-slate-900/40 border border-slate-700/25 rounded-2xl p-5 shadow-xl backdrop-blur-lg flex flex-col gap-4">
           <div className="flex items-center gap-2">
             <Bot className="h-5 w-5 text-emerald-400" />
             <h3 className="text-sm font-bold text-slate-200">Cấu hình phân tích</h3>
@@ -293,7 +293,7 @@ export default function TradingGPT({
             <select
               value={selectedSymbol}
               onChange={(e) => setSelectedSymbol(e.target.value)}
-              className="w-full bg-slate-950 border border-slate-800 focus:border-emerald-500 rounded-xl py-2.5 px-3 text-xs focus:outline-none focus:ring-0 transition-all font-semibold text-slate-200 cursor-pointer"
+              className="w-full bg-slate-950 border border-slate-700/25 focus:border-emerald-500 rounded-xl py-2.5 px-3 text-xs focus:outline-none focus:ring-0 transition-all font-semibold text-slate-200 cursor-pointer"
             >
               {marketAssets.map(asset => (
                 <option key={asset.symbol} value={asset.symbol}>
@@ -304,7 +304,7 @@ export default function TradingGPT({
           </div>
 
           {/* Quick Metrics */}
-          <div className="bg-slate-950/40 border border-slate-850 rounded-xl p-3.5 flex flex-col gap-1">
+          <div className="bg-slate-950/40 border border-slate-700/15 rounded-xl p-3.5 flex flex-col gap-1">
             <span className="text-[10px] font-bold text-slate-500 uppercase">Giá hiện tại</span>
             <span className="text-sm font-bold font-mono text-slate-200">
               {formatValSymbol(latestPrice, selectedSymbol)}
@@ -316,15 +316,15 @@ export default function TradingGPT({
         </div>
 
         {/* Live Metrics Feeder */}
-        <div className="bg-slate-900/40 border border-slate-880/60 rounded-2xl p-5 shadow-xl backdrop-blur-lg flex flex-col gap-4">
-          <div className="border-b border-slate-800 pb-2 flex items-center justify-between">
+        <div className="bg-slate-900/40 border border-slate-700/15 rounded-2xl p-5 shadow-xl backdrop-blur-lg flex flex-col gap-4">
+          <div className="border-b border-slate-700/25 pb-2 flex items-center justify-between">
             <span className="text-xs font-bold text-slate-300">Dữ liệu nạp vào AI (1Y)</span>
             {loadingHistory && <RefreshCw className="h-3.5 w-3.5 text-emerald-400 animate-spin" />}
           </div>
 
           <div className="flex flex-col gap-3 text-xs font-mono">
             {/* RSI */}
-            <div className="flex items-center justify-between border-b border-slate-850 pb-1.5">
+            <div className="flex items-center justify-between border-b border-slate-700/15 pb-1.5">
               <span className="text-slate-500 text-[10px] uppercase">RSI (14)</span>
               <span className={`font-bold ${latestRsi >= 70 ? 'text-rose-400' : latestRsi <= 30 ? 'text-emerald-400' : 'text-slate-200'}`}>
                 {latestRsi ? latestRsi.toFixed(2) : 'Đang tính...'}
@@ -332,7 +332,7 @@ export default function TradingGPT({
             </div>
 
             {/* MA50 */}
-            <div className="flex items-center justify-between border-b border-slate-850 pb-1.5">
+            <div className="flex items-center justify-between border-b border-slate-700/15 pb-1.5">
               <span className="text-slate-500 text-[10px] uppercase">Đường xu hướng MA50</span>
               <span className="font-bold text-slate-200">
                 {latestMa50 ? formatValSymbol(latestMa50, selectedSymbol) : 'Đang tính...'}
@@ -340,7 +340,7 @@ export default function TradingGPT({
             </div>
 
             {/* Bollinger Bands */}
-            <div className="flex flex-col gap-1 border-b border-slate-850 pb-1.5">
+            <div className="flex flex-col gap-1 border-b border-slate-700/15 pb-1.5">
               <div className="flex items-center justify-between text-slate-500 text-[10px] uppercase">
                 <span>Dải Bollinger Bands</span>
               </div>
@@ -385,9 +385,9 @@ export default function TradingGPT({
         )}
 
         {/* AI Analysis and Chat Dashboard */}
-        <div className="bg-slate-900/40 border border-slate-800/80 rounded-2xl shadow-2xl backdrop-blur-lg flex flex-col min-h-[500px] max-h-[700px] overflow-hidden">
+        <div className="bg-slate-900/40 border border-slate-700/25 rounded-2xl shadow-2xl backdrop-blur-lg flex flex-col min-h-[500px] max-h-[700px] overflow-hidden">
           {/* Dashboard Header */}
-          <div className="p-4 border-b border-slate-800 flex items-center justify-between bg-slate-950/20">
+          <div className="p-4 border-b border-slate-700/25 flex items-center justify-between bg-slate-950/20">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-gradient-to-tr from-emerald-500 to-teal-400 rounded-xl shadow-lg shadow-emerald-500/10">
                 <Bot className="h-5 w-5 text-slate-950" />
@@ -423,7 +423,7 @@ export default function TradingGPT({
             {/* If no analysis has been generated yet */}
             {chatHistory.length === 0 && !analyzing && (
               <div className="h-full flex flex-col items-center justify-center text-center p-8 gap-4 my-10">
-                <div className="p-4 bg-slate-850/50 rounded-full border border-slate-800 shadow-md">
+                <div className="p-4 bg-slate-850/50 rounded-full border border-slate-700/25 shadow-md">
                   <Bot className="h-10 w-10 text-emerald-400/80" />
                 </div>
                 <div className="max-w-md">
@@ -461,7 +461,7 @@ export default function TradingGPT({
                 {/* Icon */}
                 <div className={`p-2 h-8 w-8 rounded-xl shrink-0 border flex items-center justify-center shadow-md ${
                   msg.role === 'user' 
-                    ? 'bg-slate-950 border-slate-800 text-emerald-400' 
+                    ? 'bg-slate-950 border-slate-700/25 text-emerald-400' 
                     : 'bg-slate-850 border-slate-750 text-emerald-400'
                 }`}>
                   {msg.role === 'user' ? <User className="h-4 w-4" /> : <Bot className="h-4 w-4" />}
@@ -471,7 +471,7 @@ export default function TradingGPT({
                 <div className={`rounded-2xl p-4 text-xs shadow-md border ${
                   msg.role === 'user'
                     ? 'bg-emerald-950/20 border-emerald-500/20 text-slate-200'
-                    : 'bg-slate-950/40 border-slate-850 text-slate-300'
+                    : 'bg-slate-950/40 border-slate-700/15 text-slate-300'
                 }`}>
                   {msg.role === 'user' ? (
                     <p className="whitespace-pre-wrap leading-relaxed">{msg.content}</p>
@@ -488,7 +488,7 @@ export default function TradingGPT({
                 <div className="p-2 h-8 w-8 rounded-xl shrink-0 border flex items-center justify-center bg-slate-850 border-slate-750 text-emerald-400">
                   <Bot className="h-4 w-4 animate-spin" />
                 </div>
-                <div className="bg-slate-950/40 border border-slate-850 rounded-2xl p-4 text-xs text-slate-500 flex items-center gap-1.5">
+                <div className="bg-slate-950/40 border border-slate-700/15 rounded-2xl p-4 text-xs text-slate-500 flex items-center gap-1.5">
                   <span>Trợ lý đang suy nghĩ câu trả lời...</span>
                 </div>
               </div>
@@ -499,14 +499,14 @@ export default function TradingGPT({
 
           {/* Chat input form */}
           {chatHistory.length > 0 && (
-            <form onSubmit={handleSendMessage} className="p-4 border-t border-slate-800/80 bg-slate-950/40 flex items-center gap-3">
+            <form onSubmit={handleSendMessage} className="p-4 border-t border-slate-700/25 bg-slate-950/40 flex items-center gap-3">
               <input
                 type="text"
                 value={chatInput}
                 onChange={(e) => setChatInput(e.target.value)}
                 placeholder={`Hỏi thêm trợ lý về tài sản ${selectedSymbol} hoặc cách áp dụng phương án trade...`}
                 disabled={chatLoading}
-                className="flex-1 bg-slate-900 border border-slate-800 focus:border-emerald-500 rounded-xl py-2 px-3 text-xs focus:outline-none text-slate-200 transition-all placeholder-slate-500 disabled:opacity-60"
+                className="flex-1 bg-slate-900 border border-slate-700/25 focus:border-emerald-500 rounded-xl py-2 px-3 text-xs focus:outline-none text-slate-200 transition-all placeholder-slate-500 disabled:opacity-60"
               />
               <button
                 type="submit"

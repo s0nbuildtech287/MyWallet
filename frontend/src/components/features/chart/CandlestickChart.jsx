@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+﻿import React, { useState, useRef } from 'react';
 
 const RANGE_TOOLTIPS = {
   '1D': 'Dữ liệu 1 ngày gần nhất, nến 5 phút',
@@ -17,7 +17,7 @@ export default function CandlestickChart({ data, isVndAsset }) {
 
   if (!data || data.length === 0) {
     return (
-      <div className="h-96 flex items-center justify-center border border-dashed border-slate-800 rounded-2xl bg-slate-900/10">
+      <div className="h-96 flex items-center justify-center border border-dashed border-slate-700/25 rounded-2xl bg-slate-900/10">
         <span className="text-slate-500 text-sm">Không có dữ liệu biểu đồ nến</span>
       </div>
     );
@@ -124,7 +124,7 @@ export default function CandlestickChart({ data, isVndAsset }) {
     : 0;
 
   return (
-    <div className="relative w-full bg-slate-950/20 border border-slate-850 rounded-2xl p-4 flex flex-col gap-3">
+    <div className="relative w-full bg-slate-950/20 border border-slate-700/15 rounded-2xl p-4 flex flex-col gap-3">
       {/* HUD Info Header */}
       <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs font-mono bg-slate-900/40 py-2 px-4 rounded-xl border border-slate-800/50">
         <span className="text-slate-400 font-bold uppercase shrink-0">Chỉ số phiên:</span>

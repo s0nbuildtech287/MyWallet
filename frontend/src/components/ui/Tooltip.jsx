@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Info } from 'lucide-react';
 
 export default function Tooltip({ content, position = 'top' }) {
@@ -9,7 +9,7 @@ export default function Tooltip({ content, position = 'top' }) {
       <Info className="h-3.5 w-3.5 text-slate-500 hover:text-slate-300 transition-colors" />
       
       {/* Tooltip box */}
-      <div className={`absolute z-[99] hidden group-hover:block w-52 bg-slate-900 border border-slate-800 text-[10px] text-slate-300 p-2.5 rounded-lg shadow-xl font-normal leading-normal pointer-events-none transition-all duration-200
+      <div className={`absolute z-[99] hidden group-hover:block w-52 bg-slate-900 border border-slate-700/25 text-[10px] text-slate-300 p-2.5 rounded-lg shadow-xl font-normal leading-normal pointer-events-none transition-all duration-200
         ${position === 'top' ? 'bottom-full left-1/2 -translate-x-1/2 mb-2' : ''}
         ${position === 'bottom' ? 'top-full left-1/2 -translate-x-1/2 mt-2' : ''}
         ${position === 'left' ? 'right-full top-1/2 -translate-y-1/2 mr-2' : ''}

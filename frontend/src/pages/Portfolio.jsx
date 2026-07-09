@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { Doughnut } from 'react-chartjs-2';
 import { 
   Plus, Trash2, Briefcase, TrendingUp, TrendingDown, 
@@ -390,7 +390,7 @@ export default function Portfolio({ marketPrices, formatValSymbol: parentFormatV
 
         <div className="flex items-center gap-2 self-start sm:self-center">
           {/* Currency Toggle */}
-          <div className="flex items-center bg-slate-900 border border-slate-800 rounded-lg p-0.5">
+          <div className="flex items-center bg-slate-900 border border-slate-700/25 rounded-lg p-0.5">
             <button
               onClick={() => setDisplayCurrency('VND')}
               className={`text-[10px] font-bold py-1 px-3 rounded-md transition-all ${
@@ -426,7 +426,7 @@ export default function Portfolio({ marketPrices, formatValSymbol: parentFormatV
       {/* 2. Key Metrics Summary cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {/* Net Worth Card */}
-        <div className="bg-slate-900/40 border border-slate-800/80 rounded-2xl p-4 shadow-xl backdrop-blur-md flex flex-col justify-between">
+        <div className="bg-slate-900/40 border border-slate-700/25 rounded-2xl p-4 shadow-xl backdrop-blur-md flex flex-col justify-between">
           <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Tổng tài sản ròng (Net Worth)</span>
           <div className="mt-2.5 flex items-baseline justify-between">
             <span className="text-xl font-bold text-slate-100 font-mono">
@@ -440,7 +440,7 @@ export default function Portfolio({ marketPrices, formatValSymbol: parentFormatV
         </div>
 
         {/* Total Cost Card */}
-        <div className="bg-slate-900/40 border border-slate-800/80 rounded-2xl p-4 shadow-xl backdrop-blur-md flex flex-col justify-between">
+        <div className="bg-slate-900/40 border border-slate-700/25 rounded-2xl p-4 shadow-xl backdrop-blur-md flex flex-col justify-between">
           <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Tổng vốn đầu tư</span>
           <div className="mt-2.5">
             <span className="text-xl font-bold text-slate-100 font-mono">
@@ -451,7 +451,7 @@ export default function Portfolio({ marketPrices, formatValSymbol: parentFormatV
         </div>
 
         {/* Total P&L Card */}
-        <div className="bg-slate-900/40 border border-slate-800/80 rounded-2xl p-4 shadow-xl backdrop-blur-md flex flex-col justify-between">
+        <div className="bg-slate-900/40 border border-slate-700/25 rounded-2xl p-4 shadow-xl backdrop-blur-md flex flex-col justify-between">
           <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Tổng Lợi nhuận / Lỗ (P&L)</span>
           <div className="mt-2.5 flex items-center justify-between">
             <span className={`text-xl font-bold font-mono flex items-center ${
@@ -474,11 +474,11 @@ export default function Portfolio({ marketPrices, formatValSymbol: parentFormatV
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
         {/* Doughnut Allocation Chart */}
-        <div className="bg-slate-900/40 border border-slate-800/80 rounded-2xl p-5 shadow-xl backdrop-blur-md flex flex-col gap-4">
-          <div className="flex items-center justify-between border-b border-slate-800/60 pb-3">
+        <div className="bg-slate-900/40 border border-slate-700/25 rounded-2xl p-5 shadow-xl backdrop-blur-md flex flex-col gap-4">
+          <div className="flex items-center justify-between border-b border-slate-700/20 pb-3">
             <h3 className="text-xs font-bold text-slate-300 uppercase tracking-wider">Cơ cấu phân bổ tài sản</h3>
             
-            <div className="flex items-center bg-slate-950/60 border border-slate-850 rounded-lg p-0.5">
+            <div className="flex items-center bg-slate-950/60 border border-slate-700/15 rounded-lg p-0.5">
               <button
                 onClick={() => setChartMode('category')}
                 className={`text-[9px] font-bold py-0.5 px-2 rounded transition-all ${
@@ -511,9 +511,9 @@ export default function Portfolio({ marketPrices, formatValSymbol: parentFormatV
         </div>
 
         {/* Table & Tabs Container */}
-        <div className="lg:col-span-2 bg-slate-900/40 border border-slate-800/80 rounded-2xl p-5 shadow-xl backdrop-blur-md flex flex-col gap-4">
+        <div className="lg:col-span-2 bg-slate-900/40 border border-slate-700/25 rounded-2xl p-5 shadow-xl backdrop-blur-md flex flex-col gap-4">
           {/* Subtabs header */}
-          <div className="flex items-center justify-between border-b border-slate-800/60 pb-2">
+          <div className="flex items-center justify-between border-b border-slate-700/20 pb-2">
             <div className="flex gap-4">
               <button
                 onClick={() => setActiveSubTab('holdings')}
@@ -553,7 +553,7 @@ export default function Portfolio({ marketPrices, formatValSymbol: parentFormatV
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs border-collapse">
                 <thead>
-                  <tr className="border-b border-slate-850 text-slate-400 font-semibold">
+                  <tr className="border-b border-slate-700/15 text-slate-400 font-semibold">
                     <th className="py-2.5 px-2">Tài sản</th>
                     <th className="py-2.5 px-2 text-right">Số lượng</th>
                     <th className="py-2.5 px-2 text-right">Giá vốn TB</th>
@@ -658,7 +658,7 @@ export default function Portfolio({ marketPrices, formatValSymbol: parentFormatV
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs border-collapse">
                 <thead>
-                  <tr className="border-b border-slate-850 text-slate-400 font-semibold">
+                  <tr className="border-b border-slate-700/15 text-slate-400 font-semibold">
                     <th className="py-2.5 px-2">Ngày</th>
                     <th className="py-2.5 px-2">Tài sản</th>
                     <th className="py-2.5 px-2 text-center">Loại</th>
@@ -726,7 +726,7 @@ export default function Portfolio({ marketPrices, formatValSymbol: parentFormatV
       {/* 4. Add Transaction Modal */}
       {isAddModalOpen && (
         <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl relative flex flex-col gap-4 animate-scaleUp">
+          <div className="bg-slate-900 border border-slate-700/25 rounded-2xl max-w-md w-full p-6 shadow-2xl relative flex flex-col gap-4 animate-scaleUp">
             
             <button 
               onClick={() => {
@@ -757,12 +757,12 @@ export default function Portfolio({ marketPrices, formatValSymbol: parentFormatV
                     onFocus={() => setShowSuggestions(true)}
                     onBlur={() => setShowSuggestions(false)}
                     placeholder="Nhập mã (Ví dụ: FPT.VN, BTC-USD, SPY)"
-                    className="w-full bg-slate-950 border border-slate-800 focus:border-emerald-500 rounded-xl py-2 px-3 text-xs focus:outline-none text-slate-100 font-mono transition-all animate-none"
+                    className="w-full bg-slate-950 border border-slate-700/25 focus:border-emerald-500 rounded-xl py-2 px-3 text-xs focus:outline-none text-slate-100 font-mono transition-all animate-none"
                     required
                     autoComplete="off"
                   />
                   {showSuggestions && (
-                    <div className="absolute left-0 right-0 mt-1 max-h-52 overflow-y-auto bg-slate-950 border border-slate-850 rounded-xl z-50 shadow-2xl divide-y divide-slate-900/60 scrollbar-none">
+                    <div className="absolute left-0 right-0 mt-1 max-h-52 overflow-y-auto bg-slate-950 border border-slate-700/15 rounded-xl z-50 shadow-2xl divide-y divide-slate-900/60 scrollbar-none">
                       {filteredSuggestions.length > 0 ? (
                         filteredSuggestions.map(p => (
                           <div
@@ -777,7 +777,7 @@ export default function Portfolio({ marketPrices, formatValSymbol: parentFormatV
                               <span className="text-[11.5px] font-bold text-emerald-400 font-mono truncate">{p.symbol}</span>
                               <span className="text-[10px] text-slate-400 truncate max-w-[200px]">{p.name}</span>
                             </div>
-                            <span className="text-[9px] font-extrabold text-slate-400 bg-slate-900/80 px-1.5 py-0.5 rounded border border-slate-800/60 uppercase tracking-wide shrink-0">
+                            <span className="text-[9px] font-extrabold text-slate-400 bg-slate-900/80 px-1.5 py-0.5 rounded border border-slate-700/20 uppercase tracking-wide shrink-0">
                               {p.category}
                             </span>
                           </div>
@@ -796,7 +796,7 @@ export default function Portfolio({ marketPrices, formatValSymbol: parentFormatV
               {/* BUY / SELL Switch */}
               <div className="flex flex-col gap-1.5">
                 <label className="text-[10px] font-bold text-slate-400 uppercase">Loại giao dịch</label>
-                <div className="grid grid-cols-2 gap-2 bg-slate-950 p-1 border border-slate-800 rounded-xl">
+                <div className="grid grid-cols-2 gap-2 bg-slate-950 p-1 border border-slate-700/25 rounded-xl">
                   <button
                     type="button"
                     onClick={() => setTxType('BUY')}
@@ -832,7 +832,7 @@ export default function Portfolio({ marketPrices, formatValSymbol: parentFormatV
                     value={txQuantity}
                     onChange={(e) => setTxQuantity(e.target.value)}
                     placeholder="Ví dụ: 500 hoặc 0.05"
-                    className="w-full bg-slate-950 border border-slate-800 focus:border-emerald-500 rounded-xl py-2 px-3 text-xs focus:outline-none text-slate-100 font-mono transition-all"
+                    className="w-full bg-slate-950 border border-slate-700/25 focus:border-emerald-500 rounded-xl py-2 px-3 text-xs focus:outline-none text-slate-100 font-mono transition-all"
                     required
                   />
                 </div>
@@ -846,7 +846,7 @@ export default function Portfolio({ marketPrices, formatValSymbol: parentFormatV
                     value={txPrice}
                     onChange={(e) => setTxPrice(e.target.value)}
                     placeholder="Giá giao dịch"
-                    className="w-full bg-slate-950 border border-slate-800 focus:border-emerald-500 rounded-xl py-2 px-3 text-xs focus:outline-none text-slate-100 font-mono transition-all"
+                    className="w-full bg-slate-950 border border-slate-700/25 focus:border-emerald-500 rounded-xl py-2 px-3 text-xs focus:outline-none text-slate-100 font-mono transition-all"
                     required
                   />
                 </div>
@@ -860,7 +860,7 @@ export default function Portfolio({ marketPrices, formatValSymbol: parentFormatV
                   value={txDate}
                   onChange={(e) => setTxDate(e.target.value)}
                   onClick={(e) => e.target.showPicker?.()}
-                  className="w-full bg-slate-950 border border-slate-800 focus:border-emerald-500 rounded-xl py-2 px-3 text-xs focus:outline-none text-slate-100 font-mono transition-all cursor-pointer"
+                  className="w-full bg-slate-950 border border-slate-700/25 focus:border-emerald-500 rounded-xl py-2 px-3 text-xs focus:outline-none text-slate-100 font-mono transition-all cursor-pointer"
                   required
                 />
               </div>

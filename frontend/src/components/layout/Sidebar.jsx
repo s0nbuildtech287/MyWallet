@@ -1,12 +1,12 @@
-import React from 'react';
+﻿import React from 'react';
 import { 
   Compass, LayoutDashboard, Briefcase, LineChart, Scale, Calculator, Percent, Newspaper, BookOpen, Bot 
 } from 'lucide-react';
 
 export default function Sidebar({ activeTab, setActiveTab }) {
   return (
-    <aside className="w-64 bg-slate-900 border-r border-slate-800 flex flex-col h-full z-20 shrink-0">
-      <div className="p-6 border-b border-slate-800 flex items-center gap-3">
+    <aside className="w-64 bg-slate-900 border-r border-slate-700/25 flex flex-col h-full z-20 shrink-0">
+      <div className="p-6 border-b border-slate-700/25 flex items-center gap-3">
         <div className="p-2 bg-gradient-to-tr from-emerald-500 to-teal-400 rounded-xl shadow-lg shadow-emerald-500/20">
           <Compass className="h-5 w-5 text-slate-950 font-bold" />
         </div>
@@ -115,7 +115,7 @@ export default function Sidebar({ activeTab, setActiveTab }) {
         </button>
       </nav>
 
-      <div className="p-4 border-t border-slate-800 text-[10px] text-slate-500 font-mono flex items-center gap-2">
+      <div className="p-4 border-t border-slate-700/25 text-[10px] text-slate-500 font-mono flex items-center gap-2">
         <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
         <span>Online Cổng 5001</span>
       </div>

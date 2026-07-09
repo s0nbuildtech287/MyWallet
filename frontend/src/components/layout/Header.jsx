@@ -1,8 +1,8 @@
-import React from 'react';
+﻿import React from 'react';
 
 export default function Header({ macroIndices }) {
   return (
-    <header className="h-16 border-b border-slate-900 bg-slate-900/40 backdrop-blur-md px-6 flex items-center justify-between shrink-0 z-20">
+    <header className="h-16 border-b border-slate-700/10 bg-slate-900/40 backdrop-blur-md px-6 flex items-center justify-between shrink-0 z-20">
       <div className="flex items-center gap-6 overflow-hidden max-w-full">
         <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest shrink-0 hidden md:block">Bảng tin nhanh:</span>
         <div className="flex items-center gap-4 overflow-x-auto no-scrollbar py-1">

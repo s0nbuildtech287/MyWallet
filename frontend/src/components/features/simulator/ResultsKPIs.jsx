@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { DollarSign, TrendingUp, TrendingDown, Percent } from 'lucide-react';
 import Card from '../../ui/Card';
 
@@ -28,7 +28,7 @@ export default function ResultsKPIs({ results, formatVal }) {
         valueClass={results.netProfit >= 0 ? 'text-emerald-400' : 'text-rose-400'}
       />
 
-      <div className="bg-slate-900/40 border border-slate-800/80 rounded-2xl p-4 flex items-center justify-between shadow-lg backdrop-blur-md">
+      <div className="bg-slate-900/40 border border-slate-700/25 rounded-2xl p-4 flex items-center justify-between shadow-lg backdrop-blur-md">
         <div className="flex flex-col gap-1">
           <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Tỷ suất lợi nhuận</span>
           <div className="flex flex-col">

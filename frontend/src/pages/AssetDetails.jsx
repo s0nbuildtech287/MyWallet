@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { Line, Bar } from 'react-chartjs-2';
 import { LineChart, RefreshCw, ArrowRight, TrendingUp } from 'lucide-react';
 import CandlestickChart from '../components/features/chart/CandlestickChart';
@@ -153,8 +153,8 @@ export default function AssetDetails({
   return (
     <div className="flex flex-col gap-6 text-slate-100 pb-10 animate-fadeIn">
       {/* Detail Chart Section */}
-      <section className="bg-slate-900/40 border border-slate-800/80 rounded-2xl p-5 backdrop-blur-lg flex flex-col gap-5 shadow-2xl relative">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800/60 pb-4">
+      <section className="bg-slate-900/40 border border-slate-700/25 rounded-2xl p-5 backdrop-blur-lg flex flex-col gap-5 shadow-2xl relative">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-700/20 pb-4">
           <div className="flex items-center gap-2">
             <LineChart className="h-5 w-5 text-emerald-400" />
             <div>
@@ -166,7 +166,7 @@ export default function AssetDetails({
           {/* Controls Container */}
           <div className="flex items-center gap-4 flex-wrap">
             {/* Chart Type Toggle */}
-            <div className="flex bg-slate-950/60 p-0.5 rounded-lg border border-slate-800/80">
+            <div className="flex bg-slate-950/60 p-0.5 rounded-lg border border-slate-700/25">
               <button
                 type="button"
                 onClick={() => setChartType('line')}
@@ -208,7 +208,7 @@ export default function AssetDetails({
                     {rng}
                   </button>
                   {/* Tooltip */}
-                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block bg-slate-900 border border-slate-800 text-[9px] text-slate-300 py-1.5 px-2.5 rounded-md whitespace-nowrap shadow-xl z-50 pointer-events-none font-normal">
+                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block bg-slate-900 border border-slate-700/25 text-[9px] text-slate-300 py-1.5 px-2.5 rounded-md whitespace-nowrap shadow-xl z-50 pointer-events-none font-normal">
                     {RANGE_TOOLTIPS[rng]}
                     <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-slate-900" />
                   </div>
@@ -219,7 +219,7 @@ export default function AssetDetails({
         </div>
 
         {/* Indicator Toggles */}
-        <div className="flex flex-wrap gap-x-4 gap-y-2 items-center bg-slate-950/30 border border-slate-850 rounded-xl p-3 text-xs">
+        <div className="flex flex-wrap gap-x-4 gap-y-2 items-center bg-slate-950/30 border border-slate-700/15 rounded-xl p-3 text-xs">
           <span className="text-slate-500 font-bold uppercase tracking-wider text-[9px]">Chỉ báo kỹ thuật:</span>
           
           <label className="flex items-center gap-1.5 cursor-pointer text-slate-300 hover:text-white transition-colors">
@@ -227,7 +227,7 @@ export default function AssetDetails({
               type="checkbox"
               checked={showMA20}
               onChange={(e) => setShowMA20(e.target.checked)}
-              className="accent-emerald-500 rounded border-slate-800 bg-slate-950 h-3.5 w-3.5"
+              className="accent-emerald-500 rounded border-slate-700/25 bg-slate-950 h-3.5 w-3.5"
             />
             <span className="font-medium">Đường MA20</span>
           </label>
@@ -237,7 +237,7 @@ export default function AssetDetails({
               type="checkbox"
               checked={showMA50}
               onChange={(e) => setShowMA50(e.target.checked)}
-              className="accent-emerald-500 rounded border-slate-800 bg-slate-950 h-3.5 w-3.5"
+              className="accent-emerald-500 rounded border-slate-700/25 bg-slate-950 h-3.5 w-3.5"
             />
             <span className="font-medium">Đường MA50</span>
           </label>
@@ -247,7 +247,7 @@ export default function AssetDetails({
               type="checkbox"
               checked={showBollinger}
               onChange={(e) => setShowBollinger(e.target.checked)}
-              className="accent-emerald-500 rounded border-slate-800 bg-slate-950 h-3.5 w-3.5"
+              className="accent-emerald-500 rounded border-slate-700/25 bg-slate-950 h-3.5 w-3.5"
             />
             <span className="font-medium">Dải Bollinger</span>
           </label>
@@ -257,7 +257,7 @@ export default function AssetDetails({
               type="checkbox"
               checked={showRSI}
               onChange={(e) => setShowRSI(e.target.checked)}
-              className="accent-emerald-500 rounded border-slate-800 bg-slate-950 h-3.5 w-3.5"
+              className="accent-emerald-500 rounded border-slate-700/25 bg-slate-950 h-3.5 w-3.5"
             />
             <span className="font-medium">Chỉ báo RSI</span>
           </label>
@@ -267,14 +267,14 @@ export default function AssetDetails({
               type="checkbox"
               checked={showMACD}
               onChange={(e) => setShowMACD(e.target.checked)}
-              className="accent-emerald-500 rounded border-slate-800 bg-slate-950 h-3.5 w-3.5"
+              className="accent-emerald-500 rounded border-slate-700/25 bg-slate-950 h-3.5 w-3.5"
             />
             <span className="font-medium">Chỉ báo MACD</span>
           </label>
         </div>
 
         {/* Technical Stats Header */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-4 bg-slate-950/40 border border-slate-850 rounded-xl text-xs font-mono">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-4 bg-slate-950/40 border border-slate-700/15 rounded-xl text-xs font-mono">
           <div className="flex flex-col gap-1">
             <span className="text-slate-500">Tên tài sản</span>
             <span className="text-slate-200 font-bold">{targetAsset.name}</span>
@@ -296,7 +296,7 @@ export default function AssetDetails({
         {/* Big Chart & Volume Chart Grid */}
         <div className="flex flex-col gap-6 mt-2">
           {detailLoading ? (
-            <div className="h-[320px] flex items-center justify-center bg-slate-950/20 rounded-xl border border-slate-900">
+            <div className="h-[320px] flex items-center justify-center bg-slate-950/20 rounded-xl border border-slate-700/10">
               <RefreshCw className="h-8 w-8 text-emerald-400 animate-spin" />
             </div>
           ) : detailData && detailData.length > 0 ? (
@@ -556,7 +556,7 @@ export default function AssetDetails({
             </>
             )
           ) : (
-            <div className="h-[320px] flex items-center justify-center text-slate-500 font-semibold border border-slate-900 rounded-xl">
+            <div className="h-[320px] flex items-center justify-center text-slate-500 font-semibold border border-slate-700/10 rounded-xl">
               Không thể tải biểu đồ lịch sử của mã này.
             </div>
           )}
@@ -578,10 +578,10 @@ export default function AssetDetails({
           </div>
         )}
 
-        <div className="flex gap-2 justify-end border-t border-slate-800/60 pt-4 mt-2">
+        <div className="flex gap-2 justify-end border-t border-slate-700/20 pt-4 mt-2">
           <button 
             onClick={() => setActiveTab('overview')}
-            className="px-4 py-2 bg-slate-950/60 hover:bg-slate-900 border border-slate-800 text-slate-400 hover:text-slate-200 text-xs rounded-xl transition-all cursor-pointer"
+            className="px-4 py-2 bg-slate-950/60 hover:bg-slate-900 border border-slate-700/25 text-slate-400 hover:text-slate-200 text-xs rounded-xl transition-all cursor-pointer"
           >
             Quay lại thị trường
           </button>

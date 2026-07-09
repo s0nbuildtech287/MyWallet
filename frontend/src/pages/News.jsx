@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { Globe, RefreshCw } from 'lucide-react';
 import useNews from '../hooks/useNews';
 
@@ -8,10 +8,10 @@ export default function News() {
 
   return (
     <div className="flex flex-col gap-6 animate-fadeIn">
-      <section className="bg-slate-900/40 border border-slate-800/80 rounded-2xl p-5 shadow-2xl backdrop-blur-lg flex flex-col gap-4">
+      <section className="bg-slate-900/40 border border-slate-700/25 rounded-2xl p-5 shadow-2xl backdrop-blur-lg flex flex-col gap-4">
         
         {/* News filters header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800/60 pb-3">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-700/20 pb-3">
           <div className="flex items-center justify-between sm:justify-start w-full sm:w-auto gap-3">
             <div className="flex items-center gap-2">
               <Globe className="h-4 w-4 text-emerald-400" />
@@ -27,7 +27,7 @@ export default function News() {
             <button
               onClick={refetch}
               disabled={loading}
-              className="p-1.5 rounded-lg bg-slate-950/40 border border-slate-850 hover:border-slate-700 text-slate-400 hover:text-slate-200 disabled:opacity-50 transition-all ml-1"
+              className="p-1.5 rounded-lg bg-slate-950/40 border border-slate-700/15 hover:border-slate-700 text-slate-400 hover:text-slate-200 disabled:opacity-50 transition-all ml-1"
               title="Làm mới"
             >
               <RefreshCw className={`h-3 w-3 ${loading ? 'animate-spin' : ''}`} />
@@ -94,10 +94,10 @@ export default function News() {
               <div 
                 key={item.id}
                 onClick={() => window.open(item.url, '_blank')}
-                className="p-4 bg-slate-950/40 border border-slate-900 hover:border-slate-700/60 rounded-xl transition-all flex gap-4 shadow-lg group cursor-pointer hover:shadow-emerald-950/10"
+                className="p-4 bg-slate-950/40 border border-slate-700/10 hover:border-slate-700/60 rounded-xl transition-all flex gap-4 shadow-lg group cursor-pointer hover:shadow-emerald-950/10"
               >
                 {item.imageUrl && (
-                  <div className="w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 rounded-lg overflow-hidden bg-slate-950 border border-slate-850">
+                  <div className="w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 rounded-lg overflow-hidden bg-slate-950 border border-slate-700/15">
                     <img 
                       src={item.imageUrl} 
                       alt="" 

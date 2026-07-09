@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 
 export default function Card({ 
   title, 
@@ -9,7 +9,7 @@ export default function Card({
   bgIconClass = "bg-slate-800/60" 
 }) {
   return (
-    <div className="bg-slate-900/40 border border-slate-800/80 rounded-2xl p-4 flex items-center justify-between shadow-lg backdrop-blur-md">
+    <div className="bg-slate-900/40 border border-slate-700/25 rounded-2xl p-4 flex items-center justify-between shadow-lg backdrop-blur-md">
       <div className="flex flex-col gap-1">
         <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">{title}</span>
         <span className={`text-lg font-bold ${valueClass}`}>{value}</span>
@@ -22,7 +22,7 @@ export default function Card({
 }
 export function SubCard({ title, value, valueClass = "text-slate-100" }) {
   return (
-    <div className="bg-slate-900/40 border border-slate-800/80 rounded-2xl p-4 flex flex-col gap-1">
+    <div className="bg-slate-900/40 border border-slate-700/25 rounded-2xl p-4 flex flex-col gap-1">
       <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">{title}</span>
       <span className={`text-base font-extrabold ${valueClass}`}>{value}</span>
     </div>

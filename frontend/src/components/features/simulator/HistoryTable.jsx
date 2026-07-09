@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { History } from 'lucide-react';
 import Pagination from '../../ui/Pagination';
 
@@ -11,8 +11,8 @@ export default function HistoryTable({
   setCurrentPage
 }) {
   return (
-    <div className="bg-slate-900/40 border border-slate-800/80 rounded-2xl p-5 shadow-lg backdrop-blur-md flex flex-col gap-4">
-      <div className="flex items-center justify-between border-b border-slate-800/60 pb-3">
+    <div className="bg-slate-900/40 border border-slate-700/25 rounded-2xl p-5 shadow-lg backdrop-blur-md flex flex-col gap-4">
+      <div className="flex items-center justify-between border-b border-slate-700/20 pb-3">
         <div className="flex items-center gap-2">
           <History className="h-4 w-4 text-emerald-400" />
           <h3 className="text-sm font-bold text-slate-200">Nhật ký chi tiết chu kỳ tích lũy</h3>
@@ -25,7 +25,7 @@ export default function HistoryTable({
       <div className="overflow-x-auto">
         <table className="w-full text-left text-xs border-collapse">
           <thead>
-            <tr className="border-b border-slate-800 text-slate-400 font-semibold bg-slate-950/30">
+            <tr className="border-b border-slate-700/25 text-slate-400 font-semibold bg-slate-950/30">
               <th className="py-2.5 px-4">#</th>
               <th className="py-2.5 px-4">Ngày mua</th>
               <th className="py-2.5 px-4">Giá mua</th>

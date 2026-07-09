@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Flame, BookOpen, Layers, ArrowRight, Shield, Award, HelpCircle } from 'lucide-react';
 
 const SUGGESTED_SIMULATIONS = [
@@ -93,8 +93,8 @@ export default function Guides({ handleQuickSimulation, setActiveTab, setSymbol,
     <div className="flex flex-col gap-8 animate-fadeIn">
       
       {/* 1. Outstanding Suggested Investment Plans */}
-      <section className="bg-slate-900/40 border border-slate-800/80 rounded-2xl p-6 shadow-2xl backdrop-blur-lg flex flex-col gap-4">
-        <div className="flex items-center gap-2 border-b border-slate-800/60 pb-3">
+      <section className="bg-slate-900/40 border border-slate-700/25 rounded-2xl p-6 shadow-2xl backdrop-blur-lg flex flex-col gap-4">
+        <div className="flex items-center gap-2 border-b border-slate-700/20 pb-3">
           <Flame className="h-5 w-5 text-amber-500" />
           <h3 className="text-sm font-bold text-slate-200 uppercase tracking-wider">
             Các kế hoạch giả định tiêu biểu nổi bật
@@ -105,7 +105,7 @@ export default function Guides({ handleQuickSimulation, setActiveTab, setSymbol,
           {SUGGESTED_SIMULATIONS.map((sim, index) => (
             <div 
               key={index}
-              className="p-4 bg-slate-950/50 border border-slate-850 hover:border-slate-700/60 rounded-xl transition-all flex flex-col justify-between gap-4"
+              className="p-4 bg-slate-950/50 border border-slate-700/15 hover:border-slate-700/60 rounded-xl transition-all flex flex-col justify-between gap-4"
             >
               <div className="flex flex-col gap-1.5">
                 <div className="flex justify-between items-start">
@@ -137,8 +137,8 @@ export default function Guides({ handleQuickSimulation, setActiveTab, setSymbol,
       </section>
 
       {/* 2. Asset Accumulation Methodologies */}
-      <section className="bg-slate-900/40 border border-slate-800/80 rounded-2xl p-6 shadow-2xl backdrop-blur-lg flex flex-col gap-4">
-        <div className="flex items-center gap-2 border-b border-slate-800/60 pb-3">
+      <section className="bg-slate-900/40 border border-slate-700/25 rounded-2xl p-6 shadow-2xl backdrop-blur-lg flex flex-col gap-4">
+        <div className="flex items-center gap-2 border-b border-slate-700/20 pb-3">
           <Layers className="h-5 w-5 text-emerald-400" />
           <h3 className="text-sm font-bold text-slate-200 uppercase tracking-wider">
             Các phương pháp tích lũy & phân bổ vốn phổ biến
@@ -147,7 +147,7 @@ export default function Guides({ handleQuickSimulation, setActiveTab, setSymbol,
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
           {INVESTMENT_METHODS.map((method, index) => (
-            <div key={index} className="p-4 bg-slate-950/30 border border-slate-850 rounded-xl flex flex-col gap-3">
+            <div key={index} className="p-4 bg-slate-950/30 border border-slate-700/15 rounded-xl flex flex-col gap-3">
               <h4 className="text-xs font-bold text-emerald-400 flex items-center gap-1.5">
                 <Award className="h-4 w-4 shrink-0" />
                 {method.title}
@@ -165,8 +165,8 @@ export default function Guides({ handleQuickSimulation, setActiveTab, setSymbol,
       </section>
 
       {/* 3. Beginner Guide & Tips */}
-      <section className="bg-slate-900/40 border border-slate-800/80 rounded-2xl p-6 shadow-2xl backdrop-blur-lg flex flex-col gap-4">
-        <div className="flex items-center gap-2 border-b border-slate-800/60 pb-3">
+      <section className="bg-slate-900/40 border border-slate-700/25 rounded-2xl p-6 shadow-2xl backdrop-blur-lg flex flex-col gap-4">
+        <div className="flex items-center gap-2 border-b border-slate-700/20 pb-3">
           <BookOpen className="h-5 w-5 text-emerald-400" />
           <h3 className="text-sm font-bold text-slate-200 uppercase tracking-wider">
             Cẩm nang tài chính cho người mới bắt đầu
@@ -175,8 +175,8 @@ export default function Guides({ handleQuickSimulation, setActiveTab, setSymbol,
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {BEGINNER_TIPS.map((tip, index) => (
-            <div key={index} className="p-4 bg-slate-950/30 border border-slate-850 rounded-xl flex gap-3.5 items-start">
-              <div className="p-2 bg-slate-900 rounded-lg text-emerald-400 border border-slate-800/60 shrink-0">
+            <div key={index} className="p-4 bg-slate-950/30 border border-slate-700/15 rounded-xl flex gap-3.5 items-start">
+              <div className="p-2 bg-slate-900 rounded-lg text-emerald-400 border border-slate-700/20 shrink-0">
                 <Shield className="h-4 w-4" />
               </div>
               <div className="flex flex-col gap-1">

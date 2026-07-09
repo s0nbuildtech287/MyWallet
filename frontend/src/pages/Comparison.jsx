@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
 import { 
   Scale, Plus, X, TrendingUp, RefreshCw, AlertCircle, 
@@ -359,8 +359,8 @@ export default function Comparison({ marketPrices, formatValSymbol, setActiveTab
       <div className="w-full lg:w-1/4 flex flex-col gap-6">
         
         {/* Control Box */}
-        <div className="bg-slate-900/40 border border-slate-800/80 rounded-2xl p-5 backdrop-blur-md flex flex-col gap-4 shadow-xl">
-          <div className="flex items-center gap-2 border-b border-slate-800/60 pb-3">
+        <div className="bg-slate-900/40 border border-slate-700/25 rounded-2xl p-5 backdrop-blur-md flex flex-col gap-4 shadow-xl">
+          <div className="flex items-center gap-2 border-b border-slate-700/20 pb-3">
             <Scale className="h-5 w-5 text-emerald-400" />
             <h3 className="text-sm font-bold text-slate-200 uppercase tracking-wider">Cấu hình so sánh</h3>
           </div>
@@ -378,7 +378,7 @@ export default function Comparison({ marketPrices, formatValSymbol, setActiveTab
                   setShowDropdown(true);
                 }}
                 onFocus={() => setShowDropdown(true)}
-                className="flex-1 bg-slate-950/80 border border-slate-850 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-emerald-500/50 font-semibold"
+                className="flex-1 bg-slate-950/80 border border-slate-700/15 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-emerald-500/50 font-semibold"
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
                     handleAddSymbol(searchQuery);
@@ -395,13 +395,13 @@ export default function Comparison({ marketPrices, formatValSymbol, setActiveTab
 
             {/* Recommendations Dropdown */}
             {showDropdown && searchQuery.trim() !== '' && (
-              <div className="absolute top-full left-0 w-full bg-slate-900 border border-slate-800 rounded-xl mt-1 shadow-2xl z-50 max-h-56 overflow-y-auto">
+              <div className="absolute top-full left-0 w-full bg-slate-900 border border-slate-700/25 rounded-xl mt-1 shadow-2xl z-50 max-h-56 overflow-y-auto">
                 {filteredSuggestions.length > 0 ? (
                   filteredSuggestions.map((asset) => (
                     <button
                       key={asset.symbol}
                       onClick={() => handleAddSymbol(asset.symbol)}
-                      className="w-full text-left px-4 py-2 hover:bg-slate-800/80 text-xs flex justify-between items-center border-b border-slate-800 last:border-0 transition-colors"
+                      className="w-full text-left px-4 py-2 hover:bg-slate-800/80 text-xs flex justify-between items-center border-b border-slate-700/25 last:border-0 transition-colors"
                     >
                       <span className="font-bold text-slate-200">{asset.symbol}</span>
                       <span className="text-slate-400 text-[10px] truncate max-w-[150px]">{asset.name}</span>
@@ -429,7 +429,7 @@ export default function Comparison({ marketPrices, formatValSymbol, setActiveTab
               Tài sản đang chọn ({selectedSymbols.length})
             </label>
             {selectedSymbols.length === 0 ? (
-              <div className="text-[10px] text-slate-500 italic bg-slate-950/20 border border-dashed border-slate-850 p-3 rounded-xl text-center">
+              <div className="text-[10px] text-slate-500 italic bg-slate-950/20 border border-dashed border-slate-700/15 p-3 rounded-xl text-center">
                 Chưa chọn tài sản nào. Vui lòng thêm hoặc chọn kịch bản gợi ý bên dưới.
               </div>
             ) : (
@@ -467,8 +467,8 @@ export default function Comparison({ marketPrices, formatValSymbol, setActiveTab
         </div>
 
         {/* Suggestion Presets */}
-        <div className="bg-slate-900/40 border border-slate-800/80 rounded-2xl p-5 backdrop-blur-md flex flex-col gap-4 shadow-xl">
-          <div className="flex items-center gap-1.5 border-b border-slate-800/60 pb-3">
+        <div className="bg-slate-900/40 border border-slate-700/25 rounded-2xl p-5 backdrop-blur-md flex flex-col gap-4 shadow-xl">
+          <div className="flex items-center gap-1.5 border-b border-slate-700/20 pb-3">
             <Sparkles className="h-4 w-4 text-amber-400" />
             <h3 className="text-xs font-bold text-slate-200 uppercase tracking-wider">Kịch bản gợi ý nhanh</h3>
           </div>
@@ -484,14 +484,14 @@ export default function Comparison({ marketPrices, formatValSymbol, setActiveTab
                   className={`w-full text-left p-3 rounded-xl border text-xs transition-all cursor-pointer ${
                     isMatch 
                       ? 'bg-slate-800 border-slate-700 font-semibold shadow' 
-                      : 'bg-slate-950/20 border-slate-850 hover:bg-slate-900/60'
+                      : 'bg-slate-950/20 border-slate-700/15 hover:bg-slate-900/60'
                   }`}
                 >
                   <div className="font-bold text-slate-200">{p.name}</div>
                   <div className="text-[10px] text-slate-400 mt-1 leading-relaxed">{p.description}</div>
                   <div className="mt-2 flex gap-1 flex-wrap">
                     {p.symbols.map(s => (
-                      <span key={s} className="text-[8px] font-mono bg-slate-900 border border-slate-800 text-slate-400 py-0.5 px-1.5 rounded">
+                      <span key={s} className="text-[8px] font-mono bg-slate-900 border border-slate-700/25 text-slate-400 py-0.5 px-1.5 rounded">
                         {s}
                       </span>
                     ))}
@@ -520,7 +520,7 @@ export default function Comparison({ marketPrices, formatValSymbol, setActiveTab
           </div>
 
           {/* Range Selector */}
-          <div className="flex gap-1 bg-slate-900/80 p-0.5 rounded-lg border border-slate-800 self-start sm:self-center">
+          <div className="flex gap-1 bg-slate-900/80 p-0.5 rounded-lg border border-slate-700/25 self-start sm:self-center">
             {['1M', '3M', '6M', '1Y', '5Y', 'ALL'].map((rng) => (
               <div key={rng} className="group relative">
                 <button
@@ -534,7 +534,7 @@ export default function Comparison({ marketPrices, formatValSymbol, setActiveTab
                   {rng}
                 </button>
                 {/* Range Tooltip */}
-                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block bg-slate-900 border border-slate-800 text-[9px] text-slate-350 py-1 px-2 rounded whitespace-nowrap shadow-xl z-50 font-normal">
+                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block bg-slate-900 border border-slate-700/25 text-[9px] text-slate-350 py-1 px-2 rounded whitespace-nowrap shadow-xl z-50 font-normal">
                   {RANGE_TOOLTIPS[rng]}
                   <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-slate-900" />
                 </div>
@@ -544,7 +544,7 @@ export default function Comparison({ marketPrices, formatValSymbol, setActiveTab
         </div>
 
         {/* Big Chart Box */}
-        <div className="bg-slate-900/40 border border-slate-800/80 rounded-2xl p-5 shadow-2xl backdrop-blur-lg flex flex-col gap-4 relative min-h-[420px]">
+        <div className="bg-slate-900/40 border border-slate-700/25 rounded-2xl p-5 shadow-2xl backdrop-blur-lg flex flex-col gap-4 relative min-h-[420px]">
           
           {error && (
             <div className="bg-red-500/10 border border-red-500/30 text-red-400 p-4 rounded-xl text-xs flex items-center gap-3">
@@ -576,7 +576,7 @@ export default function Comparison({ marketPrices, formatValSymbol, setActiveTab
             </div>
           )}
           
-          <div className="text-[10px] text-slate-500 flex items-center gap-1.5 border-t border-slate-850 pt-3">
+          <div className="text-[10px] text-slate-500 flex items-center gap-1.5 border-t border-slate-700/15 pt-3">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
             <span>Mẹo: Tất cả các đường tăng trưởng đều tự động điều chỉnh xuất phát tại điểm mốc <b>0%</b> từ ngày đầu tiên của khoảng thời gian được chọn để dễ dàng so sánh tỷ lệ sinh lời.</span>
           </div>
@@ -584,8 +584,8 @@ export default function Comparison({ marketPrices, formatValSymbol, setActiveTab
 
         {/* Thống kê Chi tiết bảng */}
         {selectedSymbols.length > 0 && stats.length > 0 && (
-          <div className="bg-slate-900/40 border border-slate-800/80 rounded-2xl shadow-xl backdrop-blur-md overflow-hidden">
-            <div className="px-5 py-4 border-b border-slate-800/60 flex items-center gap-2">
+          <div className="bg-slate-900/40 border border-slate-700/25 rounded-2xl shadow-xl backdrop-blur-md overflow-hidden">
+            <div className="px-5 py-4 border-b border-slate-700/20 flex items-center gap-2">
               <TrendingUp className="h-4 w-4 text-emerald-400" />
               <h3 className="text-xs font-bold text-slate-350 uppercase tracking-wider">Thống kê hiệu suất chi tiết</h3>
             </div>
@@ -593,7 +593,7 @@ export default function Comparison({ marketPrices, formatValSymbol, setActiveTab
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs border-collapse">
                 <thead>
-                  <tr className="border-b border-slate-850 text-slate-400 text-[10px] font-bold uppercase tracking-wider bg-slate-950/20">
+                  <tr className="border-b border-slate-700/15 text-slate-400 text-[10px] font-bold uppercase tracking-wider bg-slate-950/20">
                     <th className="py-3 px-4">Tài sản</th>
                     <th className="py-3 px-4">Giá bắt đầu</th>
                     <th className="py-3 px-4">Giá cuối kỳ</th>

@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Layers, Search, RefreshCw } from 'lucide-react';
 import Tooltip from '../../ui/Tooltip';
 
@@ -25,8 +25,8 @@ export default function ConfigPanel({
   };
 
   return (
-    <section className="bg-slate-900/40 border border-slate-800/80 rounded-2xl p-5 backdrop-blur-lg flex flex-col gap-5 h-fit shadow-2xl">
-      <div className="border-b border-slate-800/60 pb-3 flex items-center gap-2">
+    <section className="bg-slate-900/40 border border-slate-700/25 rounded-2xl p-5 backdrop-blur-lg flex flex-col gap-5 h-fit shadow-2xl">
+      <div className="border-b border-slate-700/20 pb-3 flex items-center gap-2">
         <Layers className="h-4 w-4 text-emerald-400" />
         <h2 className="text-sm font-semibold text-slate-200 uppercase tracking-wider">Cấu hình giả lập</h2>
       </div>
@@ -44,7 +44,7 @@ export default function ConfigPanel({
               value={symbol}
               onChange={(e) => setSymbol(e.target.value)}
               placeholder="Ví dụ: HPG.VN, BTC-USD"
-              className="w-full bg-slate-950/60 border border-slate-800 focus:border-emerald-500 rounded-xl py-2 px-3 pl-9 text-sm focus:outline-none transition-all text-slate-100 font-mono"
+              className="w-full bg-slate-950/60 border border-slate-700/25 focus:border-emerald-500 rounded-xl py-2 px-3 pl-9 text-sm focus:outline-none transition-all text-slate-100 font-mono"
               required
             />
             <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-500" />
@@ -60,7 +60,7 @@ export default function ConfigPanel({
                 className={`text-[10px] py-1 px-2 rounded-md border transition-all ${
                   symbol.toUpperCase() === p.value 
                     ? 'bg-emerald-500/10 border-emerald-500/50 text-emerald-400' 
-                    : 'bg-slate-950/40 border-slate-800/80 text-slate-400 hover:text-slate-200 hover:border-slate-700'
+                    : 'bg-slate-950/40 border-slate-700/25 text-slate-400 hover:text-slate-200 hover:border-slate-700'
                 }`}
               >
                 {p.value.split('-')[0].split('.')[0]}
@@ -80,7 +80,7 @@ export default function ConfigPanel({
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
             onClick={(e) => e.target.showPicker?.()}
-            className="w-full bg-slate-950/60 border border-slate-800 focus:border-emerald-500 rounded-xl py-2 px-3 text-sm focus:outline-none focus:ring-0 transition-all font-mono text-slate-200 cursor-pointer"
+            className="w-full bg-slate-950/60 border border-slate-700/25 focus:border-emerald-500 rounded-xl py-2 px-3 text-sm focus:outline-none focus:ring-0 transition-all font-mono text-slate-200 cursor-pointer"
             required
           />
         </div>
@@ -96,7 +96,7 @@ export default function ConfigPanel({
             value={endDate}
             onChange={(e) => setEndDate(e.target.value)}
             onClick={(e) => e.target.showPicker?.()}
-            className="w-full bg-slate-950/60 border border-slate-800 focus:border-emerald-500 rounded-xl py-2 px-3 text-sm focus:outline-none focus:ring-0 transition-all font-mono text-slate-200 cursor-pointer"
+            className="w-full bg-slate-950/60 border border-slate-700/25 focus:border-emerald-500 rounded-xl py-2 px-3 text-sm focus:outline-none focus:ring-0 transition-all font-mono text-slate-200 cursor-pointer"
             required
           />
         </div>
@@ -114,7 +114,7 @@ export default function ConfigPanel({
               className={`w-full text-left py-2.5 px-3 rounded-xl border flex flex-col gap-0.5 transition-all ${
                 investMode === 'dca-qty'
                   ? 'bg-emerald-500/10 border-emerald-500/50 text-emerald-400 font-bold'
-                  : 'bg-slate-950/40 border-slate-800/80 text-slate-400 hover:text-slate-300 hover:border-slate-700'
+                  : 'bg-slate-950/40 border-slate-700/25 text-slate-400 hover:text-slate-300 hover:border-slate-700'
               }`}
             >
               <span className="font-semibold text-xs">DCA số lượng cố định</span>
@@ -127,7 +127,7 @@ export default function ConfigPanel({
               className={`w-full text-left py-2.5 px-3 rounded-xl border flex flex-col gap-0.5 transition-all ${
                 investMode === 'dca-amount'
                   ? 'bg-emerald-500/10 border-emerald-500/50 text-emerald-400 font-bold'
-                  : 'bg-slate-950/40 border-slate-800/80 text-slate-400 hover:text-slate-300 hover:border-slate-700'
+                  : 'bg-slate-950/40 border-slate-700/25 text-slate-400 hover:text-slate-300 hover:border-slate-700'
               }`}
             >
               <span className="font-semibold text-xs">DCA số tiền cố định</span>
@@ -140,7 +140,7 @@ export default function ConfigPanel({
               className={`w-full text-left py-2.5 px-3 rounded-xl border flex flex-col gap-0.5 transition-all ${
                 investMode === 'lump-sum'
                   ? 'bg-emerald-500/10 border-emerald-500/50 text-emerald-400 font-bold'
-                  : 'bg-slate-950/40 border-slate-800/80 text-slate-400 hover:text-slate-300 hover:border-slate-700'
+                  : 'bg-slate-950/40 border-slate-700/25 text-slate-400 hover:text-slate-300 hover:border-slate-700'
               }`}
             >
               <span className="font-semibold text-xs">Mua một lần duy nhất</span>
@@ -150,7 +150,7 @@ export default function ConfigPanel({
         </div>
 
         {/* Input Value */}
-        <div className="flex flex-col gap-1.5 border-t border-slate-800/60 pt-3">
+        <div className="flex flex-col gap-1.5 border-t border-slate-700/20 pt-3">
           <label className="text-xs font-medium text-slate-400 flex items-center gap-1">
             <span>
               {investMode === 'dca-qty' 
@@ -164,7 +164,7 @@ export default function ConfigPanel({
             type="text"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
-            className="w-full bg-slate-950/60 border border-slate-800 focus:border-emerald-500 rounded-xl py-2 px-3 text-sm focus:outline-none font-bold text-slate-200"
+            className="w-full bg-slate-950/60 border border-slate-700/25 focus:border-emerald-500 rounded-xl py-2 px-3 text-sm focus:outline-none font-bold text-slate-200"
             required
           />
           {isVndAsset && (investMode === 'dca-amount' || investMode === 'lump-sum') && (
@@ -175,13 +175,13 @@ export default function ConfigPanel({
         </div>
 
         {/* Reinvest Dividends Checkbox */}
-        <div className="flex items-center gap-3 border-t border-slate-800/60 pt-3">
+        <div className="flex items-center gap-3 border-t border-slate-700/20 pt-3">
           <input
             type="checkbox"
             id="reinvestDividends"
             checked={reinvestDividends}
             onChange={(e) => setReinvestDividends(e.target.checked)}
-            className="w-4 h-4 rounded text-emerald-500 bg-slate-950 border-slate-800 focus:ring-emerald-500 focus:ring-opacity-25 focus:ring-offset-0 focus:outline-none accent-emerald-500 cursor-pointer"
+            className="w-4 h-4 rounded text-emerald-500 bg-slate-950 border-slate-700/25 focus:ring-emerald-500 focus:ring-opacity-25 focus:ring-offset-0 focus:outline-none accent-emerald-500 cursor-pointer"
           />
           <label htmlFor="reinvestDividends" className="text-xs font-semibold text-slate-300 flex items-center gap-1 cursor-pointer select-none">
             <span>Tái đầu tư cổ tức</span>

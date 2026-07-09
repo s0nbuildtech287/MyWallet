@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Search, Layers, ArrowRight, Loader2, AlertCircle, PlusCircle, Star } from 'lucide-react';
 import Pagination from '../components/ui/Pagination';
 import Tooltip from '../components/ui/Tooltip';
@@ -30,7 +30,7 @@ export default function Overview({
   return (
     <div className="flex flex-col gap-6 animate-fadeIn">
       {/* Hero Search Section */}
-      <section className="bg-gradient-to-r from-slate-900/80 via-slate-900/10 to-slate-900/80 border border-slate-850 rounded-2xl p-6 text-center flex flex-col items-center justify-center gap-3.5 shadow-2xl backdrop-blur-lg">
+      <section className="bg-gradient-to-r from-slate-900/80 via-slate-900/10 to-slate-900/80 border border-slate-700/15 rounded-2xl p-6 text-center flex flex-col items-center justify-center gap-3.5 shadow-2xl backdrop-blur-lg">
         <h2 className="text-xl font-bold bg-gradient-to-r from-emerald-400 to-teal-100 bg-clip-text text-transparent">
           Cổng tra cứu tài sản &amp; Thiết lập phương án tích sản
         </h2>
@@ -46,7 +46,7 @@ export default function Overview({
               value={globalSearch}
               onChange={(e) => setGlobalSearch(e.target.value)}
               placeholder="Nhập mã tài sản (VD: VNM.VN, AMZN, ETH-USD...)"
-              className="w-full bg-slate-950/80 border border-slate-800 focus:border-emerald-500 rounded-xl py-2 px-3.5 pl-9 text-xs focus:outline-none text-slate-100 font-mono transition-all"
+              className="w-full bg-slate-950/80 border border-slate-700/25 focus:border-emerald-500 rounded-xl py-2 px-3.5 pl-9 text-xs focus:outline-none text-slate-100 font-mono transition-all"
             />
             <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-500" />
           </div>
@@ -77,8 +77,8 @@ export default function Overview({
       </section>
 
       {/* Large Market Asset List */}
-      <section className="bg-slate-900/40 border border-slate-800/80 rounded-2xl p-5 shadow-2xl backdrop-blur-lg flex flex-col gap-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-800/60 pb-3 gap-3">
+      <section className="bg-slate-900/40 border border-slate-700/25 rounded-2xl p-5 shadow-2xl backdrop-blur-lg flex flex-col gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-700/20 pb-3 gap-3">
           <h3 className="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-2">
             <Layers className="h-4 w-4 text-emerald-400" />
             Danh sách tài sản tham khảo
@@ -92,7 +92,7 @@ export default function Overview({
                 className={`text-[10px] font-semibold py-1 px-2.5 rounded-lg border transition-all ${
                   categoryFilter === cat
                     ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400"
-                    : "bg-slate-950/40 border-slate-800 text-slate-400 hover:text-slate-200"
+                    : "bg-slate-950/40 border-slate-700/25 text-slate-400 hover:text-slate-200"
                 }`}
               >
                 {cat}
@@ -104,7 +104,7 @@ export default function Overview({
               className={`text-[10px] font-semibold py-1 px-2.5 rounded-lg border transition-all flex items-center gap-1 ${
                 categoryFilter === 'Watchlist'
                   ? "bg-yellow-500/10 border-yellow-500/30 text-yellow-400"
-                  : "bg-slate-950/40 border-slate-800 text-slate-400 hover:text-slate-200"
+                  : "bg-slate-950/40 border-slate-700/25 text-slate-400 hover:text-slate-200"
               }`}
             >
               <Star className={`h-3 w-3 ${categoryFilter === 'Watchlist' ? 'fill-yellow-400 text-yellow-400' : ''}`} />
@@ -116,7 +116,7 @@ export default function Overview({
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs border-collapse">
             <thead>
-              <tr className="border-b border-slate-800 text-slate-400 font-semibold bg-slate-950/20">
+              <tr className="border-b border-slate-700/25 text-slate-400 font-semibold bg-slate-950/20">
                 <th className="py-2.5 px-3 w-8 text-center text-slate-600">#</th>
                 <th className="py-2.5 px-4">Tên tài sản</th>
                 <th className="py-2.5 px-4 font-mono">Mã Yahoo</th>
@@ -168,7 +168,7 @@ export default function Overview({
                 filteredAssets.map((asset, idx) => (
                   <tr
                     key={asset.symbol}
-                    className={`border-b border-slate-850 hover:bg-slate-800/20 transition-colors duration-300 ${
+                    className={`border-b border-slate-700/15 hover:bg-slate-800/20 transition-colors duration-300 ${
                       asset.tick === "up" ? "bg-emerald-500/10" : asset.tick === "down" ? "bg-rose-500/10" : ""
                     }`}
                   >
@@ -239,7 +239,7 @@ export default function Overview({
                         </button>
                         <button
                           onClick={() => handleOpenAssetDetails(asset.symbol)}
-                          className="bg-slate-900 hover:bg-slate-800 text-slate-300 font-bold py-1 px-3 border border-slate-800 rounded-lg text-[9px] transition-all cursor-pointer"
+                          className="bg-slate-900 hover:bg-slate-800 text-slate-300 font-bold py-1 px-3 border border-slate-700/25 rounded-lg text-[9px] transition-all cursor-pointer"
                         >
                           Xem biểu đồ
                         </button>

@@ -350,7 +350,7 @@ Nhiệm vụ của bạn là phân tích dữ liệu kỹ thuật thời gian th
    - Gợi ý vùng điểm vào lệnh (Entry), điểm dừng lỗ (Stop Loss - SL) và điểm chốt lời (Take Profit - TP) cụ thể dựa trên các chỉ báo như dải Bollinger và hỗ trợ/kháng cự kỹ thuật.
    - Khuyến nghị tỷ lệ đòn bẩy (Leverage) an toàn tương ứng với độ biến động hiện tại của tài sản đó (ví dụ: x2, x5, x10).
 
-Hãy phân tích dựa trên dữ liệu đầu vào thật được cung cấp. Trả lời ngắn gọn, tập trung, sử dụng ngôn từ chuyên nghiệp của giới trading tài chính, định dạng Markdown rõ ràng có bullet points, không nói dài dòng lý thuyết.`;
+Hãy phân tích dựa trên dữ liệu đầu vào thật được cung cấp. Trả lời ngắn gọn, tập trung, sử dụng ngôn từ chuyên nghiệp của giới trading tài chính. Định dạng câu trả lời rõ ràng có bullet points nhưng TUYỆT ĐỐI KHÔNG sử dụng ký tự dấu sao kép (** hoặc *) trong toàn bộ văn bản. Khi muốn nhấn mạnh từ khóa, hãy viết IN HOA từ đó.`;
 
   const userPrompt = `Hãy phân tích tài sản: ${symbol}
 - Giá hiện tại: ${currentPrice}
@@ -380,7 +380,8 @@ Hãy phân tích dựa trên dữ liệu đầu vào thật được cung cấp.
     );
 
     const advice = response.data?.choices?.[0]?.message?.content || 'Không thể tạo phân tích.';
-    res.json({ success: true, advice });
+    const cleanAdvice = advice.replace(/\*/g, '');
+    res.json({ success: true, advice: cleanAdvice });
   } catch (error) {
     console.error('OpenAI API request failed:', error.message);
     res.status(500).json({ error: error.response?.data?.error?.message || error.message });
@@ -399,7 +400,7 @@ app.post('/api/ai-chat', async (req, res) => {
   const systemPrompt = `Bạn là một trợ lý AI tài chính chuyên sâu thuộc hệ thống MyWallet Hub. 
 Người dùng đang xem tài sản ${symbol || 'tài sản bất kỳ'} với giá hiện tại là ${currentPrice || 'chưa rõ'}.
 Hãy trả lời các câu hỏi của người dùng về tài sản này, thị trường tài chính, phân tích kỹ thuật hoặc chiến lược đầu tư (Tích sản & Trading CFD/Futures).
-Hãy trả lời ngắn gọn, trực diện, chuyên nghiệp bằng Tiếng Việt. Định dạng Markdown rõ ràng.`;
+Hãy trả lời ngắn gọn, trực diện, chuyên nghiệp bằng Tiếng Việt. Định dạng câu trả lời rõ ràng có bullet points nhưng TUYỆT ĐỐI KHÔNG sử dụng ký tự dấu sao kép (** hoặc *) trong toàn bộ văn bản. Khi muốn nhấn mạnh từ khóa, hãy viết IN HOA từ đó.`;
 
   try {
     const response = await axios.post(
@@ -421,7 +422,8 @@ Hãy trả lời ngắn gọn, trực diện, chuyên nghiệp bằng Tiếng Vi
     );
 
     const reply = response.data?.choices?.[0]?.message?.content || '';
-    res.json({ success: true, reply });
+    const cleanReply = reply.replace(/\*/g, '');
+    res.json({ success: true, reply: cleanReply });
   } catch (error) {
     console.error('OpenAI Chat API request failed:', error.message);
     res.status(500).json({ error: error.response?.data?.error?.message || error.message });

@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Line } from 'react-chartjs-2';
 import { TrendingUp, RefreshCw, Info, Activity } from 'lucide-react';
 import ConfigPanel from '../components/features/simulator/ConfigPanel';
@@ -66,7 +66,7 @@ export default function Simulator({
 
         {/* Empty state / Welcome screen */}
         {!results && !loading && (
-          <div className="bg-slate-900/30 border border-slate-800/80 rounded-2xl p-12 text-center flex flex-col items-center justify-center gap-5 flex-1 min-h-[450px] shadow-2xl backdrop-blur-lg">
+          <div className="bg-slate-900/30 border border-slate-700/25 rounded-2xl p-12 text-center flex flex-col items-center justify-center gap-5 flex-1 min-h-[450px] shadow-2xl backdrop-blur-lg">
             <div className="p-4 bg-slate-800/60 rounded-full border border-slate-700/60 shadow-lg">
               <TrendingUp className="h-12 w-12 text-emerald-400 animate-pulse" />
             </div>
@@ -81,7 +81,7 @@ export default function Simulator({
 
         {/* Loading spinner */}
         {loading && (
-          <div className="bg-slate-900/30 border border-slate-800/80 rounded-2xl p-12 text-center flex flex-col items-center justify-center gap-4 flex-1 min-h-[450px] shadow-2xl backdrop-blur-lg">
+          <div className="bg-slate-900/30 border border-slate-700/25 rounded-2xl p-12 text-center flex flex-col items-center justify-center gap-4 flex-1 min-h-[450px] shadow-2xl backdrop-blur-lg">
             <RefreshCw className="h-10 w-10 text-emerald-400 animate-spin" />
             <p className="text-sm text-slate-400">Đang tải và tính toán dữ liệu lịch sử giá từ Yahoo Finance...</p>
           </div>
@@ -95,8 +95,8 @@ export default function Simulator({
             <ResultsKPIs results={results} formatVal={formatVal} />
 
             {/* Chart container */}
-            <div className="bg-slate-900/40 border border-slate-800/80 rounded-2xl p-5 shadow-lg backdrop-blur-md flex flex-col gap-4">
-              <div className="flex items-center justify-between border-b border-slate-800/60 pb-3">
+            <div className="bg-slate-900/40 border border-slate-700/25 rounded-2xl p-5 shadow-lg backdrop-blur-md flex flex-col gap-4">
+              <div className="flex items-center justify-between border-b border-slate-700/20 pb-3">
                 <div className="flex items-center gap-2">
                   <Activity className="h-4 w-4 text-emerald-400" />
                   <h3 className="text-sm font-bold text-slate-200">Đồ thị tăng trưởng giả lập</h3>
