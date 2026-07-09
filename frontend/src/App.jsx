@@ -141,14 +141,37 @@ export default function App() {
   const fetchAssetDetailChart = async () => {
     setDetailLoading(true);
     const nowSecs = Math.floor(new Date().getTime() / 1000);
-    let startSecs = nowSecs - 365 * 24 * 60 * 60;
+    let startSecs = nowSecs - 365 * 24 * 60 * 60; // 1Y mặc định
+    let interval = '1d';
     
-    if (detailRange === '1M') startSecs = nowSecs - 30 * 24 * 60 * 60;
-    else if (detailRange === '6M') startSecs = nowSecs - 180 * 24 * 60 * 60;
-    else if (detailRange === '5Y') startSecs = nowSecs - 5 * 365 * 24 * 60 * 60;
+    if (detailRange === '1D') {
+      startSecs = nowSecs - 1 * 24 * 60 * 60;
+      interval = '5m';
+    } else if (detailRange === '5D') {
+      startSecs = nowSecs - 5 * 24 * 60 * 60;
+      interval = '15m';
+    } else if (detailRange === '1M') {
+      startSecs = nowSecs - 30 * 24 * 60 * 60;
+      interval = '1d';
+    } else if (detailRange === '3M') {
+      startSecs = nowSecs - 90 * 24 * 60 * 60;
+      interval = '1d';
+    } else if (detailRange === '6M') {
+      startSecs = nowSecs - 180 * 24 * 60 * 60;
+      interval = '1d';
+    } else if (detailRange === '1Y') {
+      startSecs = nowSecs - 365 * 24 * 60 * 60;
+      interval = '1d';
+    } else if (detailRange === '5Y') {
+      startSecs = nowSecs - 5 * 365 * 24 * 60 * 60;
+      interval = '1wk';
+    } else if (detailRange === 'ALL') {
+      startSecs = 0;
+      interval = '1mo';
+    }
 
     try {
-      const response = await fetch(`http://localhost:5001/api/chart?symbol=${selectedDetailSymbol.toUpperCase()}&period1=${startSecs}&period2=${nowSecs}`);
+      const response = await fetch(`http://localhost:5001/api/chart?symbol=${selectedDetailSymbol.toUpperCase()}&period1=${startSecs}&period2=${nowSecs}&interval=${interval}`);
       const data = await response.json();
       if (!data.chart || !data.chart.result) throw new Error('Failed to load chart');
       
@@ -160,8 +183,22 @@ export default function App() {
       const chartPoints = [];
       for (let i = 0; i < timestamps.length; i++) {
         if (timestamps[i] && closes[i] !== null && closes[i] !== undefined) {
+          const dateObj = new Date(timestamps[i] * 1000);
+          let formattedDate = '';
+          
+          if (detailRange === '1D') {
+            formattedDate = dateObj.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', hour12: false });
+          } else if (detailRange === '5D') {
+            formattedDate = dateObj.toLocaleDateString('vi-VN', { month: 'numeric', day: 'numeric' }) + ' ' + 
+                            dateObj.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', hour12: false });
+          } else if (detailRange === '1M' || detailRange === '3M' || detailRange === '6M') {
+            formattedDate = dateObj.toLocaleDateString('vi-VN', { month: 'numeric', day: 'numeric' });
+          } else {
+            formattedDate = dateObj.toLocaleDateString('vi-VN', { year: 'numeric', month: 'numeric' });
+          }
+
           chartPoints.push({
-            date: new Date(timestamps[i] * 1000).toLocaleDateString('vi-VN', { month: 'numeric', day: 'numeric' }),
+            date: formattedDate,
             price: closes[i],
             volume: volumes[i] || 0
           });

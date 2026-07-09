@@ -2,6 +2,17 @@ import React from 'react';
 import { Line, Bar } from 'react-chartjs-2';
 import { LineChart, RefreshCw, ArrowRight } from 'lucide-react';
 
+const RANGE_TOOLTIPS = {
+  '1D': 'Dữ liệu 1 ngày gần nhất, nến 5 phút',
+  '5D': 'Dữ liệu 5 ngày gần nhất, nến 15 phút',
+  '1M': 'Dữ liệu 1 tháng gần nhất, nến 1 ngày',
+  '3M': 'Dữ liệu 3 tháng gần nhất, nến 1 ngày',
+  '6M': 'Dữ liệu 6 tháng gần nhất, nến 1 ngày',
+  '1Y': 'Dữ liệu 1 năm gần nhất, nến 1 ngày',
+  '5Y': 'Dữ liệu 5 năm gần nhất, nến 1 tuần',
+  'ALL': 'Toàn bộ dữ liệu lịch sử, nến 1 tháng'
+};
+
 export default function AssetDetails({
   selectedDetailSymbol,
   detailRange,
@@ -19,13 +30,12 @@ export default function AssetDetails({
   };
 
   return (
-    <div className="flex flex-col gap-6 animate-fadeIn">
-      <section className="bg-slate-900/40 border border-slate-800/80 rounded-2xl p-5 shadow-2xl backdrop-blur-lg flex flex-col gap-5">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-800/60 pb-3 gap-3">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-slate-800 rounded-xl border border-slate-700 text-emerald-400">
-              <LineChart className="h-4 w-4" />
-            </div>
+    <div className="flex flex-col gap-6 text-slate-100 pb-10 animate-fadeIn">
+      {/* Detail Chart Section */}
+      <section className="bg-slate-900/40 border border-slate-800/80 rounded-2xl p-5 backdrop-blur-lg flex flex-col gap-5 shadow-2xl relative">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800/60 pb-4">
+          <div className="flex items-center gap-2">
+            <LineChart className="h-5 w-5 text-emerald-400" />
             <div>
               <h3 className="text-sm font-bold text-slate-200">Biểu đồ kỹ thuật chi tiết: {selectedDetailSymbol}</h3>
               <p className="text-[10px] text-slate-500 font-mono">Dữ liệu đóng cửa hàng ngày</p>
@@ -33,19 +43,25 @@ export default function AssetDetails({
           </div>
 
           {/* Range selectors */}
-          <div className="flex gap-1">
-            {['1M', '6M', '1Y', '5Y'].map((rng) => (
-              <button
-                key={rng}
-                onClick={() => setDetailRange(rng)}
-                className={`text-[9px] font-semibold py-1 px-3.5 rounded-lg border transition-all ${
-                  detailRange === rng 
-                    ? 'bg-slate-850 border-slate-700 text-emerald-400' 
-                    : 'bg-transparent border-transparent text-slate-400 hover:text-slate-200'
-                }`}
-              >
-                {rng}
-              </button>
+          <div className="flex gap-1.5">
+            {['1D', '5D', '1M', '3M', '6M', '1Y', '5Y', 'ALL'].map((rng) => (
+              <div key={rng} className="group relative">
+                <button
+                  onClick={() => setDetailRange(rng)}
+                  className={`text-[9px] font-semibold py-1 px-2.5 rounded-lg border transition-all cursor-pointer ${
+                    detailRange === rng 
+                      ? 'bg-slate-850 border-slate-700 text-emerald-400 font-bold shadow-md' 
+                      : 'bg-transparent border-transparent text-slate-400 hover:text-slate-200'
+                  }`}
+                >
+                  {rng}
+                </button>
+                {/* Tooltip */}
+                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block bg-slate-900 border border-slate-800 text-[9px] text-slate-300 py-1.5 px-2.5 rounded-md whitespace-nowrap shadow-xl z-50 pointer-events-none font-normal">
+                  {RANGE_TOOLTIPS[rng]}
+                  <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-slate-900" />
+                </div>
+              </div>
             ))}
           </div>
         </div>

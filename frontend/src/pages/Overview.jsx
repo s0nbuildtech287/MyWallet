@@ -1,6 +1,7 @@
 import React from 'react';
 import { Search, Layers, ArrowRight, Loader2, AlertCircle, PlusCircle } from 'lucide-react';
 import Pagination from '../components/ui/Pagination';
+import Tooltip from '../components/ui/Tooltip';
 
 export default function Overview({
   globalSearch,
@@ -104,8 +105,14 @@ export default function Overview({
                 <th className="py-2.5 px-4 font-mono">Mã Yahoo</th>
                 <th className="py-2.5 px-4">Phân nhóm</th>
                 <th className="py-2.5 px-4">Giá hiện tại</th>
-                <th className="py-2.5 px-4">Biến động</th>
-                <th className="py-2.5 px-4">Khối lượng 24h</th>
+                <th className="py-2.5 px-4">
+                  <span>Biến động</span>
+                  <Tooltip content="Phần trăm thay đổi giá của tài sản trong 24 giờ qua." />
+                </th>
+                <th className="py-2.5 px-4">
+                  <span>Khối lượng 24h</span>
+                  <Tooltip content="Tổng giá trị giao dịch quy đổi (Turnover Value) trong 24 giờ gần nhất." />
+                </th>
                 <th className="py-2.5 px-4 text-right">Thao tác</th>
               </tr>
             </thead>

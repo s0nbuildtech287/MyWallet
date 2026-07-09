@@ -1,5 +1,6 @@
 import React from 'react';
 import { Layers, Search, RefreshCw } from 'lucide-react';
+import Tooltip from '../../ui/Tooltip';
 
 export default function ConfigPanel({
   symbol,
@@ -31,7 +32,10 @@ export default function ConfigPanel({
       <form onSubmit={handleSimulate} className="flex flex-col gap-4">
         {/* Symbol input with preset tags */}
         <div className="flex flex-col gap-2">
-          <label className="text-xs font-medium text-slate-400">Ký hiệu tài sản</label>
+          <label className="text-xs font-medium text-slate-400 flex items-center gap-1">
+            <span>Ký hiệu tài sản</span>
+            <Tooltip content="Mã giao dịch tài sản trên Yahoo Finance (ví dụ: BTC-USD cho Bitcoin, FPT.VN cho cổ phiếu FPT)." />
+          </label>
           <div className="relative">
             <input
               type="text"
@@ -65,7 +69,10 @@ export default function ConfigPanel({
 
         {/* Start Date */}
         <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-medium text-slate-400">Ngày bắt đầu</label>
+          <label className="text-xs font-medium text-slate-400 flex items-center gap-1">
+            <span>Ngày bắt đầu</span>
+            <Tooltip content="Mốc thời gian bắt đầu chạy giả định tích lũy tài sản." />
+          </label>
           <input
             type="date"
             value={startDate}
@@ -77,7 +84,10 @@ export default function ConfigPanel({
 
         {/* End Date */}
         <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-medium text-slate-400">Ngày kết thúc</label>
+          <label className="text-xs font-medium text-slate-400 flex items-center gap-1">
+            <span>Ngày kết thúc</span>
+            <Tooltip content="Mốc thời gian dừng việc mua tích lũy và thực hiện chốt số liệu." />
+          </label>
           <input
             type="date"
             value={endDate}
@@ -89,14 +99,17 @@ export default function ConfigPanel({
 
         {/* Investment Mode */}
         <div className="flex flex-col gap-2">
-          <label className="text-xs font-medium text-slate-400">Phương thức tích trữ</label>
+          <label className="text-xs font-medium text-slate-400 flex items-center gap-1">
+            <span>Phương thức tích trữ</span>
+            <Tooltip content="Chọn cách thức mua định kỳ (DCA) hoặc mua toàn bộ vốn một lần duy nhất." />
+          </label>
           <div className="flex flex-col gap-1.5">
             <button
               type="button"
               onClick={() => setInvestMode('dca-qty')}
               className={`w-full text-left py-2.5 px-3 rounded-xl border flex flex-col gap-0.5 transition-all ${
                 investMode === 'dca-qty'
-                  ? 'bg-emerald-500/10 border-emerald-500/50 text-emerald-400'
+                  ? 'bg-emerald-500/10 border-emerald-500/50 text-emerald-400 font-bold'
                   : 'bg-slate-950/40 border-slate-800/80 text-slate-400 hover:text-slate-300 hover:border-slate-700'
               }`}
             >
@@ -109,7 +122,7 @@ export default function ConfigPanel({
               onClick={() => setInvestMode('dca-amount')}
               className={`w-full text-left py-2.5 px-3 rounded-xl border flex flex-col gap-0.5 transition-all ${
                 investMode === 'dca-amount'
-                  ? 'bg-emerald-500/10 border-emerald-500/50 text-emerald-400'
+                  ? 'bg-emerald-500/10 border-emerald-500/50 text-emerald-400 font-bold'
                   : 'bg-slate-950/40 border-slate-800/80 text-slate-400 hover:text-slate-300 hover:border-slate-700'
               }`}
             >
@@ -122,7 +135,7 @@ export default function ConfigPanel({
               onClick={() => setInvestMode('lump-sum')}
               className={`w-full text-left py-2.5 px-3 rounded-xl border flex flex-col gap-0.5 transition-all ${
                 investMode === 'lump-sum'
-                  ? 'bg-emerald-500/10 border-emerald-500/50 text-emerald-400'
+                  ? 'bg-emerald-500/10 border-emerald-500/50 text-emerald-400 font-bold'
                   : 'bg-slate-950/40 border-slate-800/80 text-slate-400 hover:text-slate-300 hover:border-slate-700'
               }`}
             >
@@ -134,11 +147,14 @@ export default function ConfigPanel({
 
         {/* Input Value */}
         <div className="flex flex-col gap-1.5 border-t border-slate-800/60 pt-3">
-          <label className="text-xs font-medium text-slate-400">
-            {investMode === 'dca-qty' 
-              ? `Số lượng mua mỗi tháng` 
-              : `Số tiền đầu tư mỗi kỳ (${isVndAsset ? 'VNĐ' : 'USD'})`
-            }
+          <label className="text-xs font-medium text-slate-400 flex items-center gap-1">
+            <span>
+              {investMode === 'dca-qty' 
+                ? `Số lượng mua mỗi tháng` 
+                : `Số tiền đầu tư mỗi kỳ (${isVndAsset ? 'VNĐ' : 'USD'})`
+              }
+            </span>
+            <Tooltip content="Số vốn bỏ ra (hoặc số lượng tài sản mua) trong mỗi kỳ giao dịch tích lũy." />
           </label>
           <input
             type="text"

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Calculator } from 'lucide-react';
+import Tooltip from '../../ui/Tooltip';
 
 export default function ConfigPanel({
   interestInit,
@@ -20,7 +21,10 @@ export default function ConfigPanel({
 
       <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-medium text-slate-400">Số tiền ban đầu (VND)</label>
+          <label className="text-xs font-medium text-slate-400 flex items-center gap-1">
+            <span>Số tiền ban đầu (VNĐ)</span>
+            <Tooltip content="Số tiền gốc ban đầu bạn bỏ vào tài khoản gửi tiết kiệm hoặc đầu tư." />
+          </label>
           <input
             type="number"
             value={interestInit}
@@ -30,7 +34,10 @@ export default function ConfigPanel({
         </div>
 
         <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-medium text-slate-400">Gửi thêm hàng tháng (VND)</label>
+          <label className="text-xs font-medium text-slate-400 flex items-center gap-1">
+            <span>Gửi thêm hàng tháng (VNĐ)</span>
+            <Tooltip content="Số tiền bạn tích lũy và gửi thêm đều đặn vào tài khoản mỗi tháng." />
+          </label>
           <input
             type="number"
             value={interestMonthly}
@@ -40,7 +47,10 @@ export default function ConfigPanel({
         </div>
 
         <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-medium text-slate-400">Lãi suất hàng năm (%)</label>
+          <label className="text-xs font-medium text-slate-400 flex items-center gap-1">
+            <span>Lãi suất hàng năm (%)</span>
+            <Tooltip content="Lãi suất danh nghĩa kỳ vọng bạn nhận được trung bình mỗi năm." />
+          </label>
           <input
             type="number"
             value={interestRate}
@@ -50,7 +60,10 @@ export default function ConfigPanel({
         </div>
 
         <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-medium text-slate-400">Thời gian gửi (Năm)</label>
+          <label className="text-xs font-medium text-slate-400 flex items-center gap-1">
+            <span>Thời gian gửi (Năm)</span>
+            <Tooltip content="Số năm bạn dự tính duy trì khoản tiết kiệm để sinh lãi kép tích lũy." />
+          </label>
           <input
             type="number"
             value={interestYears}
