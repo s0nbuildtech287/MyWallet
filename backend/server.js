@@ -147,7 +147,11 @@ app.get('/api/live-prices', async (req, res) => {
           latestClose = meta.regularMarketPrice;
         }
         
-        const latestVolume = volumes.filter(v => v !== null && v !== undefined).pop();
+        let dailyVolume = meta.regularMarketVolume;
+        if (dailyVolume === undefined || dailyVolume === null) {
+          const nonNullVolumes = volumes.filter(v => v !== null && v !== undefined);
+          dailyVolume = nonNullVolumes.reduce((sum, v) => sum + v, 0) || nonNullVolumes.pop() || 0;
+        }
         
         if (latestClose === undefined || latestClose === null || isNaN(latestClose)) {
           return { symbol: sym, success: false, error: 'No price data found' };
@@ -162,7 +166,7 @@ app.get('/api/live-prices', async (req, res) => {
           success: true,
           price: latestClose,
           change: changePercent,
-          volume: latestVolume || 0,
+          volume: dailyVolume,
           shortName: meta.shortName || meta.longName || sym
         };
       } catch (err) {

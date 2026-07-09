@@ -874,6 +874,7 @@ export default function App() {
               handleOpenAssetDetails={handleOpenAssetDetails}
               handleGlobalSearchSubmit={handleGlobalSearchSubmit}
               formatValSymbol={formatValSymbol}
+              formatVolumeHelper={formatVolumeHelper}
               overviewPage={overviewPage}
               setOverviewPage={setOverviewPage}
               overviewTotalPages={overviewTotalPages}

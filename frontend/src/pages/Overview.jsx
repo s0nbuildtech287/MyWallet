@@ -15,6 +15,7 @@ export default function Overview({
   handleOpenAssetDetails,
   handleGlobalSearchSubmit,
   formatValSymbol,
+  formatVolumeHelper,
   overviewPage,
   setOverviewPage,
   overviewTotalPages,
@@ -146,7 +147,7 @@ export default function Overview({
                       {asset.change >= 0 ? "+" : ""}{asset.change}%
                     </td>
                     <td className="py-3 px-4 text-slate-400 font-mono font-medium">
-                      {asset.volume || "N/A"}
+                      {formatVolumeHelper(asset.volume, asset.symbol.endsWith('.VN') || asset.symbol.endsWith('.HM'))}
                     </td>
                     <td className="py-3 px-4 text-right">
                       <div className="flex items-center justify-end gap-2">
