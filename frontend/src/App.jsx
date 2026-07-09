@@ -8,6 +8,7 @@ import News from './pages/News';
 import Guides from './pages/Guides';
 import Portfolio from './pages/Portfolio';
 import Comparison from './pages/Comparison';
+import TradingGPT from './pages/TradingGPT';
 
 // Import Layout Components
 import Sidebar from './components/layout/Sidebar';
@@ -28,6 +29,32 @@ export default function App() {
   const overviewItemsPerPage = 10;
   const [searchLoading, setSearchLoading] = useState(false);
   const [searchError, setSearchError] = useState(null);
+
+  // Watchlist — seed 9 mã mặc định nếu localStorage chưa có
+  const WATCHLIST_DEFAULT = ['BTC-USD', 'ETH-USD', 'GC=F', 'SI=F', 'CL=F', '^GSPC', '^N225', '^GDAXI', '^HSI'];
+  const [watchlist, setWatchlist] = useState(() => {
+    try {
+      const saved = localStorage.getItem('mywallet_watchlist');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) return parsed;
+      }
+    } catch {}
+    return WATCHLIST_DEFAULT;
+  });
+
+  // Persist watchlist to localStorage on change
+  useEffect(() => {
+    localStorage.setItem('mywallet_watchlist', JSON.stringify(watchlist));
+  }, [watchlist]);
+
+  const toggleWatchlist = (symbol) => {
+    setWatchlist(prev =>
+      prev.includes(symbol)
+        ? prev.filter(s => s !== symbol)
+        : [...prev, symbol]
+    );
+  };
 
   // Live prices
   const [marketPrices, setMarketPrices] = useState(MARKET_ASSETS);
@@ -58,7 +85,7 @@ export default function App() {
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash.replace('#/', '');
-      const validTabs = ['overview', 'portfolio', 'asset-details', 'comparison', 'simulator', 'interest', 'news', 'guides'];
+      const validTabs = ['overview', 'portfolio', 'asset-details', 'comparison', 'simulator', 'interest', 'news', 'guides', 'trading-gpt'];
       if (validTabs.includes(hash)) {
         setActiveTab(hash);
       } else {
@@ -845,7 +872,11 @@ export default function App() {
     const matchesSearch = globalSearch.trim() === '' ||
                           asset.name.toLowerCase().includes(globalSearch.toLowerCase()) || 
                           asset.symbol.toLowerCase().includes(globalSearch.toLowerCase());
-    const matchesCategory = categoryFilter === 'All' || asset.category === categoryFilter;
+    const matchesCategory = categoryFilter === 'All'
+      ? true
+      : categoryFilter === 'Watchlist'
+        ? watchlist.includes(asset.symbol)
+        : asset.category === categoryFilter;
     return matchesSearch && matchesCategory;
   });
 
@@ -888,6 +919,8 @@ export default function App() {
               overviewItemsPerPage={overviewItemsPerPage}
               searchLoading={searchLoading}
               searchError={searchError}
+              watchlist={watchlist}
+              toggleWatchlist={toggleWatchlist}
             />
           )}
 
@@ -967,6 +1000,13 @@ export default function App() {
 
           {activeTab === 'news' && (
             <News />
+          )}
+
+          {activeTab === 'trading-gpt' && (
+            <TradingGPT
+              marketAssets={marketPrices}
+              formatValSymbol={formatValSymbol}
+            />
           )}
         </main>
       </div>

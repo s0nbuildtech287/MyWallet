@@ -1,5 +1,5 @@
 import React from 'react';
-import { Search, Layers, ArrowRight, Loader2, AlertCircle, PlusCircle } from 'lucide-react';
+import { Search, Layers, ArrowRight, Loader2, AlertCircle, PlusCircle, Star } from 'lucide-react';
 import Pagination from '../components/ui/Pagination';
 import Tooltip from '../components/ui/Tooltip';
 import SparklineChart from '../components/ui/SparklineChart';
@@ -24,6 +24,8 @@ export default function Overview({
   overviewItemsPerPage,
   searchLoading,
   searchError,
+  watchlist = [],
+  toggleWatchlist,
 }) {
   return (
     <div className="flex flex-col gap-6 animate-fadeIn">
@@ -96,6 +98,18 @@ export default function Overview({
                 {cat}
               </button>
             ))}
+            {/* Watchlist tab */}
+            <button
+              onClick={() => { setCategoryFilter('Watchlist'); setOverviewPage(1); }}
+              className={`text-[10px] font-semibold py-1 px-2.5 rounded-lg border transition-all flex items-center gap-1 ${
+                categoryFilter === 'Watchlist'
+                  ? "bg-yellow-500/10 border-yellow-500/30 text-yellow-400"
+                  : "bg-slate-950/40 border-slate-800 text-slate-400 hover:text-slate-200"
+              }`}
+            >
+              <Star className={`h-3 w-3 ${categoryFilter === 'Watchlist' ? 'fill-yellow-400 text-yellow-400' : ''}`} />
+              Watchlist ({watchlist.length})
+            </button>
           </div>
         </div>
 
@@ -141,7 +155,13 @@ export default function Overview({
               {filteredAssets.length === 0 ? (
                 <tr>
                   <td colSpan={11} className="py-10 text-center text-slate-500 text-xs">
-                    Không tìm thấy tài sản phù hợp
+                    {categoryFilter === 'Watchlist'
+                      ? <div className="flex flex-col items-center gap-2">
+                          <Star className="h-8 w-8 text-slate-700" />
+                          <span>Chưa có mã nào trong Watchlist. Bấm ⭐ trên mỗi tài sản để theo dõi.</span>
+                        </div>
+                      : 'Không tìm thấy tài sản phù hợp'
+                    }
                   </td>
                 </tr>
               ) : (
@@ -204,6 +224,19 @@ export default function Overview({
                     </td>
                     <td className="py-3 px-4">
                       <div className="flex items-center justify-center gap-2">
+                        <button
+                          onClick={() => toggleWatchlist(asset.symbol)}
+                          title={watchlist.includes(asset.symbol) ? 'Bỏ theo dõi' : 'Thêm vào Watchlist'}
+                          className="p-1 rounded-lg transition-all hover:bg-slate-800 cursor-pointer"
+                        >
+                          <Star
+                            className={`h-3.5 w-3.5 transition-colors ${
+                              watchlist.includes(asset.symbol)
+                                ? 'fill-yellow-400 text-yellow-400'
+                                : 'text-slate-500 hover:text-yellow-400'
+                            }`}
+                          />
+                        </button>
                         <button
                           onClick={() => handleOpenAssetDetails(asset.symbol)}
                           className="bg-slate-900 hover:bg-slate-800 text-slate-300 font-bold py-1 px-3 border border-slate-800 rounded-lg text-[9px] transition-all cursor-pointer"

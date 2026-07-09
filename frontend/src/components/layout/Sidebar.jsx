@@ -1,6 +1,6 @@
 import React from 'react';
 import { 
-  Compass, LayoutDashboard, Briefcase, LineChart, Scale, Calculator, Percent, Newspaper, BookOpen 
+  Compass, LayoutDashboard, Briefcase, LineChart, Scale, Calculator, Percent, Newspaper, BookOpen, Bot 
 } from 'lucide-react';
 
 export default function Sidebar({ activeTab, setActiveTab }) {
@@ -76,6 +76,18 @@ export default function Sidebar({ activeTab, setActiveTab }) {
         >
           <Calculator className="h-4 w-4" />
           <span>Chạy giả định tích sản</span>
+        </button>
+
+        <button
+          onClick={() => setActiveTab('trading-gpt')}
+          className={`w-full flex items-center gap-3 text-sm font-semibold py-3 px-4 rounded-xl border transition-all cursor-pointer ${
+            activeTab === 'trading-gpt'
+              ? 'bg-slate-800 border-slate-700 text-emerald-400 font-bold shadow-md'
+              : 'border-transparent text-slate-300 hover:text-white hover:bg-slate-900/60'
+          }`}
+        >
+          <Bot className="h-4 w-4" />
+          <span>Trading GPT</span>
         </button>
 
         <button

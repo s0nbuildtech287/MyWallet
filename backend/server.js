@@ -2,6 +2,47 @@ import express from 'express';
 import cors from 'cors';
 import axios from 'axios';
 import Parser from 'rss-parser';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Dynamic env loader looking both in /backend and root folder
+function loadEnv() {
+  const pathsToTry = [
+    path.join(__dirname, '.env'),
+    path.join(__dirname, '../.env')
+  ];
+  for (const envPath of pathsToTry) {
+    if (fs.existsSync(envPath)) {
+      try {
+        const envContent = fs.readFileSync(envPath, 'utf8');
+        envContent.split(/\r?\n/).forEach(line => {
+          const trimmed = line.trim();
+          if (trimmed && !trimmed.startsWith('#')) {
+            const index = trimmed.indexOf('=');
+            if (index !== -1) {
+              const key = trimmed.substring(0, index).trim();
+              let val = trimmed.substring(index + 1).trim();
+              if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
+                val = val.substring(1, val.length - 1);
+              }
+              process.env[key] = val;
+            }
+          }
+        });
+        console.log(`[Env Loader] Loaded variables from: ${envPath}`);
+        return;
+      } catch (err) {
+        console.error(`[Env Loader] Error reading ${envPath}:`, err.message);
+      }
+    }
+  }
+  console.log('[Env Loader] No .env file found in /backend or root folder.');
+}
+loadEnv();
 
 const app = express();
 const PORT = process.env.PORT || 5001;
@@ -285,6 +326,105 @@ app.get('/api/market-cap', async (req, res) => {
     res.json(results);
   } catch (error) {
     res.status(500).json({ error: error.message });
+  }
+});
+
+
+app.post('/api/ai-analyze', async (req, res) => {
+  const { symbol, currentPrice, indicators, priceTrend } = req.body;
+  
+  const openaiKey = process.env.OPENAI_API_KEY || process.env.openaikey;
+  if (!openaiKey) {
+    return res.status(500).json({ error: 'OpenAI API Key (hoặc openaikey) is missing in backend .env file.' });
+  }
+
+  const systemPrompt = `Bạn là một chuyên gia phân tích tài chính cấp cao của hệ thống MyWallet Hub. 
+Nhiệm vụ của bạn là phân tích dữ liệu kỹ thuật thời gian thực của tài sản và đưa ra khuyến nghị kép:
+
+1. CHIẾN LƯỢC TÍCH SẢN DÀI HẠN (DCA):
+   - Đánh giá giá hiện tại so với xu hướng lịch sử (đắt hay rẻ).
+   - Đưa ra lời khuyên về việc phân bổ tỷ trọng vốn hàng tháng (tăng lượng mua tích lũy hay tạm dừng chờ giá tối ưu).
+
+2. CHIẾN LƯỢC GIAO GỊCH NGẮN HẠN (CFD/FUTURES/LEVERAGE):
+   - Xác định hướng đánh khả thi nhất: LONG (Mua) hay SHORT (Bán) hay Đứng ngoài quan sát.
+   - Gợi ý vùng điểm vào lệnh (Entry), điểm dừng lỗ (Stop Loss - SL) và điểm chốt lời (Take Profit - TP) cụ thể dựa trên các chỉ báo như dải Bollinger và hỗ trợ/kháng cự kỹ thuật.
+   - Khuyến nghị tỷ lệ đòn bẩy (Leverage) an toàn tương ứng với độ biến động hiện tại của tài sản đó (ví dụ: x2, x5, x10).
+
+Hãy phân tích dựa trên dữ liệu đầu vào thật được cung cấp. Trả lời ngắn gọn, tập trung, sử dụng ngôn từ chuyên nghiệp của giới trading tài chính, định dạng Markdown rõ ràng có bullet points, không nói dài dòng lý thuyết.`;
+
+  const userPrompt = `Hãy phân tích tài sản: ${symbol}
+- Giá hiện tại: ${currentPrice}
+- Xu hướng 15 nến gần nhất: ${priceTrend ? priceTrend.join(', ') : 'N/A'}
+- RSI (14): ${indicators?.rsi ? Number(indicators.rsi).toFixed(2) : 'N/A'}
+- MACD: MACD Line = ${indicators?.macd?.macdLine ? Number(indicators.macd.macdLine).toFixed(2) : 'N/A'}, Signal Line = ${indicators?.macd?.signalLine ? Number(indicators.macd.signalLine).toFixed(2) : 'N/A'}
+- Bollinger Bands: Upper = ${indicators?.bollinger?.upper ? indicators.bollinger.upper : 'N/A'}, Middle = ${indicators?.bollinger?.middle ? indicators.bollinger.middle : 'N/A'}, Lower = ${indicators?.bollinger?.lower ? indicators.bollinger.lower : 'N/A'}
+- MA xu hướng: MA20 = ${indicators?.ma20 ? indicators.ma20 : 'N/A'}, MA50 = ${indicators?.ma50 ? indicators.ma50 : 'N/A'}`;
+
+  try {
+    const response = await axios.post(
+      'https://api.openai.com/v1/chat/completions',
+      {
+        model: 'gpt-4o-mini',
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: userPrompt }
+        ],
+        temperature: 0.5
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${openaiKey}`
+        }
+      }
+    );
+
+    const advice = response.data?.choices?.[0]?.message?.content || 'Không thể tạo phân tích.';
+    res.json({ success: true, advice });
+  } catch (error) {
+    console.error('OpenAI API request failed:', error.message);
+    res.status(500).json({ error: error.response?.data?.error?.message || error.message });
+  }
+});
+
+
+app.post('/api/ai-chat', async (req, res) => {
+  const { messages, symbol, currentPrice } = req.body;
+  
+  const openaiKey = process.env.OPENAI_API_KEY || process.env.openaikey;
+  if (!openaiKey) {
+    return res.status(500).json({ error: 'OpenAI API Key (hoặc openaikey) is missing in backend .env file.' });
+  }
+
+  const systemPrompt = `Bạn là một trợ lý AI tài chính chuyên sâu thuộc hệ thống MyWallet Hub. 
+Người dùng đang xem tài sản ${symbol || 'tài sản bất kỳ'} với giá hiện tại là ${currentPrice || 'chưa rõ'}.
+Hãy trả lời các câu hỏi của người dùng về tài sản này, thị trường tài chính, phân tích kỹ thuật hoặc chiến lược đầu tư (Tích sản & Trading CFD/Futures).
+Hãy trả lời ngắn gọn, trực diện, chuyên nghiệp bằng Tiếng Việt. Định dạng Markdown rõ ràng.`;
+
+  try {
+    const response = await axios.post(
+      'https://api.openai.com/v1/chat/completions',
+      {
+        model: 'gpt-4o-mini',
+        messages: [
+          { role: 'system', content: systemPrompt },
+          ...messages
+        ],
+        temperature: 0.7
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${openaiKey}`
+        }
+      }
+    );
+
+    const reply = response.data?.choices?.[0]?.message?.content || '';
+    res.json({ success: true, reply });
+  } catch (error) {
+    console.error('OpenAI Chat API request failed:', error.message);
+    res.status(500).json({ error: error.response?.data?.error?.message || error.message });
   }
 });
 
