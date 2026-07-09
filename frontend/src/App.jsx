@@ -21,24 +21,24 @@ const MACRO_INDICES = [
 
 // Market Assets Data
 const MARKET_ASSETS = [
-  { name: 'Bitcoin', symbol: 'BTC-USD', price: 92350, change: 2.4, category: 'Crypto', isVnd: false, details: { pe: 'N/A', high52: '$98,500', low52: '$38,200', volume: '$28.4B' } },
-  { name: 'Ethereum', symbol: 'ETH-USD', price: 3450, change: 1.6, category: 'Crypto', isVnd: false, details: { pe: 'N/A', high52: '$4,090', low52: '$1,850', volume: '$12.5B' } },
-  { name: 'Solana', symbol: 'SOL-USD', price: 145.2, change: 4.8, category: 'Crypto', isVnd: false, details: { pe: 'N/A', high52: '$210', low52: '$18.5', volume: '$3.8B' } },
-  { name: 'Cardano', symbol: 'ADA-USD', price: 0.58, change: -1.2, category: 'Crypto', isVnd: false, details: { pe: 'N/A', high52: '$0.82', low52: '$0.24', volume: '$450M' } },
+  { name: 'Bitcoin', symbol: 'BTC-USD', price: 92350, change: 2.4, category: 'Crypto', isVnd: false, volume: '$28.4B', details: { pe: 'N/A', high52: '$98,500', low52: '$38,200', volume: '$28.4B' } },
+  { name: 'Ethereum', symbol: 'ETH-USD', price: 3450, change: 1.6, category: 'Crypto', isVnd: false, volume: '$12.5B', details: { pe: 'N/A', high52: '$4,090', low52: '$1,850', volume: '$12.5B' } },
+  { name: 'Solana', symbol: 'SOL-USD', price: 145.2, change: 4.8, category: 'Crypto', isVnd: false, volume: '$3.8B', details: { pe: 'N/A', high52: '$210', low52: '$18.5', volume: '$3.8B' } },
+  { name: 'Cardano', symbol: 'ADA-USD', price: 0.58, change: -1.2, category: 'Crypto', isVnd: false, volume: '$450M', details: { pe: 'N/A', high52: '$0.82', low52: '$0.24', volume: '$450M' } },
   
-  { name: 'FPT Corp', symbol: 'FPT.VN', price: 142500, change: 1.8, category: 'Chứng khoán VN', isVnd: true, details: { pe: '22.4', high52: '154.000 đ', low52: '72.000 đ', volume: '180B đ' } },
-  { name: 'Hòa Phát', symbol: 'HPG.VN', price: 29450, change: -0.6, category: 'Chứng khoán VN', isVnd: true, details: { pe: '14.2', high52: '32.500 đ', low52: '23.000 đ', volume: '340B đ' } },
-  { name: 'Vietcombank', symbol: 'VCB.VN', price: 91400, change: 0.2, category: 'Chứng khoán VN', isVnd: true, details: { pe: '16.8', high52: '98.000 đ', low52: '78.500 đ', volume: '95B đ' } },
-  { name: 'Vingroup', symbol: 'VIC.VN', price: 42500, change: -1.5, category: 'Chứng khoán VN', isVnd: true, details: { pe: '28.1', high52: '58.000 đ', low52: '39.000 đ', volume: '120B đ' } },
-  { name: 'Vinamilk', symbol: 'VNM.VN', price: 68200, change: 0.5, category: 'Chứng khoán VN', isVnd: true, details: { pe: '18.2', high52: '76.000 đ', low52: '63.400 đ', volume: '110B đ' } },
-  { name: 'SSI Securities', symbol: 'SSI.VN', price: 34800, change: 2.1, category: 'Chứng khoán VN', isVnd: true, details: { pe: '21.5', high52: '38.200 đ', low52: '24.500 đ', volume: '290B đ' } },
+  { name: 'FPT Corp', symbol: 'FPT.VN', price: 142500, change: 1.8, category: 'Chứng khoán VN', isVnd: true, volume: '180B đ', details: { pe: '22.4', high52: '154.000 đ', low52: '72.000 đ', volume: '180B đ' } },
+  { name: 'Hòa Phát', symbol: 'HPG.VN', price: 29450, change: -0.6, category: 'Chứng khoán VN', isVnd: true, volume: '340B đ', details: { pe: '14.2', high52: '32.500 đ', low52: '23.000 đ', volume: '340B đ' } },
+  { name: 'Vietcombank', symbol: 'VCB.VN', price: 91400, change: 0.2, category: 'Chứng khoán VN', isVnd: true, volume: '95B đ', details: { pe: '16.8', high52: '98.000 đ', low52: '78.500 đ', volume: '95B đ' } },
+  { name: 'Vingroup', symbol: 'VIC.VN', price: 42500, change: -1.5, category: 'Chứng khoán VN', isVnd: true, volume: '120B đ', details: { pe: '28.1', high52: '58.000 đ', low52: '39.000 đ', volume: '120B đ' } },
+  { name: 'Vinamilk', symbol: 'VNM.VN', price: 68200, change: 0.5, category: 'Chứng khoán VN', isVnd: true, volume: '110B đ', details: { pe: '18.2', high52: '76.000 đ', low52: '63.400 đ', volume: '110B đ' } },
+  { name: 'SSI Securities', symbol: 'SSI.VN', price: 34800, change: 2.1, category: 'Chứng khoán VN', isVnd: true, volume: '290B đ', details: { pe: '21.5', high52: '38.200 đ', low52: '24.500 đ', volume: '290B đ' } },
   
-  { name: 'Apple Inc.', symbol: 'AAPL', price: 182.4, change: 1.5, category: 'Chứng khoán Mỹ', isVnd: false, details: { pe: '28.4', high52: '$199.6', low52: '$164.1', volume: '$8.2B' } },
-  { name: 'Tesla Inc.', symbol: 'TSLA', price: 178.6, change: -3.4, category: 'Chứng khoán Mỹ', isVnd: false, details: { pe: '42.1', high52: '$265.1', low52: '$138.8', volume: '$12.4B' } },
-  { name: 'Nvidia Corp', symbol: 'NVDA', price: 875.2, change: 6.2, category: 'Chứng khoán Mỹ', isVnd: false, details: { pe: '74.6', high52: '$974.0', low52: '$420.5', volume: '$24.6B' } },
-  { name: 'Microsoft', symbol: 'MSFT', price: 420.8, change: 0.8, category: 'Chứng khoán Mỹ', isVnd: false, details: { pe: '35.8', high52: '$430.8', low52: '$315.2', volume: '$6.5B' } },
-  { name: 'Amazon.com', symbol: 'AMZN', price: 175.4, change: 1.1, category: 'Chứng khoán Mỹ', isVnd: false, details: { pe: '40.2', high52: '$189.7', low52: '$118.3', volume: '$5.4B' } },
-  { name: 'Google (Alphabet)', symbol: 'GOOG', price: 152.6, change: -0.4, category: 'Chứng khoán Mỹ', isVnd: false, details: { pe: '25.6', high52: '$160.2', low52: '$115.6', volume: '$4.1B' } }
+  { name: 'Apple Inc.', symbol: 'AAPL', price: 182.4, change: 1.5, category: 'Chứng khoán Mỹ', isVnd: false, volume: '$8.2B', details: { pe: '28.4', high52: '$199.6', low52: '$164.1', volume: '$8.2B' } },
+  { name: 'Tesla Inc.', symbol: 'TSLA', price: 178.6, change: -3.4, category: 'Chứng khoán Mỹ', isVnd: false, volume: '$12.4B', details: { pe: '42.1', high52: '$265.1', low52: '$138.8', volume: '$12.4B' } },
+  { name: 'Nvidia Corp', symbol: 'NVDA', price: 875.2, change: 6.2, category: 'Chứng khoán Mỹ', isVnd: false, volume: '$24.6B', details: { pe: '74.6', high52: '$974.0', low52: '$420.5', volume: '$24.6B' } },
+  { name: 'Microsoft', symbol: 'MSFT', price: 420.8, change: 0.8, category: 'Chứng khoán Mỹ', isVnd: false, volume: '$6.5B', details: { pe: '35.8', high52: '$430.8', low52: '$315.2', volume: '$6.5B' } },
+  { name: 'Amazon.com', symbol: 'AMZN', price: 175.4, change: 1.1, category: 'Chứng khoán Mỹ', isVnd: false, volume: '$5.4B', details: { pe: '40.2', high52: '$189.7', low52: '$118.3', volume: '$5.4B' } },
+  { name: 'Google (Alphabet)', symbol: 'GOOG', price: 152.6, change: -0.4, category: 'Chứng khoán Mỹ', isVnd: false, volume: '$4.1B', details: { pe: '25.6', high52: '$160.2', low52: '$115.6', volume: '$4.1B' } }
 ];
 
 // Presets for Simulator
@@ -177,13 +177,15 @@ export default function App() {
       const result = data.chart.result[0];
       const timestamps = result.timestamp || [];
       const closes = result.indicators.quote[0].close || [];
+      const volumes = result.indicators.quote[0].volume || [];
       
       const chartPoints = [];
       for (let i = 0; i < timestamps.length; i++) {
-        if (timestamps[i] && closes[i]) {
+        if (timestamps[i] && closes[i] !== null && closes[i] !== undefined) {
           chartPoints.push({
             date: new Date(timestamps[i] * 1000).toLocaleDateString('vi-VN', { month: 'numeric', day: 'numeric' }),
-            price: closes[i]
+            price: closes[i],
+            volume: volumes[i] || 0
           });
         }
       }
@@ -430,6 +432,24 @@ export default function App() {
     }
   };
 
+  const formatVolumeHelper = (vol, isVnd) => {
+    if (vol === undefined || vol === null) return 'N/A';
+    if (typeof vol === 'string') return vol;
+    if (isNaN(vol)) return 'N/A';
+    
+    if (isVnd) {
+      if (vol >= 1_000_000_000) return (vol / 1_000_000_000).toFixed(2) + ' B (CP)';
+      if (vol >= 1_000_000) return (vol / 1_000_000).toFixed(2) + ' M (CP)';
+      if (vol >= 1_000) return (vol / 1_000).toFixed(2) + ' K (CP)';
+      return vol.toLocaleString('vi-VN') + ' CP';
+    } else {
+      if (vol >= 1_000_000_000) return (vol / 1_000_000_000).toFixed(2) + ' B';
+      if (vol >= 1_000_000) return (vol / 1_000_000).toFixed(2) + ' M';
+      if (vol >= 1_000) return (vol / 1_000).toFixed(2) + ' K';
+      return vol.toLocaleString('en-US');
+    }
+  };
+
   const handleGlobalSearchSubmit = async (e) => {
     e.preventDefault();
     const sym = globalSearch.trim().toUpperCase();
@@ -465,8 +485,11 @@ export default function App() {
       const result = data.chart.result[0];
       const meta = result.meta;
       const closes = result.indicators?.quote?.[0]?.close || [];
+      const volumes = result.indicators?.quote?.[0]?.volume || [];
       const latestClose = closes.filter(v => v !== null && v !== undefined).pop();
       if (!latestClose) throw new Error('Không lấy được giá đóng cửa gần nhất.');
+      
+      const latestVolume = volumes.filter(v => v !== null && v !== undefined).pop();
 
       const isVnd = sym.endsWith('.VN');
       let category = 'Khác';
@@ -475,6 +498,8 @@ export default function App() {
       else if (isVnd) category = 'Chứng khoán VN';
       else category = 'Chứng khoán Mỹ';
 
+      const formattedVol = formatVolumeHelper(latestVolume, isVnd);
+
       const newAsset = {
         name: meta.shortName || meta.longName || sym,
         symbol: sym,
@@ -482,7 +507,8 @@ export default function App() {
         change: parseFloat((((latestClose - (closes.filter(Boolean)[0] || latestClose)) / (closes.filter(Boolean)[0] || latestClose)) * 100).toFixed(2)),
         category,
         isVnd,
-        details: { pe: 'N/A', high52: 'N/A', low52: 'N/A', volume: 'N/A' },
+        volume: formattedVol,
+        details: { pe: 'N/A', high52: 'N/A', low52: 'N/A', volume: formattedVol },
         tick: 'up' // Flash it green initially
       };
       
@@ -640,18 +666,6 @@ export default function App() {
           </button>
 
           <button
-            onClick={() => setActiveTab('guides')}
-            className={`w-full flex items-center gap-3 text-xs font-semibold py-3 px-4 rounded-xl border transition-all cursor-pointer ${
-              activeTab === 'guides'
-                ? 'bg-slate-800 border-slate-700 text-emerald-400 shadow-md'
-                : 'border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-900/60'
-            }`}
-          >
-            <BookOpen className="h-4 w-4" />
-            <span>Cẩm nang & Đề xuất</span>
-          </button>
-
-          <button
             onClick={() => setActiveTab('asset-details')}
             className={`w-full flex items-center gap-3 text-xs font-semibold py-3 px-4 rounded-xl border transition-all cursor-pointer ${
               activeTab === 'asset-details'
@@ -697,6 +711,18 @@ export default function App() {
           >
             <Newspaper className="h-4 w-4" />
             <span>Tin tức tài chính</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('guides')}
+            className={`w-full flex items-center gap-3 text-xs font-semibold py-3 px-4 rounded-xl border transition-all cursor-pointer ${
+              activeTab === 'guides'
+                ? 'bg-slate-800 border-slate-700 text-emerald-400 shadow-md'
+                : 'border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-900/60'
+            }`}
+          >
+            <BookOpen className="h-4 w-4" />
+            <span>Cẩm nang & Đề xuất</span>
           </button>
         </nav>
 

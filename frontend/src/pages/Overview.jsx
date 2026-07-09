@@ -102,13 +102,14 @@ export default function Overview({
                 <th className="py-2.5 px-4">Phân nhóm</th>
                 <th className="py-2.5 px-4">Giá hiện tại</th>
                 <th className="py-2.5 px-4">Biến động</th>
+                <th className="py-2.5 px-4">Khối lượng 24h</th>
                 <th className="py-2.5 px-4 text-right">Thao tác</th>
               </tr>
             </thead>
             <tbody>
               {filteredAssets.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="py-10 text-center text-slate-500 text-xs">
+                  <td colSpan={8} className="py-10 text-center text-slate-500 text-xs">
                     Không tìm thấy tài sản phù hợp
                   </td>
                 </tr>
@@ -135,6 +136,9 @@ export default function Overview({
                     </td>
                     <td className={`py-3 px-4 font-bold font-mono ${asset.change >= 0 ? "text-emerald-400" : "text-rose-400"}`}>
                       {asset.change >= 0 ? "+" : ""}{asset.change}%
+                    </td>
+                    <td className="py-3 px-4 text-slate-400 font-mono font-medium">
+                      {asset.volume || "N/A"}
                     </td>
                     <td className="py-3 px-4 text-right">
                       <div className="flex items-center justify-end gap-2">
