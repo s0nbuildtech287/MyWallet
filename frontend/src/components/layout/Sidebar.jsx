@@ -1,6 +1,6 @@
 import React from 'react';
 import { 
-  Compass, LayoutDashboard, Briefcase, LineChart, Calculator, Percent, Newspaper, BookOpen 
+  Compass, LayoutDashboard, Briefcase, LineChart, Scale, Calculator, Percent, Newspaper, BookOpen 
 } from 'lucide-react';
 
 export default function Sidebar({ activeTab, setActiveTab }) {
@@ -52,6 +52,18 @@ export default function Sidebar({ activeTab, setActiveTab }) {
         >
           <LineChart className="h-4 w-4" />
           <span>Biểu đồ chi tiết</span>
+        </button>
+
+        <button
+          onClick={() => setActiveTab('comparison')}
+          className={`w-full flex items-center gap-3 text-sm font-semibold py-3 px-4 rounded-xl border transition-all cursor-pointer ${
+            activeTab === 'comparison'
+              ? 'bg-slate-800 border-slate-700 text-emerald-400 font-bold shadow-md'
+              : 'border-transparent text-slate-300 hover:text-white hover:bg-slate-900/60'
+          }`}
+        >
+          <Scale className="h-4 w-4" />
+          <span>So sánh hiệu suất</span>
         </button>
         
         <button

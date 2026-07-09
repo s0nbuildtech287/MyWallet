@@ -26,6 +26,7 @@ export default function Simulator({
   formatVal,
   getChartData,
   chartOptions,
+  chartPlugins,
   paginatedPurchases,
   totalPages,
   presetSymbols
@@ -105,7 +106,8 @@ export default function Simulator({
                 <Line 
                   key={`sim-chart-${symbol}-${results?.purchases?.length || 0}`} 
                   data={getChartData()} 
-                  options={chartOptions} 
+                  options={chartOptions}
+                  plugins={chartPlugins || []}
                 />
               </div>
             </div>

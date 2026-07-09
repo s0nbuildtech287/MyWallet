@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Line, Bar } from 'react-chartjs-2';
 import { LineChart, RefreshCw, ArrowRight, TrendingUp } from 'lucide-react';
 import CandlestickChart from '../components/features/chart/CandlestickChart';
+import { crosshairPlugin } from '../utils/crosshairPlugin';
 
 const RANGE_TOOLTIPS = {
   '1D': 'Dữ liệu 1 ngày gần nhất, nến 5 phút',
@@ -158,6 +159,7 @@ export default function AssetDetails({
                   options={{
                     responsive: true,
                     maintainAspectRatio: false,
+                    interaction: { mode: 'index', intersect: false },
                     plugins: {
                       legend: { display: false },
                       tooltip: {
@@ -185,6 +187,7 @@ export default function AssetDetails({
                       }
                     }
                   }}
+                  plugins={[crosshairPlugin]}
                 />
               </div>
 

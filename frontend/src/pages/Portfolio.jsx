@@ -229,7 +229,14 @@ export default function Portfolio({ marketPrices, formatValSymbol: parentFormatV
 
     setTransactions(prev => {
       // Tự động xóa sạch dữ liệu mẫu (seed-1, seed-2) khi người dùng thêm giao dịch thật đầu tiên
-      const isOnlySeed = prev.length > 0 && prev.every(t => t.id && String(t.id).startsWith('seed-'));
+      const isOnlySeed = prev.length > 0 && prev.every(t => 
+        !t.id || 
+        String(t.id).startsWith('seed-') || 
+        t.id === 'tx-1' || 
+        t.id === 'tx-2' ||
+        (t.symbol === 'FPT.VN' && t.quantity === 500) ||
+        (t.symbol === 'BTC-USD' && t.quantity === 0.05)
+      );
       const base = isOnlySeed ? [] : prev;
       return [newTx, ...base];
     });

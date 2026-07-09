@@ -8,6 +8,7 @@ import InterestCalculator from './pages/InterestCalculator';
 import News from './pages/News';
 import Guides from './pages/Guides';
 import Portfolio from './pages/Portfolio';
+import Comparison from './pages/Comparison';
 
 // Import Layout Components
 import Sidebar from './components/layout/Sidebar';
@@ -18,6 +19,7 @@ import { MACRO_INDICES, MARKET_ASSETS, PRESET_SYMBOLS, FINANCIAL_NEWS } from './
 
 // Import Utils
 import { formatValSymbol, formatVal, formatVolumeHelper } from './utils/formatters';
+import { crosshairPlugin } from './utils/crosshairPlugin';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('overview'); // 'overview' | 'asset-details' | 'simulator' | 'interest' | 'news'
@@ -64,7 +66,7 @@ export default function App() {
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash.replace('#/', '');
-      const validTabs = ['overview', 'portfolio', 'asset-details', 'simulator', 'interest', 'news', 'guides'];
+      const validTabs = ['overview', 'portfolio', 'asset-details', 'comparison', 'simulator', 'interest', 'news', 'guides'];
       if (validTabs.includes(hash)) {
         setActiveTab(hash);
       } else {
@@ -665,6 +667,10 @@ export default function App() {
   const chartOptions = {
     responsive: true,
     maintainAspectRatio: false,
+    interaction: {
+      mode: 'index',
+      intersect: false
+    },
     plugins: {
       legend: {
         position: 'top',
@@ -710,6 +716,8 @@ export default function App() {
       }
     }
   };
+
+  const chartPlugins = [crosshairPlugin];
 
   const paginatedPurchases = results 
     ? results.purchases.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
@@ -806,6 +814,15 @@ export default function App() {
             />
           )}
 
+          {activeTab === 'comparison' && (
+            <Comparison
+              marketPrices={marketPrices}
+              formatValSymbol={formatValSymbol}
+              setActiveTab={changeTab}
+              handleQuickSimulation={handleQuickSimulation}
+            />
+          )}
+
           {activeTab === 'simulator' && (
             <Simulator
               symbol={symbol}
@@ -828,6 +845,7 @@ export default function App() {
               formatVal={(val, roundInt) => formatVal(val, isVndAsset, roundInt)}
               getChartData={getChartData}
               chartOptions={chartOptions}
+              chartPlugins={chartPlugins}
               paginatedPurchases={paginatedPurchases}
               totalPages={totalPages}
               presetSymbols={PRESET_SYMBOLS}
