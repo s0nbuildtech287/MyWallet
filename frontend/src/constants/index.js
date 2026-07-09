@@ -80,7 +80,9 @@ export const MARKET_ASSETS = [
   { name: 'Chỉ số VN-Index', symbol: '^VNINDEX', price: 1245.8, change: 0.45, category: 'Khác', isVnd: false, volume: '19.4T VNĐ', details: { pe: 'N/A', high52: '1,295.0', low52: '1,020.0', volume: '19.4T VNĐ' } },
   { name: 'Chỉ số S&P 500', symbol: '^GSPC', price: 5120.4, change: 1.15, category: 'Khác', isVnd: false, volume: '$42.5B', details: { pe: 'N/A', high52: '$5,250.0', low52: '$4,100.0', volume: '$42.5B' } },
   { name: 'Dow Jones 30', symbol: '^DJI', price: 39120.4, change: 0.35, category: 'Khác', isVnd: false, volume: '$3.8B', details: { pe: 'N/A', high52: '$39,889.0', low52: '$32,715.0', volume: '$3.8B' } },
-  { name: 'Chỉ số Nikkei 225', symbol: '^N225', price: 38550.0, change: -0.65, category: 'Khác', isVnd: false, volume: '$5.8B', details: { pe: 'N/A', high52: '$41,000.0', low52: '$30,500.0', volume: '$5.8B' } }
+  { name: 'Chỉ số Nikkei 225', symbol: '^N225', price: 38550.0, change: -0.65, category: 'Khác', isVnd: false, volume: '$5.8B', details: { pe: 'N/A', high52: '$41,000.0', low52: '$30,500.0', volume: '$5.8B' } },
+  { name: 'DAX 30 - DE30', symbol: '^GDAXI', price: 18200.0, change: 0.42, category: 'Khác', isVnd: false, volume: '$3.2B', details: { pe: 'N/A', high52: '$19,200.0', low52: '$14,600.0', volume: '$3.2B' } },
+  { name: 'Hang Seng 50 - HK50', symbol: '^HSI', price: 17650.0, change: -0.38, category: 'Khác', isVnd: false, volume: '$4.1B', details: { pe: 'N/A', high52: '$20,800.0', low52: '$14,800.0', volume: '$4.1B' } }
 ];
 
 // Presets for Simulator

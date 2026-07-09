@@ -3,6 +3,8 @@ import { Line, Bar } from 'react-chartjs-2';
 import { LineChart, RefreshCw, ArrowRight, TrendingUp } from 'lucide-react';
 import CandlestickChart from '../components/features/chart/CandlestickChart';
 import { crosshairPlugin } from '../utils/crosshairPlugin';
+import { calculateSMA, calculateBollingerBands, calculateRSI, calculateMACD } from '../utils/indicators';
+import SmartAdvisor from '../components/features/advisor/SmartAdvisor';
 
 const RANGE_TOOLTIPS = {
   '1D': 'Dữ liệu 1 ngày gần nhất, nến 5 phút',
@@ -32,9 +34,121 @@ export default function AssetDetails({
   };
 
   const [chartType, setChartType] = useState('line'); // 'line' | 'candlestick'
+  const [showMA20, setShowMA20] = useState(false);
+  const [showMA50, setShowMA50] = useState(false);
+  const [showBollinger, setShowBollinger] = useState(false);
+  const [showRSI, setShowRSI] = useState(false);
+  const [showMACD, setShowMACD] = useState(false);
+
+  // Extract prices for indicators
+  const prices = detailData ? detailData.map(d => d.price) : [];
+  
+  // Calculate indicators dynamically
+  const ma20Data = prices.length > 0 ? calculateSMA(prices, 20) : [];
+  const ma50Data = prices.length > 0 ? calculateSMA(prices, 50) : [];
+  const bbData = prices.length > 0 ? calculateBollingerBands(prices, 20, 2) : { middle: [], upper: [], lower: [] };
+  const rsiData = prices.length > 0 ? calculateRSI(prices, 14) : [];
+  const macdData = prices.length > 0 ? calculateMACD(prices, 12, 26, 9) : { macdLine: [], signalLine: [], histogram: [] };
+
+  // Latest values for SmartAdvisor
+  const latestPrice = prices[prices.length - 1] || 0;
+  const latestMa20 = ma20Data[ma20Data.length - 1];
+  const latestMa50 = ma50Data[ma50Data.length - 1];
+  const latestRsi = rsiData[rsiData.length - 1];
+  
+  const latestMacd = macdData.macdLine?.length > 0 ? {
+    macdLine: macdData.macdLine[macdData.macdLine.length - 1],
+    signalLine: macdData.signalLine[macdData.signalLine.length - 1]
+  } : null;
+
+  const latestBollinger = bbData.upper?.length > 0 ? {
+    upper: bbData.upper[bbData.upper.length - 1],
+    middle: bbData.middle[bbData.middle.length - 1],
+    lower: bbData.lower[bbData.lower.length - 1]
+  } : null;
   const isVndAsset = selectedDetailSymbol.toUpperCase().endsWith('.VN') || 
                      selectedDetailSymbol.toUpperCase().endsWith('.HM') || 
                      selectedDetailSymbol.toUpperCase() === 'USDVND=X';
+
+  const chartDatasets = [
+    {
+      label: 'Giá thị trường',
+      data: prices,
+      borderColor: '#10b981',
+      backgroundColor: 'rgba(16, 185, 129, 0.03)',
+      borderWidth: 2.5,
+      pointRadius: 0,
+      pointHoverRadius: 5,
+      fill: true,
+      tension: 0.15
+    }
+  ];
+
+  if (showMA20) {
+    chartDatasets.push({
+      label: 'MA20',
+      data: ma20Data,
+      borderColor: '#3b82f6',
+      backgroundColor: 'transparent',
+      borderWidth: 1.5,
+      pointRadius: 0,
+      pointHoverRadius: 0,
+      fill: false,
+      tension: 0.15
+    });
+  }
+
+  if (showMA50) {
+    chartDatasets.push({
+      label: 'MA50',
+      data: ma50Data,
+      borderColor: '#f59e0b',
+      backgroundColor: 'transparent',
+      borderWidth: 1.5,
+      pointRadius: 0,
+      pointHoverRadius: 0,
+      fill: false,
+      tension: 0.15
+    });
+  }
+
+  if (showBollinger) {
+    chartDatasets.push({
+      label: 'BB Upper',
+      data: bbData.upper,
+      borderColor: '#ec4899',
+      backgroundColor: 'transparent',
+      borderWidth: 1.2,
+      borderDash: [3, 3],
+      pointRadius: 0,
+      pointHoverRadius: 0,
+      fill: false,
+      tension: 0.15
+    });
+    chartDatasets.push({
+      label: 'BB Middle (MA20)',
+      data: bbData.middle,
+      borderColor: '#8b5cf6',
+      backgroundColor: 'transparent',
+      borderWidth: 1,
+      pointRadius: 0,
+      pointHoverRadius: 0,
+      fill: false,
+      tension: 0.15
+    });
+    chartDatasets.push({
+      label: 'BB Lower',
+      data: bbData.lower,
+      borderColor: '#ec4899',
+      backgroundColor: 'transparent',
+      borderWidth: 1.2,
+      borderDash: [3, 3],
+      pointRadius: 0,
+      pointHoverRadius: 0,
+      fill: false,
+      tension: 0.15
+    });
+  }
 
   return (
     <div className="flex flex-col gap-6 text-slate-100 pb-10 animate-fadeIn">
@@ -104,6 +218,61 @@ export default function AssetDetails({
           </div>
         </div>
 
+        {/* Indicator Toggles */}
+        <div className="flex flex-wrap gap-x-4 gap-y-2 items-center bg-slate-950/30 border border-slate-850 rounded-xl p-3 text-xs">
+          <span className="text-slate-500 font-bold uppercase tracking-wider text-[9px]">Chỉ báo kỹ thuật:</span>
+          
+          <label className="flex items-center gap-1.5 cursor-pointer text-slate-300 hover:text-white transition-colors">
+            <input
+              type="checkbox"
+              checked={showMA20}
+              onChange={(e) => setShowMA20(e.target.checked)}
+              className="accent-emerald-500 rounded border-slate-800 bg-slate-950 h-3.5 w-3.5"
+            />
+            <span className="font-medium">Đường MA20</span>
+          </label>
+          
+          <label className="flex items-center gap-1.5 cursor-pointer text-slate-300 hover:text-white transition-colors">
+            <input
+              type="checkbox"
+              checked={showMA50}
+              onChange={(e) => setShowMA50(e.target.checked)}
+              className="accent-emerald-500 rounded border-slate-800 bg-slate-950 h-3.5 w-3.5"
+            />
+            <span className="font-medium">Đường MA50</span>
+          </label>
+
+          <label className="flex items-center gap-1.5 cursor-pointer text-slate-300 hover:text-white transition-colors">
+            <input
+              type="checkbox"
+              checked={showBollinger}
+              onChange={(e) => setShowBollinger(e.target.checked)}
+              className="accent-emerald-500 rounded border-slate-800 bg-slate-950 h-3.5 w-3.5"
+            />
+            <span className="font-medium">Dải Bollinger</span>
+          </label>
+
+          <label className="flex items-center gap-1.5 cursor-pointer text-slate-300 hover:text-white transition-colors">
+            <input
+              type="checkbox"
+              checked={showRSI}
+              onChange={(e) => setShowRSI(e.target.checked)}
+              className="accent-emerald-500 rounded border-slate-800 bg-slate-950 h-3.5 w-3.5"
+            />
+            <span className="font-medium">Chỉ báo RSI</span>
+          </label>
+
+          <label className="flex items-center gap-1.5 cursor-pointer text-slate-300 hover:text-white transition-colors">
+            <input
+              type="checkbox"
+              checked={showMACD}
+              onChange={(e) => setShowMACD(e.target.checked)}
+              className="accent-emerald-500 rounded border-slate-800 bg-slate-950 h-3.5 w-3.5"
+            />
+            <span className="font-medium">Chỉ báo MACD</span>
+          </label>
+        </div>
+
         {/* Technical Stats Header */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-4 bg-slate-950/40 border border-slate-850 rounded-xl text-xs font-mono">
           <div className="flex flex-col gap-1">
@@ -142,19 +311,7 @@ export default function AssetDetails({
                   key={`detail-chart-${selectedDetailSymbol}-${detailRange}`}
                   data={{
                     labels: detailData.map(d => d.date),
-                    datasets: [
-                      {
-                        label: 'Giá thị trường',
-                        data: detailData.map(d => d.price),
-                        borderColor: '#10b981',
-                        backgroundColor: 'rgba(16, 185, 129, 0.03)',
-                        borderWidth: 2.5,
-                        pointRadius: 0,
-                        pointHoverRadius: 5,
-                        fill: true,
-                        tension: 0.15
-                      }
-                    ]
+                    datasets: chartDatasets
                   }}
                   options={{
                     responsive: true,
@@ -168,7 +325,11 @@ export default function AssetDetails({
                         bodyColor: '#f1f5f9',
                         callbacks: {
                           label: function (context) {
-                            return `Giá: ` + formatValSymbol(context.parsed.y, selectedDetailSymbol);
+                            const label = context.dataset.label || '';
+                            if (label === 'Giá thị trường') {
+                              return `Giá: ` + formatValSymbol(context.parsed.y, selectedDetailSymbol);
+                            }
+                            return `${label}: ` + formatValSymbol(context.parsed.y, selectedDetailSymbol);
                           }
                         }
                       }
@@ -249,6 +410,149 @@ export default function AssetDetails({
                   }}
                 />
               </div>
+
+              {/* RSI Sub-chart */}
+              {showRSI && rsiData.length > 0 && (
+                <div className="h-[120px] relative w-full border-t border-slate-800/40 pt-3 animate-fadeIn">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Chỉ số sức mạnh tương đối (RSI 14)</span>
+                    <span className={`text-[10px] font-mono font-bold ${latestRsi >= 70 ? 'text-rose-400' : latestRsi <= 30 ? 'text-emerald-400' : 'text-slate-300'}`}>
+                      Hiện tại: {latestRsi?.toFixed(2) || 'N/A'}
+                    </span>
+                  </div>
+                  <Line
+                    key={`rsi-chart-${selectedDetailSymbol}-${detailRange}`}
+                    data={{
+                      labels: detailData.map(d => d.date),
+                      datasets: [
+                        {
+                          label: 'RSI',
+                          data: rsiData,
+                          borderColor: '#a855f7',
+                          backgroundColor: 'rgba(168, 85, 247, 0.05)',
+                          borderWidth: 1.5,
+                          pointRadius: 0,
+                          pointHoverRadius: 4,
+                          fill: true,
+                          tension: 0.15
+                        }
+                      ]
+                    }}
+                    options={{
+                      responsive: true,
+                      maintainAspectRatio: false,
+                      interaction: { mode: 'index', intersect: false },
+                      plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                          backgroundColor: '#1e293b',
+                          titleColor: '#f8fafc',
+                          bodyColor: '#f1f5f9',
+                          callbacks: {
+                            label: function (context) {
+                              return `RSI: ${context.parsed.y.toFixed(2)}`;
+                            }
+                          }
+                        }
+                      },
+                      scales: {
+                        x: { ticks: { display: false }, grid: { display: false } },
+                        y: {
+                          min: 0,
+                          max: 100,
+                          ticks: {
+                            color: '#64748b',
+                            font: { size: 8 },
+                            stepSize: 20
+                          },
+                          grid: {
+                            color: (context) => {
+                              if (context.tick.value === 30 || context.tick.value === 70) {
+                                return 'rgba(239, 68, 68, 0.25)';
+                              }
+                              return 'rgba(71, 85, 105, 0.05)';
+                            }
+                          }
+                        }
+                      }
+                    }}
+                  />
+                </div>
+              )}
+
+              {/* MACD Sub-chart */}
+              {showMACD && macdData.macdLine?.length > 0 && (
+                <div className="h-[120px] relative w-full border-t border-slate-800/40 pt-3 animate-fadeIn">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Chỉ báo MACD (12, 26, 9)</span>
+                    <span className="text-[10px] font-mono text-slate-400">
+                      MACD: <span className="text-[#3b82f6] font-bold">{latestMacd?.macdLine?.toFixed(2) || 'N/A'}</span> | Tín hiệu: <span className="text-[#f59e0b] font-bold">{latestMacd?.signalLine?.toFixed(2) || 'N/A'}</span>
+                    </span>
+                  </div>
+                  <Bar
+                    key={`macd-chart-${selectedDetailSymbol}-${detailRange}`}
+                    data={{
+                      labels: detailData.map(d => d.date),
+                      datasets: [
+                        {
+                          type: 'bar',
+                          label: 'Histogram',
+                          data: macdData.histogram,
+                          backgroundColor: macdData.histogram.map(v => v >= 0 ? 'rgba(16, 185, 129, 0.45)' : 'rgba(239, 68, 68, 0.45)'),
+                          borderColor: macdData.histogram.map(v => v >= 0 ? '#10b981' : '#ef4444'),
+                          borderWidth: 0.8,
+                          barPercentage: 0.8,
+                        },
+                        {
+                          type: 'line',
+                          label: 'MACD',
+                          data: macdData.macdLine,
+                          borderColor: '#3b82f6',
+                          borderWidth: 1.2,
+                          pointRadius: 0,
+                          fill: false,
+                          tension: 0.15
+                        },
+                        {
+                          type: 'line',
+                          label: 'Signal',
+                          data: macdData.signalLine,
+                          borderColor: '#f59e0b',
+                          borderWidth: 1.2,
+                          pointRadius: 0,
+                          fill: false,
+                          tension: 0.15
+                        }
+                      ]
+                    }}
+                    options={{
+                      responsive: true,
+                      maintainAspectRatio: false,
+                      interaction: { mode: 'index', intersect: false },
+                      plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                          backgroundColor: '#1e293b',
+                          titleColor: '#f8fafc',
+                          bodyColor: '#f1f5f9',
+                          callbacks: {
+                            label: function (context) {
+                              return `${context.dataset.label}: ${context.parsed.y.toFixed(2)}`;
+                            }
+                          }
+                        }
+                      },
+                      scales: {
+                        x: { ticks: { display: false }, grid: { display: false } },
+                        y: {
+                          ticks: { color: '#64748b', font: { size: 8 } },
+                          grid: { color: 'rgba(71, 85, 105, 0.05)' }
+                        }
+                      }
+                    }}
+                  />
+                </div>
+              )}
             </>
             )
           ) : (
@@ -257,6 +561,22 @@ export default function AssetDetails({
             </div>
           )}
         </div>
+
+        {/* Smart Advisor Recommendation Widget */}
+        {detailData && detailData.length > 0 && !detailLoading && (
+          <div className="mt-2">
+            <SmartAdvisor
+              symbol={selectedDetailSymbol}
+              currentPrice={latestPrice}
+              ma20={latestMa20}
+              ma50={latestMa50}
+              rsi={latestRsi}
+              macd={latestMacd}
+              bollinger={latestBollinger}
+              isVnd={isVndAsset}
+            />
+          </div>
+        )}
 
         <div className="flex gap-2 justify-end border-t border-slate-800/60 pt-4 mt-2">
           <button 
