@@ -16,7 +16,9 @@ export default function ConfigPanel({
   loading,
   handleSimulate,
   presetSymbols,
-  isVndAsset
+  isVndAsset,
+  reinvestDividends,
+  setReinvestDividends
 }) {
   const handlePresetClick = (p) => {
     setSymbol(p.value);
@@ -168,6 +170,21 @@ export default function ConfigPanel({
               Ví dụ: 1000000 = 1 triệu đồng
             </span>
           )}
+        </div>
+
+        {/* Reinvest Dividends Checkbox */}
+        <div className="flex items-center gap-3 border-t border-slate-800/60 pt-3">
+          <input
+            type="checkbox"
+            id="reinvestDividends"
+            checked={reinvestDividends}
+            onChange={(e) => setReinvestDividends(e.target.checked)}
+            className="w-4 h-4 rounded text-emerald-500 bg-slate-950 border-slate-800 focus:ring-emerald-500 focus:ring-opacity-25 focus:ring-offset-0 focus:outline-none accent-emerald-500 cursor-pointer"
+          />
+          <label htmlFor="reinvestDividends" className="text-xs font-semibold text-slate-300 flex items-center gap-1 cursor-pointer select-none">
+            <span>Tái đầu tư cổ tức</span>
+            <Tooltip content="Nếu được chọn, tiền cổ tức nhận được sẽ tự động quy đổi thành cổ phiếu mua thêm theo thị giá vào ngày phát cổ tức." />
+          </label>
         </div>
 
         {/* Simulate Trigger Button */}

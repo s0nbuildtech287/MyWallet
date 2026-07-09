@@ -37,16 +37,29 @@ export default function HistoryTable({
           </thead>
           <tbody>
             {paginatedPurchases.map((p) => (
-              <tr key={p.index} className="border-b border-slate-800/40 hover:bg-slate-800/20 transition-all font-mono">
+              <tr key={p.index} className={`border-b border-slate-800/40 hover:bg-slate-800/20 transition-all font-mono ${p.isDividend ? 'bg-emerald-950/10' : ''}`}>
                 <td className="py-2.5 px-4 text-slate-500">{p.index}</td>
                 <td className="py-2.5 px-4 text-slate-300">
                   {p.date.toLocaleDateString('vi-VN')}
+                  {p.isDividend && (
+                    <span className="ml-2 text-[9px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-1.5 py-0.2 rounded font-sans font-bold">
+                      Cổ tức
+                    </span>
+                  )}
                 </td>
                 <td className="py-2.5 px-4 text-slate-300">{formatVal(p.price)}</td>
                 <td className="py-2.5 px-4 text-slate-300 font-semibold">
                   {p.sharesBought.toFixed(p.sharesBought > 10 ? 2 : 4)}
                 </td>
-                <td className="py-2.5 px-4 text-slate-300">{formatVal(p.amountSpent)}</td>
+                <td className="py-2.5 px-4 text-slate-300">
+                  {p.isDividend ? (
+                    <span className="text-emerald-400 font-bold text-[10px]" title={`Nhận ${formatVal(p.dividendAmount)}/CP`}>
+                      +{formatVal(p.dividendPayout)}
+                    </span>
+                  ) : (
+                    formatVal(p.amountSpent)
+                  )}
+                </td>
                 <td className="py-2.5 px-4 text-slate-400">{formatVal(p.totalCost)}</td>
                 <td className="py-2.5 px-4 text-emerald-400 font-bold text-right">
                   {formatVal(p.portfolioValue)}

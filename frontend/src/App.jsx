@@ -15,7 +15,7 @@ import Sidebar from './components/layout/Sidebar';
 import Header from './components/layout/Header';
 
 // Import Constants
-import { MACRO_INDICES, MARKET_ASSETS, PRESET_SYMBOLS, FINANCIAL_NEWS } from './constants';
+import { MACRO_INDICES, MARKET_ASSETS, PRESET_SYMBOLS } from './constants';
 
 // Import Utils
 import { formatValSymbol, formatVal, formatVolumeHelper } from './utils/formatters';
@@ -47,15 +47,13 @@ export default function App() {
   const [interestYears, setInterestYears] = useState('10');
   const [interestResults, setInterestResults] = useState(null);
 
-  // News filters
-  const [newsFilter, setNewsFilter] = useState('Tất cả');
-
   // Simulator Backtest states
   const [symbol, setSymbol] = useState('BTC-USD');
   const [startDate, setStartDate] = useState('2020-01-01');
   const [endDate, setEndDate] = useState(new Date().toISOString().split('T')[0]);
   const [investMode, setInvestMode] = useState('dca-qty');
   const [inputValue, setInputValue] = useState('100');
+  const [reinvestDividends, setReinvestDividends] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [results, setResults] = useState(null);
@@ -376,7 +374,7 @@ export default function App() {
     }
 
     try {
-      const response = await fetch(`http://localhost:5001/api/chart?symbol=${symbol.toUpperCase()}&period1=${p1}&period2=${p2}`);
+      const response = await fetch(`http://localhost:5001/api/chart?symbol=${symbol.toUpperCase()}&period1=${p1}&period2=${p2}&events=div`);
       const data = await response.json();
 
       if (data.error) {
@@ -407,6 +405,7 @@ export default function App() {
 
       let totalInvested = 0;
       let totalShares = 0;
+      let totalDividendsReceived = 0;
       const purchases = [];
       const inputNum = parseFloat(inputValue.replace(/,/g, '')) || 0;
 
@@ -416,13 +415,24 @@ export default function App() {
 
       const currentPrice = dailyPrices[dailyPrices.length - 1].close;
 
+      // Extract dividends
+      const dividendsData = result.events?.dividends || {};
+      const dividends = Object.values(dividendsData).map(div => ({
+        date: new Date(div.date * 1000),
+        amount: div.amount
+      })).sort((a, b) => a.date - b.date);
+
+      let divIndex = 0;
+      let count = 0;
+
       if (investMode === 'lump-sum') {
         const entryPrice = dailyPrices[0].close;
         totalInvested = inputNum;
         totalShares = inputNum / entryPrice;
-        
+        count++;
+
         purchases.push({
-          index: 1,
+          index: count,
           date: dailyPrices[0].date,
           price: entryPrice,
           amountSpent: inputNum,
@@ -432,66 +442,162 @@ export default function App() {
           portfolioValue: totalShares * entryPrice
         });
 
-        if (dailyPrices.length > 1) {
-          purchases.push({
-            index: 2,
-            date: dailyPrices[dailyPrices.length - 1].date,
-            price: currentPrice,
-            amountSpent: 0,
-            sharesBought: 0,
-            totalShares: totalShares,
-            totalCost: inputNum,
-            portfolioValue: totalShares * currentPrice
-          });
+        for (let i = 1; i < dailyPrices.length; i++) {
+          const prevDate = dailyPrices[i - 1].date;
+          const currDate = dailyPrices[i].date;
+          const price = dailyPrices[i].close;
+
+          while (divIndex < dividends.length && dividends[divIndex].date > prevDate && dividends[divIndex].date <= currDate) {
+            const div = dividends[divIndex];
+            if (totalShares > 0) {
+              const payout = totalShares * div.amount;
+              totalDividendsReceived += payout;
+              
+              if (reinvestDividends) {
+                const sharesBoughtFromDiv = payout / price;
+                totalShares += sharesBoughtFromDiv;
+                count++;
+                purchases.push({
+                  index: count,
+                  date: div.date,
+                  price: price,
+                  amountSpent: 0,
+                  sharesBought: sharesBoughtFromDiv,
+                  totalShares: totalShares,
+                  totalCost: totalInvested,
+                  portfolioValue: totalShares * price,
+                  isDividend: true,
+                  dividendAmount: div.amount,
+                  dividendPayout: payout
+                });
+              }
+            }
+            divIndex++;
+          }
         }
+
+        // Final entry
+        count++;
+        purchases.push({
+          index: count,
+          date: dailyPrices[dailyPrices.length - 1].date,
+          price: currentPrice,
+          amountSpent: 0,
+          sharesBought: 0,
+          totalShares: totalShares,
+          totalCost: totalInvested,
+          portfolioValue: totalShares * currentPrice
+        });
+
       } else if (investMode === 'dca-amount') {
         let lastMonthStr = '';
-        let count = 0;
-        for (const item of dailyPrices) {
+        for (let i = 0; i < dailyPrices.length; i++) {
+          const item = dailyPrices[i];
+          const prevDate = i > 0 ? dailyPrices[i - 1].date : new Date(item.date.getTime() - 24 * 60 * 60 * 1000);
+          const price = item.close;
+
           const monthStr = `${item.date.getFullYear()}-${item.date.getMonth()}`;
           if (monthStr !== lastMonthStr) {
             count++;
-            const buyPrice = item.close;
-            const sharesBought = inputNum / buyPrice;
+            const sharesBought = inputNum / price;
             totalInvested += inputNum;
             totalShares += sharesBought;
 
             purchases.push({
               index: count,
               date: item.date,
-              price: buyPrice,
+              price: price,
               amountSpent: inputNum,
               sharesBought: sharesBought,
               totalShares: totalShares,
               totalCost: totalInvested,
-              portfolioValue: totalShares * buyPrice
+              portfolioValue: totalShares * price
             });
             lastMonthStr = monthStr;
           }
+
+          while (divIndex < dividends.length && dividends[divIndex].date > prevDate && dividends[divIndex].date <= item.date) {
+            const div = dividends[divIndex];
+            if (totalShares > 0) {
+              const payout = totalShares * div.amount;
+              totalDividendsReceived += payout;
+              
+              if (reinvestDividends) {
+                const sharesBoughtFromDiv = payout / price;
+                totalShares += sharesBoughtFromDiv;
+                count++;
+                purchases.push({
+                  index: count,
+                  date: div.date,
+                  price: price,
+                  amountSpent: 0,
+                  sharesBought: sharesBoughtFromDiv,
+                  totalShares: totalShares,
+                  totalCost: totalInvested,
+                  portfolioValue: totalShares * price,
+                  isDividend: true,
+                  dividendAmount: div.amount,
+                  dividendPayout: payout
+                });
+              }
+            }
+            divIndex++;
+          }
         }
-      } else {
+
+      } else { // dca-qty
         let lastMonthStr = '';
-        let count = 0;
-        for (const item of dailyPrices) {
+        for (let i = 0; i < dailyPrices.length; i++) {
+          const item = dailyPrices[i];
+          const prevDate = i > 0 ? dailyPrices[i - 1].date : new Date(item.date.getTime() - 24 * 60 * 60 * 1000);
+          const price = item.close;
+
           const monthStr = `${item.date.getFullYear()}-${item.date.getMonth()}`;
           if (monthStr !== lastMonthStr) {
             count++;
-            const buyPrice = item.close;
-            const cost = inputNum * buyPrice;
+            const cost = inputNum * price;
             totalInvested += cost;
             totalShares += inputNum;
 
             purchases.push({
               index: count,
               date: item.date,
-              price: buyPrice,
+              price: price,
               amountSpent: cost,
               sharesBought: inputNum,
               totalShares: totalShares,
               totalCost: totalInvested,
-              portfolioValue: totalShares * buyPrice
+              portfolioValue: totalShares * price
             });
             lastMonthStr = monthStr;
+          }
+
+          while (divIndex < dividends.length && dividends[divIndex].date > prevDate && dividends[divIndex].date <= item.date) {
+            const div = dividends[divIndex];
+            if (totalShares > 0) {
+              const payout = totalShares * div.amount;
+              totalDividendsReceived += payout;
+              
+              if (reinvestDividends) {
+                const sharesBoughtFromDiv = payout / price;
+                totalShares += sharesBoughtFromDiv;
+                count++;
+                purchases.push({
+                  index: count,
+                  date: div.date,
+                  price: price,
+                  amountSpent: 0,
+                  sharesBought: sharesBoughtFromDiv,
+                  totalShares: totalShares,
+                  totalCost: totalInvested,
+                  portfolioValue: totalShares * price,
+                  isDividend: true,
+                  dividendAmount: div.amount,
+                  dividendPayout: payout
+                });
+              }
+            }
+            divIndex++;
           }
         }
       }
@@ -514,6 +620,7 @@ export default function App() {
         avgPrice,
         cagr,
         purchases,
+        totalDividends: totalDividendsReceived,
         symbol: symbol.toUpperCase()
       });
 
@@ -741,11 +848,6 @@ export default function App() {
     overviewPage * overviewItemsPerPage
   );
 
-  const filteredNews = FINANCIAL_NEWS.filter(news => {
-    if (newsFilter === 'Tất cả') return true;
-    return news.category === newsFilter;
-  });
-
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex font-sans relative overflow-hidden h-screen">
       {/* Sidebar Navigation */}
@@ -849,6 +951,8 @@ export default function App() {
               paginatedPurchases={paginatedPurchases}
               totalPages={totalPages}
               presetSymbols={PRESET_SYMBOLS}
+              reinvestDividends={reinvestDividends}
+              setReinvestDividends={setReinvestDividends}
             />
           )}
 
@@ -867,11 +971,7 @@ export default function App() {
           )}
 
           {activeTab === 'news' && (
-            <News
-              newsFilter={newsFilter}
-              setNewsFilter={setNewsFilter}
-              filteredNews={filteredNews}
-            />
+            <News />
           )}
         </main>
       </div>

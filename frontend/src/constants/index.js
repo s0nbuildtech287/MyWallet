@@ -94,13 +94,3 @@ export const PRESET_SYMBOLS = [
   { label: 'Apple (AAPL)', value: 'AAPL', isVnd: false },
   { label: 'Tesla (TSLA)', value: 'TSLA', isVnd: false }
 ];
-
-// Financial news
-export const FINANCIAL_NEWS = [
-  { id: 1, title: 'Thị trường chứng khoán Việt Nam: VN-Index bứt phá chinh phục mốc cản tâm lý mới nhờ dòng vốn FDI ổn định', source: 'Vietstock', time: '20 phút trước', summary: 'Dòng tiền khối ngoại quay trở lại mua ròng mạnh mẽ các cổ phiếu trụ cột như FPT, VCB, và HPG, kéo VN-Index duy trì sắc xanh tích cực trong bối cảnh vĩ mô trong nước tiếp tục hồi phục.', category: 'Trong nước', sentiment: 'bullish' },
-  { id: 2, title: 'GDP Việt Nam tăng trưởng vượt dự báo nhờ lực kéo từ hoạt động xuất khẩu và thu hút đầu tư nước ngoài mạnh mẽ', source: 'CafeF', time: '2 giờ trước', summary: 'Báo cáo mới nhất từ Tổng cục Thống kê cho thấy chỉ số công nghiệp và dịch vụ phục hồi rõ rệt. Lãi suất huy động tại các ngân hàng thương mại duy trì ở mức thấp hỗ trợ doanh nghiệp tối đa.', category: 'Trong nước', sentiment: 'bullish' },
-  { id: 3, title: 'Ngân hàng Nhà nước giữ nguyên mức lãi suất điều hành, linh hoạt ổn định tỷ giá USD/VND trong biên độ cho phép', source: 'Kinh tế & Đầu tư', time: '5 giờ trước', summary: 'Chính sách tiền tệ ổn định giúp củng cố niềm tin cho thị trường tài sản và bất động sản trong nước, tạo điều kiện thuận lợi cho các chiến lược đầu tư tích sản dài hạn của nhà đầu tư.', category: 'Trong nước', sentiment: 'neutral' },
-  { id: 4, title: 'FED phát đi tín hiệu nới lỏng chính sách: Thị trường chứng khoán Mỹ và Crypto đồng loạt lập đỉnh lịch sử mới', source: 'Bloomberg', time: '45 phút trước', summary: 'Ủy ban Thị trường Mở Liên bang (FOMC) hé lộ lộ trình cắt giảm lãi suất cơ bản trong các tháng tới do lạm phát hạ nhiệt nhanh chóng, tạo đà tăng phi mã cho Bitcoin và chỉ số S&P 500.', category: 'Quốc tế', sentiment: 'bullish' },
-  { id: 5, title: 'Căng thẳng địa chính trị tiếp tục leo thang, dòng tiền trú ẩn an toàn thúc đẩy giá Vàng thế giới tăng vọt lập kỷ lục', source: 'Reuters', time: '3 giờ trước', summary: 'Giá vàng giao ngay thế giới duy trì vững chắc trên đà tăng. Các chuyên gia quốc tế nhận định vàng tiếp tục là kênh tích lũy phòng thủ thiết yếu nhất trong danh mục đầu tư đa tài sản hiện nay.', category: 'Quốc tế', sentiment: 'neutral' },
-  { id: 6, title: 'Làn sóng AI thúc đẩy lợi nhuận kỷ lục của nhóm Big Tech Mỹ: Nvidia, Apple và Microsoft duy trì dẫn dắt thị trường', source: 'Wall Street Journal', time: '6 giờ trước', summary: 'Nhu cầu khổng lồ về chip xử lý và hạ tầng đám mây AI giúp các tập đoàn công nghệ đạt biên lợi nhuận vượt bậc, thu hút dòng vốn đầu tư khổng lồ đổ về sàn chứng khoán New York.', category: 'Quốc tế', sentiment: 'bullish' }
-];

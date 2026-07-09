@@ -29,7 +29,9 @@ export default function Simulator({
   chartPlugins,
   paginatedPurchases,
   totalPages,
-  presetSymbols
+  presetSymbols,
+  reinvestDividends,
+  setReinvestDividends
 }) {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 animate-fadeIn">
@@ -49,6 +51,8 @@ export default function Simulator({
         handleSimulate={handleSimulate}
         presetSymbols={presetSymbols}
         isVndAsset={isVndAsset}
+        reinvestDividends={reinvestDividends}
+        setReinvestDividends={setReinvestDividends}
       />
 
       {/* Results Panel */}
