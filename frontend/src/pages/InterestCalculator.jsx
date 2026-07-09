@@ -97,6 +97,7 @@ export default function InterestCalculator({
               </div>
               <div className="h-[250px]">
                 <Bar
+                  key={`interest-chart-${interestInit}-${interestMonthly}-${interestRate}-${interestYears}`}
                   data={{
                     labels: interestResults.yearlyBreakdown.map(y => y.year),
                     datasets: [

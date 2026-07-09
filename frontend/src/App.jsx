@@ -67,6 +67,10 @@ export default function App() {
   const [activeTab, setActiveTab] = useState('overview'); // 'overview' | 'asset-details' | 'simulator' | 'interest' | 'news'
   const [globalSearch, setGlobalSearch] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('All');
+  const [overviewPage, setOverviewPage] = useState(1);
+  const overviewItemsPerPage = 10;
+  const [searchLoading, setSearchLoading] = useState(false);
+  const [searchError, setSearchError] = useState(null);
 
   // Live prices
   const [marketPrices, setMarketPrices] = useState(MARKET_ASSETS);
@@ -426,10 +430,72 @@ export default function App() {
     }
   };
 
-  const handleGlobalSearchSubmit = (e) => {
+  const handleGlobalSearchSubmit = async (e) => {
     e.preventDefault();
-    if (globalSearch.trim()) {
-      handleQuickSimulation(globalSearch.trim());
+    const sym = globalSearch.trim().toUpperCase();
+    if (!sym) return;
+
+    // Check if already in list
+    const existingIndex = marketPrices.findIndex(a => a.symbol.toUpperCase() === sym);
+    if (existingIndex !== -1) {
+      // If already exists, switch to 'All', calculate its page, jump to it, and flash it green
+      setCategoryFilter('All');
+      const targetPage = Math.ceil((existingIndex + 1) / overviewItemsPerPage);
+      setOverviewPage(targetPage);
+      setGlobalSearch('');
+      
+      // Temporary flash highlight
+      setMarketPrices(prev => prev.map((item, idx) => 
+        idx === existingIndex ? { ...item, tick: 'up' } : item
+      ));
+      return;
+    }
+
+    setSearchLoading(true);
+    setSearchError(null);
+    try {
+      const nowSecs = Math.floor(Date.now() / 1000);
+      // Query 30 days instead of 7 days to avoid empty data on holidays/weekends
+      const startSecs = nowSecs - 30 * 24 * 60 * 60;
+      const res = await fetch(`http://localhost:5001/api/chart?symbol=${sym}&period1=${startSecs}&period2=${nowSecs}`);
+      const data = await res.json();
+      if (!data.chart || !data.chart.result || !data.chart.result[0]) {
+        throw new Error('Không tìm thấy mã tài sản này hoặc API Yahoo quá tải.');
+      }
+      const result = data.chart.result[0];
+      const meta = result.meta;
+      const closes = result.indicators?.quote?.[0]?.close || [];
+      const latestClose = closes.filter(v => v !== null && v !== undefined).pop();
+      if (!latestClose) throw new Error('Không lấy được giá đóng cửa gần nhất.');
+
+      const isVnd = sym.endsWith('.VN');
+      let category = 'Khác';
+      const cryptoSuffixes = ['-USD', '-USDT', '-BTC'];
+      if (cryptoSuffixes.some(s => sym.includes(s))) category = 'Crypto';
+      else if (isVnd) category = 'Chứng khoán VN';
+      else category = 'Chứng khoán Mỹ';
+
+      const newAsset = {
+        name: meta.shortName || meta.longName || sym,
+        symbol: sym,
+        price: isVnd ? Math.round(latestClose) : parseFloat(latestClose.toFixed(2)),
+        change: parseFloat((((latestClose - (closes.filter(Boolean)[0] || latestClose)) / (closes.filter(Boolean)[0] || latestClose)) * 100).toFixed(2)),
+        category,
+        isVnd,
+        details: { pe: 'N/A', high52: 'N/A', low52: 'N/A', volume: 'N/A' },
+        tick: 'up' // Flash it green initially
+      };
+      
+      // Add new asset to the beginning of the list so it is immediately visible on Page 1
+      setMarketPrices(prev => [newAsset, ...prev]);
+      setCategoryFilter('All');
+      setOverviewPage(1);
+      setGlobalSearch('');
+    } catch (err) {
+      setSearchError(err.message || 'Không tìm thấy mã tài sản.');
+      setTimeout(() => setSearchError(null), 4000);
+    } finally {
+      setSearchLoading(false);
     }
   };
 
@@ -527,11 +593,18 @@ export default function App() {
     : 0;
 
   const filteredAssets = marketPrices.filter(asset => {
-    const matchesSearch = asset.name.toLowerCase().includes(globalSearch.toLowerCase()) || 
+    const matchesSearch = globalSearch.trim() === '' ||
+                          asset.name.toLowerCase().includes(globalSearch.toLowerCase()) || 
                           asset.symbol.toLowerCase().includes(globalSearch.toLowerCase());
     const matchesCategory = categoryFilter === 'All' || asset.category === categoryFilter;
     return matchesSearch && matchesCategory;
   });
+
+  const overviewTotalPages = Math.ceil(filteredAssets.length / overviewItemsPerPage);
+  const paginatedOverviewAssets = filteredAssets.slice(
+    (overviewPage - 1) * overviewItemsPerPage,
+    overviewPage * overviewItemsPerPage
+  );
 
   const filteredNews = FINANCIAL_NEWS.filter(news => {
     if (newsFilter === 'Tất cả') return true;
@@ -673,11 +746,18 @@ export default function App() {
               categoryFilter={categoryFilter}
               setCategoryFilter={setCategoryFilter}
               macroIndices={macroIndices}
-              filteredAssets={filteredAssets}
+              filteredAssets={paginatedOverviewAssets}
+              totalFilteredCount={filteredAssets.length}
               handleQuickSimulation={handleQuickSimulation}
               handleOpenAssetDetails={handleOpenAssetDetails}
               handleGlobalSearchSubmit={handleGlobalSearchSubmit}
               formatValSymbol={formatValSymbol}
+              overviewPage={overviewPage}
+              setOverviewPage={setOverviewPage}
+              overviewTotalPages={overviewTotalPages}
+              overviewItemsPerPage={overviewItemsPerPage}
+              searchLoading={searchLoading}
+              searchError={searchError}
             />
           )}
 

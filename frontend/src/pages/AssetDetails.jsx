@@ -78,6 +78,7 @@ export default function AssetDetails({
             </div>
           ) : detailData && detailData.length > 0 ? (
             <Line
+              key={`detail-chart-${selectedDetailSymbol}-${detailRange}`}
               data={{
                 labels: detailData.map(d => d.date),
                 datasets: [

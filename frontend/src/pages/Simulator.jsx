@@ -298,7 +298,7 @@ export default function Simulator({
               </div>
 
               <div className="h-[280px]">
-                <Line data={getChartData()} options={chartOptions} />
+                <Line key={`sim-chart-${symbol}-${results?.purchases?.length || 0}`} data={getChartData()} options={chartOptions} />
               </div>
             </div>
 
