@@ -28,7 +28,7 @@ export const MARKET_ASSETS = [
   // Chứng khoán VN (20)
   { name: 'FPT Corp', symbol: 'FPT.VN', price: 142500, change: 1.8, category: 'Chứng khoán VN', isVnd: true, volume: '180B VNĐ', details: { pe: '22.4', high52: '154.000 VNĐ', low52: '72.000 VNĐ', volume: '180B VNĐ' } },
   { name: 'Hòa Phát', symbol: 'HPG.VN', price: 29450, change: -0.6, category: 'Chứng khoán VN', isVnd: true, volume: '340B VNĐ', details: { pe: '14.2', high52: '32.500 VNĐ', low52: '23.000 VNĐ', volume: '340B VNĐ' } },
-  { name: 'Vietcombank', symbol: 'VCB.VN', price: 91400, change: 0.2, category: 'Chứng khoán VN', isVnd: true, volume: '95B VNĐ', details: { pe: '16.8', high52: '98.000 VNĐ', low52: '78.500 VNĐ', volume: '95B VNĐ' } },
+  { name: 'Vietcombank', symbol: 'VCB.VN', price: 61000, change: 0.2, category: 'Chứng khoán VN', isVnd: true, volume: '95B VNĐ', details: { pe: '16.8', high52: '68.000 VNĐ', low52: '55.000 VNĐ', volume: '95B VNĐ' } },
   { name: 'Vingroup', symbol: 'VIC.VN', price: 42500, change: -1.5, category: 'Chứng khoán VN', isVnd: true, volume: '120B VNĐ', details: { pe: '28.1', high52: '58.000 VNĐ', low52: '39.000 VNĐ', volume: '120B VNĐ' } },
   { name: 'Vinamilk', symbol: 'VNM.VN', price: 68200, change: 0.5, category: 'Chứng khoán VN', isVnd: true, volume: '110B VNĐ', details: { pe: '18.2', high52: '76.000 VNĐ', low52: '63.400 VNĐ', volume: '110B VNĐ' } },
   { name: 'SSI Securities', symbol: 'SSI.VN', price: 34800, change: 2.1, category: 'Chứng khoán VN', isVnd: true, volume: '290B VNĐ', details: { pe: '21.5', high52: '38.200 VNĐ', low52: '24.500 VNĐ', volume: '290B VNĐ' } },
@@ -59,12 +59,28 @@ export const MARKET_ASSETS = [
   { name: 'AMD Devices', symbol: 'AMD', price: 168.5, change: 3.6, category: 'Chứng khoán Mỹ', isVnd: false, volume: '$3.5B', details: { pe: '65.4', high52: '$227.3', low52: '$93.1', volume: '$3.5B' } },
   { name: 'Intel Corp', symbol: 'INTC', price: 34.2, change: -0.9, category: 'Chứng khoán Mỹ', isVnd: false, volume: '$1.4B', details: { pe: '18.4', high52: '$51.2', low52: '$26.8', volume: '$1.4B' } },
 
-  // Khác (5)
-  { name: 'Vàng Thế Giới', symbol: 'GC=F', price: 2345.5, change: -0.85, category: 'Khác', isVnd: false, volume: '$1.8B', details: { pe: 'N/A', high52: '$2,450.0', low52: '$1,810.0', volume: '$1.8B' } },
-  { name: 'Dầu Thô (WTI)', symbol: 'CL=F', price: 78.4, change: 1.2, category: 'Khác', isVnd: false, volume: '$1.1B', details: { pe: 'N/A', high52: '$95.0', low52: '$67.2', volume: '$1.1B' } },
+  // Hàng hóa & Tỷ giá (9)
+  { name: 'Vàng Thế Giới', symbol: 'GC=F', price: 2345.5, change: -0.85, category: 'Hàng hóa & Tỷ giá', isVnd: false, volume: '$1.8B', details: { pe: 'N/A', high52: '$2,450.0', low52: '$1,810.0', volume: '$1.8B' } },
+  { name: 'Bạc Thế Giới', symbol: 'SI=F', price: 29.5, change: 0.45, category: 'Hàng hóa & Tỷ giá', isVnd: false, volume: '$450M', details: { pe: 'N/A', high52: '$32.50', low52: '$21.20', volume: '$450M' } },
+  { name: 'Dầu Thô WTI', symbol: 'CL=F', price: 78.4, change: 1.2, category: 'Hàng hóa & Tỷ giá', isVnd: false, volume: '$1.1B', details: { pe: 'N/A', high52: '$95.0', low52: '$67.2', volume: '$1.1B' } },
+  { name: 'Dầu Thô Brent', symbol: 'BZ=F', price: 82.5, change: 0.85, category: 'Hàng hóa & Tỷ giá', isVnd: false, volume: '$980M', details: { pe: 'N/A', high52: '$98.5', low52: '$72.1', volume: '$980M' } },
+  { name: 'Khí Gas Tự Nhiên', symbol: 'NG=F', price: 2.15, change: -1.5, category: 'Hàng hóa & Tỷ giá', isVnd: false, volume: '$350M', details: { pe: 'N/A', high52: '$3.50', low52: '$1.55', volume: '$350M' } },
+  { name: 'Tỷ giá USD/VND', symbol: 'USDVND=X', price: 25450, change: 0.05, category: 'Hàng hóa & Tỷ giá', isVnd: true, volume: '95B VNĐ', details: { pe: 'N/A', high52: '25.600 VNĐ', low52: '24.200 VNĐ', volume: '95B VNĐ' } },
+  { name: 'Tỷ giá EUR/USD', symbol: 'EURUSD=X', price: 1.08, change: -0.15, category: 'Hàng hóa & Tỷ giá', isVnd: false, volume: '$12.4B', details: { pe: 'N/A', high52: '$1.12', low52: '$1.05', volume: '$12.4B' } },
+  { name: 'Tỷ giá GBP/USD', symbol: 'GBPUSD=X', price: 1.27, change: 0.22, category: 'Hàng hóa & Tỷ giá', isVnd: false, volume: '$8.5B', details: { pe: 'N/A', high52: '$1.31', low52: '$1.22', volume: '$8.5B' } },
+  { name: 'Tỷ giá USD/JPY', symbol: 'USDJPY=X', price: 156.4, change: 0.35, category: 'Hàng hóa & Tỷ giá', isVnd: false, volume: '$14.2B', details: { pe: 'N/A', high52: '$160.5', low52: '$140.2', volume: '$14.2B' } },
+
+  // ETF & Quỹ (4)
+  { name: 'Quỹ ETF Diamond VN', symbol: 'FUEVFVND.HM', price: 32000, change: 1.15, category: 'ETF & Quỹ', isVnd: true, volume: '45B VNĐ', details: { pe: 'N/A', high52: '34.500 VNĐ', low52: '23.000 VNĐ', volume: '45B VNĐ' } },
+  { name: 'Quỹ ETF VN30 VN', symbol: 'E1VFVN30.HM', price: 21000, change: 0.85, category: 'ETF & Quỹ', isVnd: true, volume: '28B VNĐ', details: { pe: 'N/A', high52: '23.400 VNĐ', low52: '16.500 VNĐ', volume: '28B VNĐ' } },
+  { name: 'Quỹ ETF S&P 500 (SPY)', symbol: 'SPY', price: 512.4, change: 0.75, category: 'ETF & Quỹ', isVnd: false, volume: '$35.2B', details: { pe: 'N/A', high52: '$525.0', low52: '$410.0', volume: '$35.2B' } },
+  { name: 'Quỹ ETF Nasdaq (QQQ)', symbol: 'QQQ', price: 435.5, change: 1.35, category: 'ETF & Quỹ', isVnd: false, volume: '$21.8B', details: { pe: 'N/A', high52: '$448.0', low52: '$345.0', volume: '$21.8B' } },
+
+  // Khác (4)
   { name: 'Chỉ số VN-Index', symbol: '^VNINDEX', price: 1245.8, change: 0.45, category: 'Khác', isVnd: false, volume: '19.4T VNĐ', details: { pe: 'N/A', high52: '1,295.0', low52: '1,020.0', volume: '19.4T VNĐ' } },
+  { name: 'Chỉ số S&P 500', symbol: '^GSPC', price: 5120.4, change: 1.15, category: 'Khác', isVnd: false, volume: '$42.5B', details: { pe: 'N/A', high52: '$5,250.0', low52: '$4,100.0', volume: '$42.5B' } },
   { name: 'Dow Jones 30', symbol: '^DJI', price: 39120.4, change: 0.35, category: 'Khác', isVnd: false, volume: '$3.8B', details: { pe: 'N/A', high52: '$39,889.0', low52: '$32,715.0', volume: '$3.8B' } },
-  { name: 'Nasdaq 100', symbol: '^IXIC', price: 16274.9, change: 1.15, category: 'Khác', isVnd: false, volume: '$7.4B', details: { pe: 'N/A', high52: '$16,538.0', low52: '$11,910.0', volume: '$7.4B' } }
+  { name: 'Chỉ số Nikkei 225', symbol: '^N225', price: 38550.0, change: -0.65, category: 'Khác', isVnd: false, volume: '$5.8B', details: { pe: 'N/A', high52: '$41,000.0', low52: '$30,500.0', volume: '$5.8B' } }
 ];
 
 // Presets for Simulator

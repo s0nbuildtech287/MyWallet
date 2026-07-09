@@ -80,7 +80,7 @@ export default function Overview({
             <span className="text-slate-500 normal-case font-normal tracking-normal">({totalFilteredCount} tài sản)</span>
           </h3>
           <div className="flex items-center gap-1.5 self-start flex-wrap">
-            {["All", "Crypto", "Chứng khoán VN", "Chứng khoán Mỹ", "Khác"].map((cat) => (
+            {["All", "Crypto", "Chứng khoán VN", "Chứng khoán Mỹ", "ETF & Quỹ", "Hàng hóa & Tỷ giá", "Khác"].map((cat) => (
               <button
                 key={cat}
                 onClick={() => { setCategoryFilter(cat); setOverviewPage(1); }}

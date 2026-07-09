@@ -1,6 +1,6 @@
 import React from 'react';
 import { 
-  Compass, LayoutDashboard, LineChart, Calculator, Percent, Newspaper, BookOpen 
+  Compass, LayoutDashboard, Briefcase, LineChart, Calculator, Percent, Newspaper, BookOpen 
 } from 'lucide-react';
 
 export default function Sidebar({ activeTab, setActiveTab }) {
@@ -28,6 +28,18 @@ export default function Sidebar({ activeTab, setActiveTab }) {
         >
           <LayoutDashboard className="h-4 w-4" />
           <span>Xem giá thị trường</span>
+        </button>
+
+        <button
+          onClick={() => setActiveTab('portfolio')}
+          className={`w-full flex items-center gap-3 text-sm font-semibold py-3 px-4 rounded-xl border transition-all cursor-pointer ${
+            activeTab === 'portfolio'
+              ? 'bg-slate-800 border-slate-700 text-emerald-400 font-bold shadow-md'
+              : 'border-transparent text-slate-300 hover:text-white hover:bg-slate-900/60'
+          }`}
+        >
+          <Briefcase className="h-4 w-4" />
+          <span>Danh mục của tôi</span>
         </button>
 
         <button

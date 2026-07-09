@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 // Import Modular Pages
 import Overview from './pages/Overview';
@@ -7,6 +7,7 @@ import Simulator from './pages/Simulator';
 import InterestCalculator from './pages/InterestCalculator';
 import News from './pages/News';
 import Guides from './pages/Guides';
+import Portfolio from './pages/Portfolio';
 
 // Import Layout Components
 import Sidebar from './components/layout/Sidebar';
@@ -63,7 +64,7 @@ export default function App() {
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash.replace('#/', '');
-      const validTabs = ['overview', 'asset-details', 'simulator', 'interest', 'news', 'guides'];
+      const validTabs = ['overview', 'portfolio', 'asset-details', 'simulator', 'interest', 'news', 'guides'];
       if (validTabs.includes(hash)) {
         setActiveTab(hash);
       } else {
@@ -82,7 +83,84 @@ export default function App() {
     window.location.hash = `#/${tabName}`;
   };
 
-  const isVndAsset = symbol.toUpperCase().endsWith('.VN');
+  const symUpperDca = symbol.toUpperCase();
+  const isVndAsset = symUpperDca.endsWith('.VN') || symUpperDca.endsWith('.HM') || symUpperDca === 'USDVND=X';
+
+  // Refs to prevent stale closure in intervals
+  const marketPricesRef = useRef(marketPrices);
+  const macroIndicesRef = useRef(macroIndices);
+
+  useEffect(() => {
+    marketPricesRef.current = marketPrices;
+  }, [marketPrices]);
+
+  useEffect(() => {
+    macroIndicesRef.current = macroIndices;
+  }, [macroIndices]);
+
+  // Fetch real-time prices from Yahoo Finance via backend proxy
+  const fetchRealtimePrices = async () => {
+    try {
+      const assetSymbols = marketPricesRef.current.map(a => a.symbol);
+      const indexSymbols = macroIndicesRef.current.map(a => a.symbol);
+      const uniqueSymbols = Array.from(new Set([...assetSymbols, ...indexSymbols]));
+      if (uniqueSymbols.length === 0) return;
+
+      const response = await fetch(`http://localhost:5001/api/live-prices?symbols=${uniqueSymbols.join(',')}`);
+      if (!response.ok) throw new Error('API server returned error');
+      const data = await response.json();
+
+      if (Array.isArray(data)) {
+        setMarketPrices(prev => prev.map(item => {
+          const live = data.find(l => l.symbol.toUpperCase() === item.symbol.toUpperCase() && l.success);
+          if (live && typeof live.price === 'number' && !isNaN(live.price)) {
+            const isVnd = item.isVnd;
+            const newPrice = isVnd ? Math.round(live.price) : parseFloat(live.price.toFixed(2));
+            const priceDiff = newPrice - item.price;
+            const tick = priceDiff > 0 ? 'up' : priceDiff < 0 ? 'down' : null;
+            const formattedVol = formatVolumeHelper(live.volume, isVnd);
+            return {
+              ...item,
+              price: newPrice,
+              change: typeof live.change === 'number' ? live.change : item.change,
+              volume: formattedVol,
+              details: {
+                ...item.details,
+                volume: formattedVol
+              },
+              tick
+            };
+          }
+          return item;
+        }));
+
+        setMacroIndices(prev => prev.map(item => {
+          const live = data.find(l => l.symbol.toUpperCase() === item.symbol.toUpperCase() && l.success);
+          if (live && typeof live.price === 'number' && !isNaN(live.price)) {
+            const newPrice = parseFloat(live.price.toFixed(2));
+            const priceDiff = newPrice - item.price;
+            const tick = priceDiff > 0 ? 'up' : priceDiff < 0 ? 'down' : null;
+            return {
+              ...item,
+              price: newPrice,
+              change: typeof live.change === 'number' ? live.change : item.change,
+              tick
+            };
+          }
+          return item;
+        }));
+      }
+    } catch (err) {
+      console.error('Failed to fetch real-time prices:', err);
+    }
+  };
+
+  // Poll real-time prices every 30 seconds
+  useEffect(() => {
+    fetchRealtimePrices();
+    const interval = setInterval(fetchRealtimePrices, 30000);
+    return () => clearInterval(interval);
+  }, []);
 
   // Live ticker ticks
   useEffect(() => {
@@ -504,12 +582,22 @@ export default function App() {
       
       const latestVolume = volumes.filter(v => v !== null && v !== undefined).pop();
 
-      const isVnd = sym.endsWith('.VN');
+      const isVnd = sym.endsWith('.VN') || sym.endsWith('.HM') || sym === 'USDVND=X';
       let category = 'Khác';
       const cryptoSuffixes = ['-USD', '-USDT', '-BTC'];
-      if (cryptoSuffixes.some(s => sym.includes(s))) category = 'Crypto';
-      else if (isVnd) category = 'Chứng khoán VN';
-      else category = 'Chứng khoán Mỹ';
+      if (cryptoSuffixes.some(s => sym.includes(s))) {
+        category = 'Crypto';
+      } else if (sym.endsWith('.VN')) {
+        category = 'Chứng khoán VN';
+      } else if (sym.endsWith('.HM')) {
+        category = 'ETF & Quỹ';
+      } else if (sym === 'SPY' || sym === 'QQQ') {
+        category = 'ETF & Quỹ';
+      } else if (sym.endsWith('=X') || sym.endsWith('=F')) {
+        category = 'Hàng hóa & Tỷ giá';
+      } else {
+        category = 'Chứng khoán Mỹ';
+      }
 
       const formattedVol = formatVolumeHelper(latestVolume, isVnd);
 
@@ -682,6 +770,14 @@ export default function App() {
               overviewItemsPerPage={overviewItemsPerPage}
               searchLoading={searchLoading}
               searchError={searchError}
+            />
+          )}
+
+          {activeTab === 'portfolio' && (
+            <Portfolio
+              marketPrices={marketPrices}
+              formatValSymbol={formatValSymbol}
+              setActiveTab={changeTab}
             />
           )}
 

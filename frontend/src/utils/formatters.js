@@ -1,6 +1,7 @@
 export const formatValSymbol = (val, sym) => {
   if (val === undefined || val === null) return 'N/A';
-  const displayVnd = sym.toUpperCase().endsWith('.VN');
+  const symUpper = sym.toUpperCase();
+  const displayVnd = symUpper.endsWith('.VN') || symUpper.endsWith('.HM') || symUpper === 'USDVND=X';
   if (displayVnd) {
     return Math.round(val).toLocaleString('vi-VN') + ' VNĐ';
   }

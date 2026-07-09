@@ -31,7 +31,9 @@ export default function AssetDetails({
   };
 
   const [chartType, setChartType] = useState('line'); // 'line' | 'candlestick'
-  const isVndAsset = selectedDetailSymbol.toUpperCase().endsWith('.VN');
+  const isVndAsset = selectedDetailSymbol.toUpperCase().endsWith('.VN') || 
+                     selectedDetailSymbol.toUpperCase().endsWith('.HM') || 
+                     selectedDetailSymbol.toUpperCase() === 'USDVND=X';
 
   return (
     <div className="flex flex-col gap-6 text-slate-100 pb-10 animate-fadeIn">
