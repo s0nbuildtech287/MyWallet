@@ -4,7 +4,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import Overview from './pages/Overview';
 import AssetDetails from './pages/AssetDetails';
 import Simulator from './pages/Simulator';
-import InterestCalculator from './pages/InterestCalculator';
 import News from './pages/News';
 import Guides from './pages/Guides';
 import Portfolio from './pages/Portfolio';
@@ -40,12 +39,7 @@ export default function App() {
   const [detailData, setDetailData] = useState([]);
   const [detailLoading, setDetailLoading] = useState(false);
 
-  // Compound interest page
-  const [interestInit, setInterestInit] = useState('10000000');
-  const [interestMonthly, setInterestMonthly] = useState('2000000');
-  const [interestRate, setInterestRate] = useState('8');
-  const [interestYears, setInterestYears] = useState('10');
-  const [interestResults, setInterestResults] = useState(null);
+
 
   // Simulator Backtest states
   const [symbol, setSymbol] = useState('BTC-USD');
@@ -269,9 +263,6 @@ export default function App() {
     };
   }, [selectedDetailSymbol, detailRange, activeTab]);
 
-  useEffect(() => {
-    calculateCompoundInterest();
-  }, [interestInit, interestMonthly, interestRate, interestYears]);
 
   const fetchAssetDetailChart = async (isSilent = false) => {
     if (!isSilent) setDetailLoading(true);
@@ -360,39 +351,7 @@ export default function App() {
     }
   };
 
-  const calculateCompoundInterest = () => {
-    const init = parseFloat(interestInit) || 0;
-    const monthly = parseFloat(interestMonthly) || 0;
-    const rate = (parseFloat(interestRate) || 0) / 100 / 12;
-    const years = parseInt(interestYears) || 0;
-    const totalMonths = years * 12;
 
-    let balance = init;
-    let totalInvested = init;
-    const yearlyBreakdown = [];
-
-    for (let month = 1; month <= totalMonths; month++) {
-      balance = (balance + monthly) * (1 + rate);
-      totalInvested += monthly;
-
-      if (month % 12 === 0) {
-        const year = month / 12;
-        yearlyBreakdown.push({
-          year: `Năm ${year}`,
-          totalInvested: Math.round(totalInvested),
-          totalBalance: Math.round(balance),
-          interestEarned: Math.round(balance - totalInvested)
-        });
-      }
-    }
-
-    setInterestResults({
-      finalBalance: Math.round(balance),
-      totalInvested: Math.round(totalInvested),
-      interestEarned: Math.round(balance - totalInvested),
-      yearlyBreakdown
-    });
-  };
 
   const handleQuickSimulation = (targetSymbol) => {
     setSymbol(targetSymbol);
@@ -1005,19 +964,6 @@ export default function App() {
             />
           )}
 
-          {activeTab === 'interest' && (
-            <InterestCalculator
-              interestInit={interestInit}
-              setInterestInit={setInterestInit}
-              interestMonthly={interestMonthly}
-              setInterestMonthly={setInterestMonthly}
-              interestRate={interestRate}
-              setInterestRate={setInterestRate}
-              interestYears={interestYears}
-              setInterestYears={setInterestYears}
-              interestResults={interestResults}
-            />
-          )}
 
           {activeTab === 'news' && (
             <News />

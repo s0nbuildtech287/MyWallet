@@ -79,18 +79,6 @@ export default function Sidebar({ activeTab, setActiveTab }) {
         </button>
 
         <button
-          onClick={() => setActiveTab('interest')}
-          className={`w-full flex items-center gap-3 text-sm font-semibold py-3 px-4 rounded-xl border transition-all cursor-pointer ${
-            activeTab === 'interest'
-              ? 'bg-slate-800 border-slate-700 text-emerald-400 font-bold shadow-md'
-              : 'border-transparent text-slate-300 hover:text-white hover:bg-slate-900/60'
-          }`}
-        >
-          <Percent className="h-4 w-4" />
-          <span>Bảng tính lãi kép</span>
-        </button>
-
-        <button
           onClick={() => setActiveTab('news')}
           className={`w-full flex items-center gap-3 text-sm font-semibold py-3 px-4 rounded-xl border transition-all cursor-pointer ${
             activeTab === 'news'
