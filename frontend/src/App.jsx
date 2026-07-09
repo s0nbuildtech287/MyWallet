@@ -129,17 +129,26 @@ export default function App() {
   }, [investMode, symbol]);
 
   useEffect(() => {
+    let intervalId;
     if (activeTab === 'asset-details') {
-      fetchAssetDetailChart();
+      fetchAssetDetailChart(false);
+      
+      // Tự động cập nhật dữ liệu biểu đồ sau mỗi 15 giây
+      intervalId = setInterval(() => {
+        fetchAssetDetailChart(true);
+      }, 15000);
     }
+    return () => {
+      if (intervalId) clearInterval(intervalId);
+    };
   }, [selectedDetailSymbol, detailRange, activeTab]);
 
   useEffect(() => {
     calculateCompoundInterest();
   }, [interestInit, interestMonthly, interestRate, interestYears]);
 
-  const fetchAssetDetailChart = async () => {
-    setDetailLoading(true);
+  const fetchAssetDetailChart = async (isSilent = false) => {
+    if (!isSilent) setDetailLoading(true);
     const nowSecs = Math.floor(new Date().getTime() / 1000);
     let startSecs = nowSecs - 365 * 24 * 60 * 60; // 1Y mặc định
     let interval = '1d';
@@ -177,8 +186,12 @@ export default function App() {
       
       const result = data.chart.result[0];
       const timestamps = result.timestamp || [];
-      const closes = result.indicators.quote[0].close || [];
-      const volumes = result.indicators.quote[0].volume || [];
+      const quote = result.indicators.quote[0] || {};
+      const opens = quote.open || [];
+      const highs = quote.high || [];
+      const lows = quote.low || [];
+      const closes = quote.close || [];
+      const volumes = quote.volume || [];
       
       const chartPoints = [];
       for (let i = 0; i < timestamps.length; i++) {
@@ -197,9 +210,18 @@ export default function App() {
             formattedDate = dateObj.toLocaleDateString('vi-VN', { year: 'numeric', month: 'numeric' });
           }
 
+          const cVal = closes[i];
+          const oVal = opens[i] !== null && opens[i] !== undefined ? opens[i] : cVal;
+          const hVal = highs[i] !== null && highs[i] !== undefined ? highs[i] : Math.max(oVal, cVal);
+          const lVal = lows[i] !== null && lows[i] !== undefined ? lows[i] : Math.min(oVal, cVal);
+
           chartPoints.push({
             date: formattedDate,
-            price: closes[i],
+            price: cVal,
+            open: oVal,
+            high: hVal,
+            low: lVal,
+            close: cVal,
             volume: volumes[i] || 0
           });
         }

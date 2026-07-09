@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Line, Bar } from 'react-chartjs-2';
-import { LineChart, RefreshCw, ArrowRight } from 'lucide-react';
+import { LineChart, RefreshCw, ArrowRight, TrendingUp } from 'lucide-react';
+import CandlestickChart from '../components/features/chart/CandlestickChart';
 
 const RANGE_TOOLTIPS = {
   '1D': 'Dữ liệu 1 ngày gần nhất, nến 5 phút',
@@ -29,6 +30,9 @@ export default function AssetDetails({
     details: { pe: 'N/A', high52: 'N/A', low52: 'N/A', volume: 'N/A' } 
   };
 
+  const [chartType, setChartType] = useState('line'); // 'line' | 'candlestick'
+  const isVndAsset = selectedDetailSymbol.toUpperCase().endsWith('.VN');
+
   return (
     <div className="flex flex-col gap-6 text-slate-100 pb-10 animate-fadeIn">
       {/* Detail Chart Section */}
@@ -42,27 +46,58 @@ export default function AssetDetails({
             </div>
           </div>
 
-          {/* Range selectors */}
-          <div className="flex gap-1.5">
-            {['1D', '5D', '1M', '3M', '6M', '1Y', '5Y', 'ALL'].map((rng) => (
-              <div key={rng} className="group relative">
-                <button
-                  onClick={() => setDetailRange(rng)}
-                  className={`text-[9px] font-semibold py-1 px-2.5 rounded-lg border transition-all cursor-pointer ${
-                    detailRange === rng 
-                      ? 'bg-slate-850 border-slate-700 text-emerald-400 font-bold shadow-md' 
-                      : 'bg-transparent border-transparent text-slate-400 hover:text-slate-200'
-                  }`}
-                >
-                  {rng}
-                </button>
-                {/* Tooltip */}
-                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block bg-slate-900 border border-slate-800 text-[9px] text-slate-300 py-1.5 px-2.5 rounded-md whitespace-nowrap shadow-xl z-50 pointer-events-none font-normal">
-                  {RANGE_TOOLTIPS[rng]}
-                  <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-slate-900" />
+          {/* Controls Container */}
+          <div className="flex items-center gap-4 flex-wrap">
+            {/* Chart Type Toggle */}
+            <div className="flex bg-slate-950/60 p-0.5 rounded-lg border border-slate-800/80">
+              <button
+                type="button"
+                onClick={() => setChartType('line')}
+                className={`text-[9px] font-bold py-1 px-2.5 rounded-md transition-all cursor-pointer ${
+                  chartType === 'line'
+                    ? 'bg-slate-800 text-emerald-400 shadow-sm'
+                    : 'text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                Đường
+              </button>
+              <button
+                type="button"
+                onClick={() => setChartType('candlestick')}
+                className={`text-[9px] font-bold py-1 px-2.5 rounded-md transition-all cursor-pointer ${
+                  chartType === 'candlestick'
+                    ? 'bg-slate-800 text-emerald-400 shadow-sm'
+                    : 'text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                Nến Nhật
+              </button>
+            </div>
+
+            <div className="h-5 w-[1px] bg-slate-800 hidden sm:block" />
+
+            {/* Range selectors */}
+            <div className="flex gap-1.5">
+              {['1D', '5D', '1M', '3M', '6M', '1Y', '5Y', 'ALL'].map((rng) => (
+                <div key={rng} className="group relative">
+                  <button
+                    onClick={() => setDetailRange(rng)}
+                    className={`text-[9px] font-semibold py-1 px-2.5 rounded-lg border transition-all cursor-pointer ${
+                      detailRange === rng 
+                        ? 'bg-slate-850 border-slate-700 text-emerald-400 font-bold shadow-md' 
+                        : 'bg-transparent border-transparent text-slate-400 hover:text-slate-200'
+                    }`}
+                  >
+                    {rng}
+                  </button>
+                  {/* Tooltip */}
+                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block bg-slate-900 border border-slate-800 text-[9px] text-slate-300 py-1.5 px-2.5 rounded-md whitespace-nowrap shadow-xl z-50 pointer-events-none font-normal">
+                    {RANGE_TOOLTIPS[rng]}
+                    <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-slate-900" />
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
 
@@ -93,7 +128,10 @@ export default function AssetDetails({
               <RefreshCw className="h-8 w-8 text-emerald-400 animate-spin" />
             </div>
           ) : detailData && detailData.length > 0 ? (
-            <>
+            chartType === 'candlestick' ? (
+              <CandlestickChart data={detailData} isVndAsset={isVndAsset} />
+            ) : (
+              <>
               {/* Price Line Chart */}
               <div className="h-[240px] relative w-full">
                 <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-1">Xu hướng giá đóng cửa</span>
@@ -207,6 +245,7 @@ export default function AssetDetails({
                 />
               </div>
             </>
+            )
           ) : (
             <div className="h-[320px] flex items-center justify-center text-slate-500 font-semibold border border-slate-900 rounded-xl">
               Không thể tải biểu đồ lịch sử của mã này.

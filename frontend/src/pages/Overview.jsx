@@ -107,11 +107,11 @@ export default function Overview({
                 <th className="py-2.5 px-4">Giá hiện tại</th>
                 <th className="py-2.5 px-4">
                   <span>Biến động</span>
-                  <Tooltip content="Phần trăm thay đổi giá của tài sản trong 24 giờ qua." />
+                  <Tooltip content="Phần trăm thay đổi giá của tài sản trong 24 giờ qua." position="bottom" />
                 </th>
                 <th className="py-2.5 px-4">
                   <span>Khối lượng 24h</span>
-                  <Tooltip content="Tổng giá trị giao dịch quy đổi (Turnover Value) trong 24 giờ gần nhất." />
+                  <Tooltip content="Tổng giá trị giao dịch quy đổi (Turnover Value) trong 24 giờ gần nhất." position="bottom" />
                 </th>
                 <th className="py-2.5 px-4 text-right">Thao tác</th>
               </tr>
