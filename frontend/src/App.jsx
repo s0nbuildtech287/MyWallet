@@ -654,8 +654,12 @@ export default function App() {
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="text-[10px] text-slate-400 bg-slate-900/80 border border-slate-800 py-1.5 px-3 rounded-full font-mono">
-              Phiên bản 1.2.0
+            <div className="flex items-center gap-2 bg-emerald-950/40 border border-emerald-500/25 py-1.5 px-3.5 rounded-full text-[9px] font-extrabold tracking-wider text-emerald-400 font-mono shadow-lg shadow-emerald-500/5">
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
+              </span>
+              <span>LIVE</span>
             </div>
           </div>
         </header>

@@ -85,15 +85,23 @@ export default function Overview({
               {filteredAssets.map((asset) => (
                 <tr 
                   key={asset.symbol} 
-                  className={`border-b border-slate-850 hover:bg-slate-800/20 transition-all ${
-                    asset.tick === 'up' ? 'bg-emerald-500/5' : asset.tick === 'down' ? 'bg-rose-500/5' : ''
+                  className={`border-b border-slate-850 hover:bg-slate-800/20 transition-colors duration-300 ${
+                    asset.tick === 'up' 
+                      ? 'bg-emerald-500/10' 
+                      : asset.tick === 'down' 
+                      ? 'bg-rose-500/10' 
+                      : ''
                   }`}
                 >
                   <td className="py-3 px-4 text-slate-200 font-bold">{asset.name}</td>
                   <td className="py-3 px-4 text-slate-400 font-mono">{asset.symbol}</td>
                   <td className="py-3 px-4 text-slate-500 font-semibold">{asset.category}</td>
-                  <td className={`py-3 px-4 font-bold font-mono transition-all ${
-                    asset.tick === 'up' ? 'text-emerald-400' : asset.tick === 'down' ? 'text-rose-400' : 'text-slate-100'
+                  <td className={`py-3 px-4 font-bold font-mono transition-colors duration-200 ${
+                    asset.tick === 'up' 
+                      ? 'text-emerald-400' 
+                      : asset.tick === 'down' 
+                      ? 'text-rose-400' 
+                      : 'text-slate-100'
                   }`}>
                     {asset.isVnd 
                       ? `${asset.price.toLocaleString('vi-VN')} đ` 
