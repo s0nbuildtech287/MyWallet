@@ -10,7 +10,7 @@ export default function useNews(category = 'Tất cả') {
     setError(null);
     try {
       const response = await fetch(
-        `http://localhost:5001/api/news?category=${encodeURIComponent(category)}`
+        `/api/news?category=${encodeURIComponent(category)}`
       );
       if (!response.ok) {
         throw new Error('Không thể tải tin tức từ server.');

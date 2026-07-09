@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Bot, Send, Sparkles, RefreshCw, AlertTriangle, TrendingUp, Info, ArrowRight, User } from 'lucide-react';
 import { calculateSMA, calculateBollingerBands, calculateRSI, calculateMACD } from '../utils/indicators';
 
@@ -117,7 +117,7 @@ export default function TradingGPT({
       setLoadingHistory(true);
       setError(null);
       try {
-        const res = await fetch(`http://localhost:5001/api/chart?symbol=${selectedSymbol.toUpperCase()}&range=1y&interval=1d`);
+        const res = await fetch(`/api/chart?symbol=${selectedSymbol.toUpperCase()}&range=1y&interval=1d`);
         if (!res.ok) throw new Error('Không thể lấy dữ liệu lịch sử tài sản.');
         const json = await res.json();
         
@@ -204,7 +204,7 @@ export default function TradingGPT({
         }
       };
 
-      const res = await fetch('http://localhost:5001/api/ai-analyze', {
+      const res = await fetch('/api/ai-analyze', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
@@ -248,7 +248,7 @@ export default function TradingGPT({
     setChatLoading(true);
 
     try {
-      const res = await fetch('http://localhost:5001/api/ai-chat', {
+      const res = await fetch('/api/ai-chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

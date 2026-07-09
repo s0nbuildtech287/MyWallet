@@ -19,7 +19,7 @@ export default function SparklineChart({ symbol, change }) {
 
       try {
         const res = await fetch(
-          `http://localhost:5001/api/chart?symbol=${encodeURIComponent(symbol)}&range=1mo&interval=1d`
+          `/api/chart?symbol=${encodeURIComponent(symbol)}&range=1mo&interval=1d`
         );
         if (!res.ok) return;
         const data = await res.json();

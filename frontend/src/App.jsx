@@ -145,7 +145,7 @@ export default function App() {
       const uniqueSymbols = Array.from(new Set([...assetSymbols, ...indexSymbols]));
       if (uniqueSymbols.length === 0) return;
 
-      const response = await fetch(`http://localhost:5001/api/live-prices?symbols=${uniqueSymbols.join(',')}`);
+      const response = await fetch(`/api/live-prices?symbols=${uniqueSymbols.join(',')}`);
       if (!response.ok) throw new Error('API server returned error');
       const data = await response.json();
 
@@ -207,7 +207,7 @@ export default function App() {
       const batchSize = 10;
       for (let i = 0; i < symbols.length; i += batchSize) {
         const batch = symbols.slice(i, i + batchSize);
-        const response = await fetch(`http://localhost:5001/api/market-cap?symbols=${batch.join(',')}`);
+        const response = await fetch(`/api/market-cap?symbols=${batch.join(',')}`);
         if (!response.ok) continue;
         const data = await response.json();
 
@@ -341,7 +341,7 @@ export default function App() {
     }
 
     try {
-      const response = await fetch(`http://localhost:5001/api/chart?symbol=${selectedDetailSymbol.toUpperCase()}&range=${queryRange}&interval=${interval}`);
+      const response = await fetch(`/api/chart?symbol=${selectedDetailSymbol.toUpperCase()}&range=${queryRange}&interval=${interval}`);
       const data = await response.json();
       if (!data.chart || !data.chart.result) throw new Error('Failed to load chart');
       
@@ -426,7 +426,7 @@ export default function App() {
     }
 
     try {
-      const response = await fetch(`http://localhost:5001/api/chart?symbol=${symbol.toUpperCase()}&period1=${p1}&period2=${p2}&events=div`);
+      const response = await fetch(`/api/chart?symbol=${symbol.toUpperCase()}&period1=${p1}&period2=${p2}&events=div`);
       const data = await response.json();
 
       if (data.error) {
@@ -729,7 +729,7 @@ export default function App() {
       const nowSecs = Math.floor(Date.now() / 1000);
       // Query 30 days instead of 7 days to avoid empty data on holidays/weekends
       const startSecs = nowSecs - 30 * 24 * 60 * 60;
-      const res = await fetch(`http://localhost:5001/api/chart?symbol=${sym}&period1=${startSecs}&period2=${nowSecs}`);
+      const res = await fetch(`/api/chart?symbol=${sym}&period1=${startSecs}&period2=${nowSecs}`);
       const data = await res.json();
       if (!data.chart || !data.chart.result || !data.chart.result[0]) {
         throw new Error('Không tìm thấy mã tài sản này hoặc API Yahoo quá tải.');

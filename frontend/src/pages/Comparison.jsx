@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
 import { 
   Scale, Plus, X, TrendingUp, RefreshCw, AlertCircle, 
@@ -82,7 +82,7 @@ export default function Comparison({ marketPrices, formatValSymbol, setActiveTab
         else if (range === '5Y') { queryRange = '5y'; queryInterval = '1wk'; }
         else if (range === 'ALL') { queryRange = 'max'; queryInterval = '1mo'; }
 
-        const res = await fetch(`http://localhost:5001/api/chart?symbol=${sym.toUpperCase()}&range=${queryRange}&interval=${queryInterval}`);
+        const res = await fetch(`/api/chart?symbol=${sym.toUpperCase()}&range=${queryRange}&interval=${queryInterval}`);
         if (!res.ok) throw new Error(`HTTP ${res.status} cho mã "${sym}"`);
         const data = await res.json();
 
