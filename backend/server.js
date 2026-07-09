@@ -10,14 +10,23 @@ app.use(express.json());
 
 // API proxy endpoint to fetch Yahoo Finance historical chart data
 app.get('/api/chart', async (req, res) => {
-  const { symbol, period1, period2, interval } = req.query;
+  const { symbol, period1, period2, range, interval } = req.query;
 
-  if (!symbol || !period1 || !period2) {
-    return res.status(400).json({ error: 'Missing required parameters: symbol, period1, period2' });
+  if (!symbol) {
+    return res.status(400).json({ error: 'Missing required parameter: symbol' });
   }
 
   const queryInterval = interval || '1d';
-  const url = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?period1=${period1}&period2=${period2}&interval=${queryInterval}`;
+  let url;
+
+  if (range) {
+    url = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?range=${range}&interval=${queryInterval}`;
+  } else {
+    if (!period1 || !period2) {
+      return res.status(400).json({ error: 'Missing required parameters: period1 and period2 (or range)' });
+    }
+    url = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?period1=${period1}&period2=${period2}&interval=${queryInterval}`;
+  }
 
   try {
     const response = await axios.get(url, {

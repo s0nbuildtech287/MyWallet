@@ -149,38 +149,37 @@ export default function App() {
 
   const fetchAssetDetailChart = async (isSilent = false) => {
     if (!isSilent) setDetailLoading(true);
-    const nowSecs = Math.floor(new Date().getTime() / 1000);
-    let startSecs = nowSecs - 365 * 24 * 60 * 60; // 1Y mặc định
+    let queryRange = '1y'; // Mặc định 1Y
     let interval = '1d';
     
     if (detailRange === '1D') {
-      startSecs = nowSecs - 1 * 24 * 60 * 60;
+      queryRange = '1d';
       interval = '5m';
     } else if (detailRange === '5D') {
-      startSecs = nowSecs - 5 * 24 * 60 * 60;
+      queryRange = '5d';
       interval = '15m';
     } else if (detailRange === '1M') {
-      startSecs = nowSecs - 30 * 24 * 60 * 60;
+      queryRange = '1mo';
       interval = '1d';
     } else if (detailRange === '3M') {
-      startSecs = nowSecs - 90 * 24 * 60 * 60;
+      queryRange = '3mo';
       interval = '1d';
     } else if (detailRange === '6M') {
-      startSecs = nowSecs - 180 * 24 * 60 * 60;
+      queryRange = '6mo';
       interval = '1d';
     } else if (detailRange === '1Y') {
-      startSecs = nowSecs - 365 * 24 * 60 * 60;
+      queryRange = '1y';
       interval = '1d';
     } else if (detailRange === '5Y') {
-      startSecs = nowSecs - 5 * 365 * 24 * 60 * 60;
+      queryRange = '5y';
       interval = '1wk';
     } else if (detailRange === 'ALL') {
-      startSecs = 0;
+      queryRange = 'max';
       interval = '1mo';
     }
 
     try {
-      const response = await fetch(`http://localhost:5001/api/chart?symbol=${selectedDetailSymbol.toUpperCase()}&period1=${startSecs}&period2=${nowSecs}&interval=${interval}`);
+      const response = await fetch(`http://localhost:5001/api/chart?symbol=${selectedDetailSymbol.toUpperCase()}&range=${queryRange}&interval=${interval}`);
       const data = await response.json();
       if (!data.chart || !data.chart.result) throw new Error('Failed to load chart');
       
