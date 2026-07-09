@@ -40,10 +40,6 @@ export default function App() {
     }
   }, [isLoggedIn]);
 
-  if (!isLoggedIn) {
-    return <Login onLogin={handleLogin} />;
-  }
-
   const [activeTab, setActiveTab] = useState('overview'); // 'overview' | 'asset-details' | 'simulator' | 'interest' | 'news'
   const [globalSearch, setGlobalSearch] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('All');
@@ -907,6 +903,10 @@ export default function App() {
     (overviewPage - 1) * overviewItemsPerPage,
     overviewPage * overviewItemsPerPage
   );
+
+  if (!isLoggedIn) {
+    return <Login onLogin={handleLogin} />;
+  }
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex font-sans relative overflow-hidden h-screen">
