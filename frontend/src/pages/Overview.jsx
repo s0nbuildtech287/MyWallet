@@ -2,6 +2,8 @@ import React from 'react';
 import { Search, Layers, ArrowRight, Loader2, AlertCircle, PlusCircle } from 'lucide-react';
 import Pagination from '../components/ui/Pagination';
 import Tooltip from '../components/ui/Tooltip';
+import SparklineChart from '../components/ui/SparklineChart';
+import { formatMarketCap } from '../utils/formatters';
 
 export default function Overview({
   globalSearch,
@@ -111,16 +113,34 @@ export default function Overview({
                   <Tooltip content="Phần trăm thay đổi giá của tài sản trong 24 giờ qua." position="bottom" />
                 </th>
                 <th className="py-2.5 px-4">
+                  <div className="flex items-center gap-1">
+                    <span>Vốn hóa</span>
+                    <Tooltip content="Tổng giá trị thị trường của tài sản (Market Cap). Cập nhật theo live data." position="bottom" />
+                  </div>
+                </th>
+                <th className="py-2.5 px-4">
+                  <div className="flex items-center gap-1">
+                    <span>52W H/L</span>
+                    <Tooltip content="Giá cao nhất và thấp nhất trong 52 tuần gần nhất." position="bottom" />
+                  </div>
+                </th>
+                <th className="py-2.5 px-4">
                   <span>Khối lượng 24h</span>
                   <Tooltip content="Tổng giá trị giao dịch quy đổi (Turnover Value) trong 24 giờ gần nhất." position="bottom" />
                 </th>
-                <th className="py-2.5 px-4 text-right">Thao tác</th>
+                <th className="py-2.5 px-4 text-center">
+                  <div className="flex items-center justify-center gap-1">
+                    <span>Biểu đồ</span>
+                    <Tooltip content="Biểu đồ giá tổng quan 30 ngày gần nhất." position="bottom" />
+                  </div>
+                </th>
+                <th className="py-2.5 px-4 text-center">Thao tác</th>
               </tr>
             </thead>
             <tbody>
               {filteredAssets.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="py-10 text-center text-slate-500 text-xs">
+                  <td colSpan={11} className="py-10 text-center text-slate-500 text-xs">
                     Không tìm thấy tài sản phù hợp
                   </td>
                 </tr>
@@ -146,11 +166,44 @@ export default function Overview({
                     <td className={`py-3 px-4 font-bold font-mono ${asset.change >= 0 ? "text-emerald-400" : "text-rose-400"}`}>
                       {asset.change >= 0 ? "+" : ""}{asset.change}%
                     </td>
+                    <td className="py-3 px-4 font-mono text-slate-300 text-xs">
+                      {asset.details?.marketCap ? (
+                        formatMarketCap(asset.details.marketCap, asset.isVnd)
+                      ) : (
+                        <div className="flex items-center text-slate-500 gap-0.5">
+                          <span>N/A</span>
+                          <Tooltip content="Dữ liệu vốn hóa không khả dụng cho tài sản này" position="top" />
+                        </div>
+                      )}
+                    </td>
+                    <td className="py-3 px-4 text-xs">
+                      {asset.details?.high52 && asset.details?.low52 ? (
+                        <div className="flex flex-col gap-0.5">
+                          <span className="text-emerald-400 font-mono font-medium">
+                            ▲ {asset.isVnd
+                              ? Number(asset.details.high52).toLocaleString('vi-VN') + ' VNĐ'
+                              : '$' + Number(asset.details.high52).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                          </span>
+                          <span className="text-rose-400 font-mono font-medium">
+                            ▼ {asset.isVnd
+                              ? Number(asset.details.low52).toLocaleString('vi-VN') + ' VNĐ'
+                              : '$' + Number(asset.details.low52).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                          </span>
+                        </div>
+                      ) : (
+                        <span className="text-slate-600">N/A</span>
+                      )}
+                    </td>
                     <td className="py-3 px-4 text-slate-400 font-mono font-medium">
                       {formatVolumeHelper(asset.volume, asset.symbol.endsWith('.VN') || asset.symbol.endsWith('.HM'))}
                     </td>
-                    <td className="py-3 px-4 text-right">
-                      <div className="flex items-center justify-end gap-2">
+                    <td className="py-3 px-4 text-center">
+                      <div className="flex items-center justify-center">
+                        <SparklineChart symbol={asset.symbol} change={asset.change} />
+                      </div>
+                    </td>
+                    <td className="py-3 px-4">
+                      <div className="flex items-center justify-center gap-2">
                         <button
                           onClick={() => handleOpenAssetDetails(asset.symbol)}
                           className="bg-slate-900 hover:bg-slate-800 text-slate-300 font-bold py-1 px-3 border border-slate-800 rounded-lg text-[9px] transition-all cursor-pointer"

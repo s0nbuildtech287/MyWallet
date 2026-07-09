@@ -167,7 +167,10 @@ app.get('/api/live-prices', async (req, res) => {
           price: latestClose,
           change: changePercent,
           volume: dailyVolume,
-          shortName: meta.shortName || meta.longName || sym
+          shortName: meta.shortName || meta.longName || sym,
+          marketCap: meta.marketCap || null,
+          high52: meta.fiftyTwoWeekHigh || null,
+          low52: meta.fiftyTwoWeekLow || null
         };
       } catch (err) {
         return { symbol: sym, success: false, error: err.message };
@@ -180,7 +183,112 @@ app.get('/api/live-prices', async (req, res) => {
   }
 });
 
-// API endpoint to aggregate financial news from multiple feeds and Yahoo Finance
+let yahooSession = {
+  cookie: null,
+  crumb: null,
+  timestamp: 0
+};
+const SESSION_DURATION = 15 * 60 * 1000; // 15 minutes
+
+async function getYahooSession() {
+  const now = Date.now();
+  if (yahooSession.cookie && yahooSession.crumb && (now - yahooSession.timestamp < SESSION_DURATION)) {
+    return yahooSession;
+  }
+
+  const userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
+  
+  // 1. Get initial cookie from fc.yahoo.com
+  const fcResponse = await axios.get('https://fc.yahoo.com', {
+    headers: { 'User-Agent': userAgent },
+    validateStatus: () => true
+  });
+  
+  const setCookie = fcResponse.headers['set-cookie'];
+  if (!setCookie || setCookie.length === 0) {
+    throw new Error('No cookie returned from fc.yahoo.com');
+  }
+  
+  const cookiesList = setCookie.map(c => c.split(';')[0]);
+  const cookiesString = cookiesList.join('; ');
+
+  // 2. Fetch crumb
+  const crumbResponse = await axios.get('https://query2.finance.yahoo.com/v1/test/getcrumb', {
+    headers: {
+      'User-Agent': userAgent,
+      'Cookie': cookiesString
+    }
+  });
+  
+  const crumb = crumbResponse.data;
+  if (!crumb) {
+    throw new Error('Failed to retrieve crumb');
+  }
+
+  yahooSession = {
+    cookie: cookiesString,
+    crumb,
+    timestamp: now
+  };
+
+  return yahooSession;
+}
+
+// API endpoint to fetch market cap for multiple symbols via quoteSummary
+app.get('/api/market-cap', async (req, res) => {
+  const { symbols } = req.query;
+  if (!symbols) {
+    return res.status(400).json({ error: 'Missing required parameter: symbols' });
+  }
+
+  const symbolList = symbols.split(',').filter(Boolean);
+
+  try {
+    let session;
+    try {
+      session = await getYahooSession();
+    } catch (sessionErr) {
+      console.error('Failed to resolve Yahoo session:', sessionErr.message);
+      // Fallback: return null for all
+      return res.json(symbolList.map(sym => ({ symbol: sym, success: false, marketCap: null })));
+    }
+
+    const userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
+
+    const results = await Promise.all(symbolList.map(async (sym) => {
+      try {
+        const url = `https://query2.finance.yahoo.com/v10/finance/quoteSummary/${sym.toUpperCase()}?modules=summaryDetail,defaultKeyStatistics&crumb=${session.crumb}`;
+        const response = await axios.get(url, {
+          headers: {
+            'User-Agent': userAgent,
+            'Cookie': session.cookie
+          }
+        });
+
+        const summary = response.data?.quoteSummary?.result?.[0];
+        const marketCap = summary?.summaryDetail?.marketCap?.raw
+          || summary?.defaultKeyStatistics?.enterpriseValue?.raw
+          || null;
+
+        return { symbol: sym, success: true, marketCap };
+      } catch (err) {
+        console.error(`Failed to fetch market cap for ${sym}:`, err.message);
+        if (err.response?.status === 401) {
+          // Invalidate cache on unauthorized error so it re-fetches next time
+          yahooSession.cookie = null;
+          yahooSession.crumb = null;
+        }
+        return { symbol: sym, success: false, marketCap: null };
+      }
+    }));
+
+    res.json(results);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
 app.get('/api/news', async (req, res) => {
   const { category } = req.query; // 'Tất cả' | 'Trong nước' | 'Quốc tế' | 'Crypto'
   

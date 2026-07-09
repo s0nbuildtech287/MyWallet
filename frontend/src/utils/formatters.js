@@ -42,3 +42,28 @@ export const formatVolumeHelper = (vol, isVnd) => {
     return vol.toLocaleString('en-US');
   }
 };
+
+// Format market cap: trả về chuỗi rút gọn, VND hoặc USD
+export const formatMarketCap = (val, isVnd) => {
+  if (val === undefined || val === null || isNaN(val)) return 'N/A';
+  if (isVnd) {
+    if (val >= 1_000_000_000) {
+      return (val / 1_000_000_000).toLocaleString('vi-VN', {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2
+      }) + ' tỷ VNĐ';
+    }
+    if (val >= 1_000_000) {
+      return (val / 1_000_000).toLocaleString('vi-VN', {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2
+      }) + ' triệu VNĐ';
+    }
+    return val.toLocaleString('vi-VN') + ' VNĐ';
+  } else {
+    if (val >= 1_000_000_000_000) return '$' + (val / 1_000_000_000_000).toFixed(2) + 'T';
+    if (val >= 1_000_000_000)     return '$' + (val / 1_000_000_000).toFixed(2) + 'B';
+    if (val >= 1_000_000)         return '$' + (val / 1_000_000).toFixed(2) + 'M';
+    return '$' + val.toLocaleString('en-US');
+  }
+};

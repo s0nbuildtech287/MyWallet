@@ -126,7 +126,10 @@ export default function App() {
               volume: formattedVol,
               details: {
                 ...item.details,
-                volume: formattedVol
+                volume: formattedVol,
+                high52: live.high52 ?? item.details?.high52 ?? null,
+                low52: live.low52 ?? item.details?.low52 ?? null,
+                marketCap: live.marketCap ?? item.details?.marketCap ?? null,
               },
               tick
             };
@@ -155,11 +158,56 @@ export default function App() {
     }
   };
 
+  // Fetch market cap separately via quoteSummary endpoint (batch mode)
+  const fetchMarketCaps = async () => {
+    try {
+      const symbols = marketPricesRef.current.map(a => a.symbol);
+      if (symbols.length === 0) return;
+
+      // Batch 10 symbols per request to avoid rate limit
+      const batchSize = 10;
+      for (let i = 0; i < symbols.length; i += batchSize) {
+        const batch = symbols.slice(i, i + batchSize);
+        const response = await fetch(`http://localhost:5001/api/market-cap?symbols=${batch.join(',')}`);
+        if (!response.ok) continue;
+        const data = await response.json();
+
+        if (Array.isArray(data)) {
+          setMarketPrices(prev => prev.map(item => {
+            const capData = data.find(d => d.symbol.toUpperCase() === item.symbol.toUpperCase() && d.success);
+            if (capData && capData.marketCap) {
+              return {
+                ...item,
+                details: { ...item.details, marketCap: capData.marketCap }
+              };
+            }
+            return item;
+          }));
+        }
+
+        // Delay 500ms between batches to be polite to Yahoo API
+        if (i + batchSize < symbols.length) {
+          await new Promise(resolve => setTimeout(resolve, 500));
+        }
+      }
+    } catch (err) {
+      console.error('Failed to fetch market caps:', err);
+    }
+  };
+
   // Poll real-time prices every 30 seconds
   useEffect(() => {
     fetchRealtimePrices();
     const interval = setInterval(fetchRealtimePrices, 30000);
     return () => clearInterval(interval);
+  }, []);
+
+  // Fetch market caps once on mount, refresh every 5 minutes
+  useEffect(() => {
+    // Delay slightly so live prices load first
+    const timeout = setTimeout(fetchMarketCaps, 3000);
+    const interval = setInterval(fetchMarketCaps, 5 * 60 * 1000);
+    return () => { clearTimeout(timeout); clearInterval(interval); };
   }, []);
 
   // Live ticker ticks
