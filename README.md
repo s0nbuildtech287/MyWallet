@@ -71,6 +71,18 @@ npm run install-all
 
 # Khởi động đồng thời cả React App (cổng 5173) và Express Server (cổng 5001)
 npm run dev
+```
 
+---
 
+## 🌐 HƯỚNG DẪN DEPLOY LÊN VERCEL (Monorepo)
+
+Dự án đã được cấu hình sẵn tệp vercel.json ở thư mục gốc để hỗ trợ triển khai đồng thời cả Frontend và Backend Express trên nền tảng Vercel:
+
+1. Đẩy mã nguồn lên kho lưu trữ GITHUB của bạn.
+2. Truy cập Vercel, chọn New Project và Import repo vừa đẩy lên.
+3. Vercel sẽ tự động dò tìm cấu trúc Monorepo thông qua file vercel.json. Hãy giữ nguyên cấu hình Root Directory: ./.
+4. Vào phần Environment Variables, cấu hình biến môi trường:
+   - openaikey: Key OpenAI của bạn.
+5. Nhấn nút Deploy và chờ Vercel thiết lập trong vài giây.
 
