@@ -1,6 +1,6 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { Line, Bar } from 'react-chartjs-2';
-import { LineChart, RefreshCw, ArrowRight, TrendingUp } from 'lucide-react';
+import { LineChart, RefreshCw, ArrowRight, TrendingUp, Info, X } from 'lucide-react';
 import CandlestickChart from '../components/features/chart/CandlestickChart';
 import { crosshairPlugin } from '../utils/crosshairPlugin';
 import { calculateSMA, calculateBollingerBands, calculateRSI, calculateMACD } from '../utils/indicators';
@@ -39,6 +39,7 @@ export default function AssetDetails({
   const [showBollinger, setShowBollinger] = useState(false);
   const [showRSI, setShowRSI] = useState(false);
   const [showMACD, setShowMACD] = useState(false);
+  const [showInfoModal, setShowInfoModal] = useState(false);
 
   // Extract prices for indicators
   const prices = detailData ? detailData.map(d => d.price) : [];
@@ -220,7 +221,17 @@ export default function AssetDetails({
 
         {/* Indicator Toggles */}
         <div className="flex flex-wrap gap-x-4 gap-y-2 items-center bg-slate-950/30 border border-slate-700/15 rounded-xl p-3 text-xs">
-          <span className="text-slate-500 font-bold uppercase tracking-wider text-[9px]">Chỉ báo kỹ thuật:</span>
+          <div className="flex items-center gap-1">
+            <span className="text-slate-500 font-bold uppercase tracking-wider text-[9px]">Chỉ báo kỹ thuật:</span>
+            <button
+              type="button"
+              onClick={() => setShowInfoModal(true)}
+              className="text-slate-500 hover:text-emerald-400 transition-colors p-0.5 cursor-pointer flex items-center justify-center"
+              title="Tìm hiểu về các chỉ báo"
+            >
+              <Info className="h-3.5 w-3.5" />
+            </button>
+          </div>
           
           <label className="flex items-center gap-1.5 cursor-pointer text-slate-300 hover:text-white transition-colors">
             <input
@@ -594,6 +605,60 @@ export default function AssetDetails({
           </button>
         </div>
       </section>
+
+      {showInfoModal && (
+        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fadeIn">
+          <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-lg p-6 shadow-2xl relative flex flex-col gap-4">
+            <button
+              onClick={() => setShowInfoModal(false)}
+              className="absolute top-4 right-4 text-slate-400 hover:text-slate-200 transition-colors cursor-pointer"
+            >
+              <X className="h-4 w-4" />
+            </button>
+            
+            <div className="flex items-center gap-2 border-b border-slate-800 pb-3">
+              <Info className="h-5 w-5 text-emerald-400" />
+              <h3 className="font-bold text-slate-100 text-sm">Hướng dẫn chỉ báo kỹ thuật</h3>
+            </div>
+
+            <div className="flex flex-col gap-4 overflow-y-auto max-h-[350px] pr-1 scrollbar-thin text-xs text-slate-300">
+              <div className="flex flex-col gap-1.5">
+                <span className="font-bold text-slate-100">1. Đường MA20 (Trung bình động 20 ngày)</span>
+                <p className="leading-relaxed text-slate-400">Thể hiện xu hướng giá ngắn hạn. Khi giá nằm trên MA20 báo hiệu đà tăng ngắn hạn, ngược lại khi nằm dưới báo hiệu đà giảm ngắn hạn.</p>
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <span className="font-bold text-slate-100">2. Đường MA50 (Trung bình động 50 ngày)</span>
+                <p className="leading-relaxed text-slate-400">Thể hiện xu hướng giá trung hạn. Đây là đường hỗ trợ/kháng cự cực kỳ quan trọng; việc giữ vững trên MA50 xác nhận xu hướng tăng vững chắc.</p>
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <span className="font-bold text-slate-100">3. Dải Bollinger (Bollinger Bands)</span>
+                <p className="leading-relaxed text-slate-400">Đo lường biên độ biến động giá. Gồm dải trên (kháng cự) và dải dưới (hỗ trợ). Giá chạm dải dưới thường là cơ hội mua tốt, chạm dải trên thường gặp áp lực chốt lời.</p>
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <span className="font-bold text-slate-100">4. Chỉ báo RSI (Chỉ số sức mạnh tương đối)</span>
+                <p className="leading-relaxed text-slate-400">Xác định trạng thái quá mua hoặc quá bán. RSI &gt; 70 là vùng Quá mua (hưng phấn quá đà, rủi ro điều chỉnh). RSI &lt; 30 là vùng Quá bán (hoảng loạn quá đà, cơ hội mua giá rẻ).</p>
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <span className="font-bold text-slate-100">5. Chỉ báo MACD (Động lượng xu hướng)</span>
+                <p className="leading-relaxed text-slate-400">Xác định cường độ và xu hướng dòng tiền. MACD nằm trên đường Tín hiệu (Histogram xanh) cho thấy dòng tiền dương đi lên; ngược lại (Histogram đỏ) cho thấy dòng tiền đang yếu đi.</p>
+              </div>
+            </div>
+
+            <div className="border-t border-slate-800 pt-3 flex justify-end">
+              <button
+                onClick={() => setShowInfoModal(false)}
+                className="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs rounded-xl transition-all cursor-pointer"
+              >
+                Đã hiểu
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
