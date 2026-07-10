@@ -60,11 +60,7 @@ MyWallet Hub là một nền tảng Web App hiện đại, hỗ trợ nhà đầ
 ## ⚙️ HƯỚNG DẪN CÀI ĐẶT & CHẠY CỤC BỘ (Local)
 
 ### 1. Chuẩn bị file môi trường .env
-Tạo file .env nằm ở thư mục gốc của dự án (/MyWallet/.env) với nội dung:
-```env
-openaikey=sk-proj-xxxxxx...  # Nhập API Key OpenAI của bạn tại đây
-API_SECRET_TOKEN=mywallet_secure_key_2026_xyz # Mã bảo vệ API (mặc định)
-```
+
 
 ### 2. Cài đặt thư viện & Khởi động dự án
 Mở Terminal tại thư mục gốc dự án và chạy các lệnh:
@@ -75,18 +71,6 @@ npm run install-all
 
 # Khởi động đồng thời cả React App (cổng 5173) và Express Server (cổng 5001)
 npm run dev
-```
 
----
 
-## 🌐 HƯỚNG DẪN DEPLOY LÊN VERCEL (Monorepo)
-
-Dự án đã được cấu hình sẵn tệp vercel.json ở thư mục gốc để hỗ trợ triển khai đồng thời cả Frontend và Backend Express trên nền tảng Vercel:
-
-1. Đẩy mã nguồn lên kho lưu trữ GITHUB của bạn.
-2. Truy cập Vercel, chọn New Project và Import repo vừa đẩy lên.
-3. Vercel sẽ tự động dò tìm cấu trúc Monorepo thông qua file vercel.json. Hãy giữ nguyên cấu hình Root Directory: ./.
-4. Vào phần Environment Variables, cấu hình biến môi trường:
-   - openaikey: Key OpenAI của bạn.
-5. Nhấn nút Deploy và chờ Vercel thiết lập trong vài giây.
 
