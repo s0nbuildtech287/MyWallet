@@ -330,13 +330,30 @@ app.get('/api/market-cap', async (req, res) => {
 });
 
 
-app.post('/api/ai-analyze', async (req, res) => {
+// Middleware to verify custom API secret token for protection
+function verifyApiToken(req, res, next) {
+  const token = req.headers['x-api-token'];
+  const secureToken = process.env.API_SECRET_TOKEN || 'mywallet_secure_key_2026_xyz';
+  
+  if (!token || token !== secureToken) {
+    console.warn(`[Security Alert] Unauthorized access attempt blocked from IP: ${req.ip}`);
+    return res.status(403).json({ error: 'Access forbidden. Invalid API Token.' });
+  }
+  next();
+}
+
+app.post('/api/ai-analyze', verifyApiToken, async (req, res) => {
   const { symbol, currentPrice, indicators, priceTrend } = req.body;
   
   const openaiKey = process.env.OPENAI_API_KEY || process.env.openaikey;
   if (!openaiKey) {
     return res.status(500).json({ error: 'OpenAI API Key (hoặc openaikey) is missing in backend .env file.' });
   }
+
+  // Sanitize and limit inputs to prevent prompt injection and token abuse
+  const cleanSymbol = String(symbol || '').substring(0, 10).toUpperCase();
+  const cleanPrice = String(currentPrice || '').substring(0, 30);
+  const cleanTrend = Array.isArray(priceTrend) ? priceTrend.slice(-15).map(v => String(v).substring(0, 20)) : [];
 
   const systemPrompt = `Bạn là một chuyên gia phân tích tài chính cấp cao của hệ thống MyWallet Hub. 
 Nhiệm vụ của bạn là phân tích dữ liệu kỹ thuật thời gian thực của tài sản và đưa ra khuyến nghị kép:
@@ -352,13 +369,13 @@ Nhiệm vụ của bạn là phân tích dữ liệu kỹ thuật thời gian th
 
 Hãy phân tích dựa trên dữ liệu đầu vào thật được cung cấp. Trả lời ngắn gọn, tập trung, sử dụng ngôn từ chuyên nghiệp của giới trading tài chính. Định dạng câu trả lời rõ ràng có bullet points nhưng TUYỆT ĐỐI KHÔNG sử dụng ký tự dấu sao kép (** hoặc *) trong toàn bộ văn bản. Khi muốn nhấn mạnh từ khóa, hãy viết IN HOA từ đó.`;
 
-  const userPrompt = `Hãy phân tích tài sản: ${symbol}
-- Giá hiện tại: ${currentPrice}
-- Xu hướng 15 nến gần nhất: ${priceTrend ? priceTrend.join(', ') : 'N/A'}
+  const userPrompt = `Hãy phân tích tài sản: ${cleanSymbol}
+- Giá hiện tại: ${cleanPrice}
+- Xu hướng 15 nến gần nhất: ${cleanTrend.join(', ')}
 - RSI (14): ${indicators?.rsi ? Number(indicators.rsi).toFixed(2) : 'N/A'}
 - MACD: MACD Line = ${indicators?.macd?.macdLine ? Number(indicators.macd.macdLine).toFixed(2) : 'N/A'}, Signal Line = ${indicators?.macd?.signalLine ? Number(indicators.macd.signalLine).toFixed(2) : 'N/A'}
-- Bollinger Bands: Upper = ${indicators?.bollinger?.upper ? indicators.bollinger.upper : 'N/A'}, Middle = ${indicators?.bollinger?.middle ? indicators.bollinger.middle : 'N/A'}, Lower = ${indicators?.bollinger?.lower ? indicators.bollinger.lower : 'N/A'}
-- MA xu hướng: MA20 = ${indicators?.ma20 ? indicators.ma20 : 'N/A'}, MA50 = ${indicators?.ma50 ? indicators.ma50 : 'N/A'}`;
+- Bollinger Bands: Upper = ${indicators?.bollinger?.upper ? String(indicators.bollinger.upper).substring(0, 20) : 'N/A'}, Middle = ${indicators?.bollinger?.middle ? String(indicators.bollinger.middle).substring(0, 20) : 'N/A'}, Lower = ${indicators?.bollinger?.lower ? String(indicators.bollinger.lower).substring(0, 20) : 'N/A'}
+- MA xu hướng: MA20 = ${indicators?.ma20 ? String(indicators.ma20).substring(0, 20) : 'N/A'}, MA50 = ${indicators?.ma50 ? String(indicators.ma50).substring(0, 20) : 'N/A'}`;
 
   try {
     const response = await axios.post(
@@ -389,7 +406,7 @@ Hãy phân tích dựa trên dữ liệu đầu vào thật được cung cấp.
 });
 
 
-app.post('/api/ai-chat', async (req, res) => {
+app.post('/api/ai-chat', verifyApiToken, async (req, res) => {
   const { messages, symbol, currentPrice } = req.body;
   
   const openaiKey = process.env.OPENAI_API_KEY || process.env.openaikey;
@@ -397,8 +414,18 @@ app.post('/api/ai-chat', async (req, res) => {
     return res.status(500).json({ error: 'OpenAI API Key (hoặc openaikey) is missing in backend .env file.' });
   }
 
+  // Sanitize and limit inputs to prevent prompt injection and token abuse
+  const cleanSymbol = String(symbol || '').substring(0, 10).toUpperCase();
+  const cleanPrice = String(currentPrice || '').substring(0, 30);
+
+  const rawMessages = Array.isArray(messages) ? messages : [];
+  const sanitizedMessages = rawMessages.slice(-10).map(m => ({
+    role: m.role === 'user' ? 'user' : 'assistant',
+    content: String(m.content || '').substring(0, 500)
+  }));
+
   const systemPrompt = `Bạn là một trợ lý AI tài chính chuyên sâu thuộc hệ thống MyWallet Hub. 
-Người dùng đang xem tài sản ${symbol || 'tài sản bất kỳ'} với giá hiện tại là ${currentPrice || 'chưa rõ'}.
+Người dùng đang xem tài sản ${cleanSymbol || 'tài sản bất kỳ'} với giá hiện tại là ${cleanPrice || 'chưa rõ'}.
 Hãy trả lời các câu hỏi của người dùng về tài sản này, thị trường tài chính, phân tích kỹ thuật hoặc chiến lược đầu tư (Tích sản & Trading CFD/Futures).
 Hãy trả lời ngắn gọn, trực diện, chuyên nghiệp bằng Tiếng Việt. Định dạng câu trả lời rõ ràng có bullet points nhưng TUYỆT ĐỐI KHÔNG sử dụng ký tự dấu sao kép (** hoặc *) trong toàn bộ văn bản. Khi muốn nhấn mạnh từ khóa, hãy viết IN HOA từ đó.`;
 
@@ -409,7 +436,7 @@ Hãy trả lời ngắn gọn, trực diện, chuyên nghiệp bằng Tiếng Vi
         model: 'gpt-4o-mini',
         messages: [
           { role: 'system', content: systemPrompt },
-          ...messages
+          ...sanitizedMessages
         ],
         temperature: 0.7
       },

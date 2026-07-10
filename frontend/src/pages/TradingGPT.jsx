@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Bot, Send, Sparkles, RefreshCw, AlertTriangle, TrendingUp, Info, ArrowRight, User } from 'lucide-react';
 import { calculateSMA, calculateBollingerBands, calculateRSI, calculateMACD } from '../utils/indicators';
 
+const API_SECRET_TOKEN = 'mywallet_secure_key_2026_xyz';
+
 // A simple local markdown helper to render basic markdown elements (headers, bold, bullet points) beautifully in React without external packages
 function SafeMarkdown({ text }) {
   if (!text) return null;
@@ -206,7 +208,10 @@ export default function TradingGPT({
 
       const res = await fetch('/api/ai-analyze', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'x-api-token': API_SECRET_TOKEN
+        },
         body: JSON.stringify(payload)
       });
 
@@ -250,7 +255,10 @@ export default function TradingGPT({
     try {
       const res = await fetch('/api/ai-chat', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'x-api-token': API_SECRET_TOKEN
+        },
         body: JSON.stringify({
           messages: updatedHistory,
           symbol: selectedSymbol,
