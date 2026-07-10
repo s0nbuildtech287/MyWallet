@@ -312,7 +312,13 @@ export default function AssetDetails({
             </div>
           ) : detailData && detailData.length > 0 ? (
             chartType === 'candlestick' ? (
-              <CandlestickChart data={detailData} isVndAsset={isVndAsset} />
+              <CandlestickChart 
+                data={detailData} 
+                isVndAsset={isVndAsset} 
+                ma20={showMA20 ? ma20Data : null}
+                ma50={showMA50 ? ma50Data : null}
+                bollinger={showBollinger ? bbData : null}
+              />
             ) : (
               <>
               {/* Price Line Chart */}

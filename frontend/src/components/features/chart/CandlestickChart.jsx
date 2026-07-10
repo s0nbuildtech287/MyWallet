@@ -1,4 +1,4 @@
-﻿import React, { useState, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 
 const RANGE_TOOLTIPS = {
   '1D': 'Dữ liệu 1 ngày gần nhất, nến 5 phút',
@@ -11,7 +11,13 @@ const RANGE_TOOLTIPS = {
   'ALL': 'Toàn bộ dữ liệu lịch sử, nến 1 tháng'
 };
 
-export default function CandlestickChart({ data, isVndAsset }) {
+export default function CandlestickChart({ 
+  data, 
+  isVndAsset,
+  ma20 = null,
+  ma50 = null,
+  bollinger = null
+}) {
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const svgRef = useRef(null);
 
@@ -35,10 +41,19 @@ export default function CandlestickChart({ data, isVndAsset }) {
   const chartWidth = viewWidth - paddingLeft - paddingRight;
   const chartHeight = viewHeight - paddingTop - paddingBottom;
 
-  // Price boundaries
-  const prices = data.flatMap(d => [d.open, d.high, d.low, d.close]).filter(p => p !== null && !isNaN(p));
-  const minPriceRaw = prices.length > 0 ? Math.min(...prices) : 0;
-  const maxPriceRaw = prices.length > 0 ? Math.max(...prices) : 100;
+  // Price boundaries (including indicators to avoid clipping)
+  const candlePrices = data.flatMap(d => [d.open, d.high, d.low, d.close]).filter(p => p !== null && !isNaN(p));
+  const indicatorPrices = [];
+  if (ma20) indicatorPrices.push(...ma20.filter(v => v !== null && v !== undefined && !isNaN(v)));
+  if (ma50) indicatorPrices.push(...ma50.filter(v => v !== null && v !== undefined && !isNaN(v)));
+  if (bollinger) {
+    if (bollinger.upper) indicatorPrices.push(...bollinger.upper.filter(v => v !== null && v !== undefined && !isNaN(v)));
+    if (bollinger.lower) indicatorPrices.push(...bollinger.lower.filter(v => v !== null && v !== undefined && !isNaN(v)));
+  }
+  
+  const allPrices = [...candlePrices, ...indicatorPrices];
+  const minPriceRaw = allPrices.length > 0 ? Math.min(...allPrices) : 0;
+  const maxPriceRaw = allPrices.length > 0 ? Math.max(...allPrices) : 100;
   const priceRange = maxPriceRaw - minPriceRaw || 1;
   const minPrice = Math.max(0, minPriceRaw - priceRange * 0.05);
   const maxPrice = maxPriceRaw + priceRange * 0.05;
@@ -122,6 +137,17 @@ export default function CandlestickChart({ data, isVndAsset }) {
   const pctChange = activePoint.open !== 0 
     ? ((activePoint.close - activePoint.open) / activePoint.open) * 100 
     : 0;
+
+  const getPolylinePoints = (indicatorData) => {
+    if (!indicatorData || indicatorData.length === 0) return '';
+    return indicatorData
+      .map((val, idx) => {
+        if (val === null || val === undefined || isNaN(val)) return null;
+        return `${getX(idx)},${getY(val)}`;
+      })
+      .filter(p => p !== null)
+      .join(' ');
+  };
 
   return (
     <div className="relative w-full bg-slate-950/20 border border-slate-700/15 rounded-2xl p-4 flex flex-col gap-3">
@@ -292,6 +318,69 @@ export default function CandlestickChart({ data, isVndAsset }) {
               </g>
             );
           })}
+
+          {/* Technical Indicators Overlays */}
+          {ma20 && (
+            <polyline
+              points={getPolylinePoints(ma20)}
+              fill="none"
+              stroke="#3b82f6"
+              strokeWidth={1.5}
+              strokeLinejoin="round"
+              strokeLinecap="round"
+              opacity={0.85}
+            />
+          )}
+
+          {ma50 && (
+            <polyline
+              points={getPolylinePoints(ma50)}
+              fill="none"
+              stroke="#f59e0b"
+              strokeWidth={1.5}
+              strokeLinejoin="round"
+              strokeLinecap="round"
+              opacity={0.85}
+            />
+          )}
+
+          {bollinger && bollinger.upper && (
+            <polyline
+              points={getPolylinePoints(bollinger.upper)}
+              fill="none"
+              stroke="#ec4899"
+              strokeWidth={1.2}
+              strokeDasharray="4,4"
+              strokeLinejoin="round"
+              strokeLinecap="round"
+              opacity={0.7}
+            />
+          )}
+
+          {bollinger && bollinger.middle && (
+            <polyline
+              points={getPolylinePoints(bollinger.middle)}
+              fill="none"
+              stroke="#8b5cf6"
+              strokeWidth={1}
+              strokeLinejoin="round"
+              strokeLinecap="round"
+              opacity={0.6}
+            />
+          )}
+
+          {bollinger && bollinger.lower && (
+            <polyline
+              points={getPolylinePoints(bollinger.lower)}
+              fill="none"
+              stroke="#ec4899"
+              strokeWidth={1.2}
+              strokeDasharray="4,4"
+              strokeLinejoin="round"
+              strokeLinecap="round"
+              opacity={0.7}
+            />
+          )}
 
           {/* Crosshairs & Highlight points (Rendered on Hover) */}
           {hoveredIndex !== null && (
