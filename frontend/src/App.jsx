@@ -14,6 +14,7 @@ import TradingGPT from './pages/TradingGPT';
 // Import Layout Components
 import Sidebar from './components/layout/Sidebar';
 import Header from './components/layout/Header';
+import { Bot } from 'lucide-react';
 
 // Import Constants
 import { MACRO_INDICES, MARKET_ASSETS, PRESET_SYMBOLS } from './constants';
@@ -26,19 +27,13 @@ export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
     return sessionStorage.getItem('mywallet_auth') === '1';
   });
+  const [showLoginPrompt, setShowLoginPrompt] = useState(false);
 
   const handleLogin = () => {
     sessionStorage.setItem('mywallet_auth', '1');
     setIsLoggedIn(true);
-    window.location.hash = '#/overview';
+    window.location.hash = '#/trading-gpt';
   };
-
-  // Redirect to login if not authenticated
-  useEffect(() => {
-    if (!isLoggedIn) {
-      window.location.hash = '#/login';
-    }
-  }, [isLoggedIn]);
 
   const [activeTab, setActiveTab] = useState('overview'); // 'overview' | 'asset-details' | 'simulator' | 'interest' | 'news'
   const [globalSearch, setGlobalSearch] = useState('');
@@ -106,6 +101,13 @@ export default function App() {
       if (hash === 'login') return; // handled by isLoggedIn guard
       const validTabs = ['overview', 'portfolio', 'asset-details', 'comparison', 'simulator', 'interest', 'news', 'guides', 'trading-gpt'];
       if (validTabs.includes(hash)) {
+        if (hash === 'trading-gpt' && !isLoggedIn) {
+          setShowLoginPrompt(true);
+          if (window.location.hash === '#/trading-gpt') {
+            window.location.hash = '#/overview';
+          }
+          return;
+        }
         setActiveTab(hash);
       } else {
         window.location.hash = '#/overview';
@@ -116,9 +118,13 @@ export default function App() {
     handleHashChange();
     window.addEventListener('hashchange', handleHashChange);
     return () => window.removeEventListener('hashchange', handleHashChange);
-  }, []);
+  }, [isLoggedIn]);
 
   const changeTab = (tabName) => {
+    if (tabName === 'trading-gpt' && !isLoggedIn) {
+      setShowLoginPrompt(true);
+      return;
+    }
     window.location.hash = `#/${tabName}`;
   };
 
@@ -904,7 +910,7 @@ export default function App() {
     overviewPage * overviewItemsPerPage
   );
 
-  if (!isLoggedIn) {
+  if (activeTab === 'trading-gpt' && !isLoggedIn) {
     return <Login onLogin={handleLogin} />;
   }
 
@@ -1032,6 +1038,46 @@ export default function App() {
           )}
         </main>
       </div>
+
+      {showLoginPrompt && (
+        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fadeIn">
+          <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-sm p-6 shadow-2xl relative flex flex-col gap-4 text-center">
+            <div className="mx-auto bg-emerald-500/10 p-3 rounded-full text-emerald-450">
+              <Bot className="h-8 w-8 animate-pulse" />
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <h3 className="font-bold text-slate-100 text-base">Yêu cầu đăng nhập</h3>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                Bạn cần đăng nhập tài khoản để có thể sử dụng phân tích chiến lược của trợ lý TRADING GPT.
+              </p>
+            </div>
+
+            <div className="flex gap-3 justify-center mt-2">
+              <button
+                type="button"
+                onClick={() => {
+                  setShowLoginPrompt(false);
+                }}
+                className="flex-1 py-2.5 bg-slate-950/60 hover:bg-slate-900 border border-slate-700/25 text-slate-400 hover:text-slate-200 text-xs font-bold rounded-xl transition-all cursor-pointer"
+              >
+                Hủy bỏ
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setShowLoginPrompt(false);
+                  window.location.hash = '#/trading-gpt';
+                  setActiveTab('trading-gpt');
+                }}
+                className="flex-1 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-slate-950 font-bold text-xs rounded-xl transition-all cursor-pointer shadow-lg shadow-emerald-500/15"
+              >
+                Đăng nhập ngay
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
